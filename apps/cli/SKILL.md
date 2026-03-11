@@ -8,7 +8,7 @@
 
 ## Core Workflow
 
-The fundamental pattern for using Postiz CLI:
+The fundamental pattern for using XPoz CLI:
 
 1. **Discover** - List integrations and get their settings
 2. **Fetch** - Use integration tools to retrieve dynamic data (flairs, playlists, companies)
@@ -107,7 +107,7 @@ postiz posts:delete <post-id>
 
 ### Media Upload
 
-**⚠️ IMPORTANT:** Always upload files to Postiz before using them in posts. Many platforms (TikTok, Instagram, YouTube) **require verified URLs** and will reject external links.
+**⚠️ IMPORTANT:** Always upload files to XPoz before using them in posts. Many platforms (TikTok, Instagram, YouTube) **require verified URLs** and will reject external links.
 
 ```bash
 # Upload file and get URL
@@ -415,7 +415,7 @@ All dates use ISO 8601 format:
 Upload returns JSON with path and metadata:
 ```json
 {
-  "path": "https://cdn.postiz.com/uploads/abc123.jpg",
+  "path": "https://cdn.xpoz.com/uploads/abc123.jpg",
   "size": 123456,
   "type": "image/jpeg"
 }
@@ -567,7 +567,7 @@ postiz posts:create \
 1. **API Key not set** - Always `export POSTIZ_API_KEY=key` before using CLI
 2. **Invalid integration ID** - Run `integrations:list` to get current IDs
 3. **Settings schema mismatch** - Check `integrations:settings` for required fields
-4. **Media MUST be uploaded to Postiz first** - ⚠️ **CRITICAL:** TikTok, Instagram, YouTube, and many platforms only accept verified URLs. Upload files via `postiz upload` first, then use the returned URL in `-m`. External URLs will be rejected!
+4. **Media MUST be uploaded to XPoz first** - ⚠️ **CRITICAL:** TikTok, Instagram, YouTube, and many platforms only accept verified URLs. Upload files via `postiz upload` first, then use the returned URL in `-m`. External URLs will be rejected!
 5. **JSON escaping in shell** - Use single quotes for JSON: `--settings '{...}'`
 6. **Date format** - Must be ISO 8601: `"2024-12-31T12:00:00Z"` and is REQUIRED
 7. **Tool not found** - Check available tools in `integrations:settings` output

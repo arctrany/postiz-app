@@ -1,6 +1,6 @@
 # Provider-Specific Settings
 
-The Postiz CLI supports platform-specific settings for each integration. Different platforms have different options and requirements.
+The XPoz CLI supports platform-specific settings for each integration. Different platforms have different options and requirements.
 
 ## How to Use Provider Settings
 

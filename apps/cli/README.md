@@ -1,8 +1,8 @@
-# Postiz CLI
+# XPoz CLI
 
 **Social media automation CLI for AI agents** - Schedule posts across 28+ platforms programmatically.
 
-The Postiz CLI provides a command-line interface to the Postiz API, enabling developers and AI agents to automate social media posting, manage content, and handle media uploads across platforms like Twitter/X, LinkedIn, Reddit, YouTube, TikTok, Instagram, Facebook, and more.
+The XPoz CLI provides a command-line interface to the XPoz API, enabling developers and AI agents to automate social media posting, manage content, and handle media uploads across platforms like Twitter/X, LinkedIn, Reddit, YouTube, TikTok, Instagram, Facebook, and more.
 
 ---
 
@@ -42,7 +42,7 @@ pnpm run start -- posts:list
 
 ## Setup
 
-**Required:** Set your Postiz API key
+**Required:** Set your XPoz API key
 
 ```bash
 export POSTIZ_API_KEY=your_api_key_here
@@ -182,7 +182,7 @@ postiz upload <file-path>
 
 **⚠️ IMPORTANT: Upload Files Before Posting**
 
-You **must** upload media files to Postiz before using them in posts. Many platforms (especially TikTok, Instagram, and YouTube) require verified/trusted URLs and will reject external links.
+You **must** upload media files to XPoz before using them in posts. Many platforms (especially TikTok, Instagram, and YouTube) require verified/trusted URLs and will reject external links.
 
 **Workflow:**
 1. Upload your file using `postiz upload`
@@ -201,14 +201,14 @@ You **must** upload media files to Postiz before using them in posts. Many platf
 RESULT=$(postiz upload video.mp4)
 PATH=$(echo "$RESULT" | jq -r '.path')
 
-# 2. Use the Postiz URL in your post
+# 2. Use the XPoz URL in your post
 postiz posts:create -c "Check out my video!" -s "2024-12-31T12:00:00Z" -m "$PATH" -i "tiktok-id"
 ```
 
 **Why this is required:**
 - **TikTok, Instagram, YouTube** only accept URLs from trusted domains
 - **Security:** Platforms verify media sources to prevent abuse
-- **Reliability:** Postiz ensures your media is always accessible
+- **Reliability:** XPoz ensures your media is always accessible
 
 ---
 
@@ -476,7 +476,7 @@ done
 
 ## API Endpoints
 
-The CLI interacts with these Postiz API endpoints:
+The CLI interacts with these XPoz API endpoints:
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
@@ -494,8 +494,8 @@ The CLI interacts with these Postiz API endpoints:
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `POSTIZ_API_KEY` | ✅ Yes | - | Your Postiz API key |
-| `POSTIZ_API_URL` | No | `https://api.postiz.com` | Custom API endpoint |
+| `POSTIZ_API_KEY` | ✅ Yes | - | Your XPoz API key |
+| `POSTIZ_API_URL` | No | `https://api.xpoz.com` | Custom API endpoint |
 
 ---
 
@@ -527,7 +527,7 @@ The CLI provides clear error messages with exit codes:
 apps/cli/
 ├── src/
 │   ├── index.ts              # CLI entry point with yargs
-│   ├── api.ts                # PostizAPI client class
+│   ├── api.ts                # XPozAPI client class
 │   ├── config.ts             # Environment configuration
 │   └── commands/
 │       ├── posts.ts          # Post management commands
@@ -596,7 +596,7 @@ postiz posts:create --help                        # Command help
 
 ## Contributing
 
-This CLI is part of the [Postiz monorepo](https://github.com/gitroomhq/postiz-app).
+This CLI is part of the [XPoz monorepo](https://github.com/gitroomhq/postiz-app).
 
 To contribute:
 1. Fork the repository
@@ -615,8 +615,8 @@ AGPL-3.0
 
 ## Links
 
-- **Website:** [postiz.com](https://postiz.com)
-- **API Docs:** [postiz.com/api-docs](https://postiz.com/api-docs)
+- **Website:** [xpoz.com](https://xpoz.com)
+- **API Docs:** [xpoz.com/api-docs](https://xpoz.com/api-docs)
 - **GitHub:** [gitroomhq/postiz-app](https://github.com/gitroomhq/postiz-app)
 - **Issues:** [Report bugs](https://github.com/gitroomhq/postiz-app/issues)
 

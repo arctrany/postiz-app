@@ -195,12 +195,12 @@ export const DeveloperComponent: FC = () => {
           <div className="text-customColor18 mt-[4px]">
             {t(
               'create_an_oauth_application',
-              'Create an OAuth application to allow third-party integrations with Postiz on behalf of your users.'
+              'Create an OAuth application to allow third-party integrations with XPoz on behalf of your users.'
             )}
             <br />
             <a
               className="underline hover:font-bold hover:underline"
-              href="https://docs.postiz.com/public-api/oauth"
+              href="/docs/public-api/oauth"
               target="_blank"
             >
               {t(
@@ -313,7 +313,7 @@ export const DeveloperComponent: FC = () => {
           <br />
           <a
             className="underline hover:font-bold hover:underline"
-            href="https://docs.postiz.com/public-api/oauth"
+            href="/docs/public-api/oauth"
             target="_blank"
           >
             {t(

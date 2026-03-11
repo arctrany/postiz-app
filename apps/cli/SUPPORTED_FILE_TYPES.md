@@ -1,6 +1,6 @@
 # Supported File Types for Upload
 
-The Postiz CLI now correctly detects and uploads various media types.
+The XPoz CLI now correctly detects and uploads various media types.
 
 ## How It Works
 
@@ -112,8 +112,8 @@ Response:
 ```json
 {
   "id": "upload-123",
-  "path": "https://cdn.postiz.com/uploads/photo.jpg",
-  "url": "https://cdn.postiz.com/uploads/photo.jpg"
+  "path": "https://cdn.xpoz.com/uploads/photo.jpg",
+  "url": "https://cdn.xpoz.com/uploads/photo.jpg"
 }
 ```
 
@@ -127,8 +127,8 @@ Response:
 ```json
 {
   "id": "upload-456",
-  "path": "https://cdn.postiz.com/uploads/promo.mp4",
-  "url": "https://cdn.postiz.com/uploads/promo.mp4"
+  "path": "https://cdn.xpoz.com/uploads/promo.mp4",
+  "url": "https://cdn.xpoz.com/uploads/promo.mp4"
 }
 ```
 

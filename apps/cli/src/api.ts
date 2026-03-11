@@ -1,17 +1,17 @@
 import fetch, { FormData } from 'node-fetch';
 
-export interface PostizConfig {
+export interface XPozConfig {
   apiKey: string;
   apiUrl?: string;
 }
 
-export class PostizAPI {
+export class XPozAPI {
   private apiKey: string;
   private apiUrl: string;
 
-  constructor(config: PostizConfig) {
+  constructor(config: XPozConfig) {
     this.apiKey = config.apiKey;
-    this.apiUrl = config.apiUrl || 'https://api.postiz.com';
+    this.apiUrl = config.apiUrl || 'https://api.xpoz.com';
   }
 
   private async request(endpoint: string, options: any = {}) {

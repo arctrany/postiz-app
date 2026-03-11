@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the Postiz CLI will be documented in this file.
+All notable changes to the XPoz CLI will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-02-13
 
 ### Added
-- Initial release of Postiz CLI
+- Initial release of XPoz CLI
 - `posts:create` - Create new social media posts
 - `posts:list` - List all posts with pagination and search
 - `posts:delete` - Delete posts by ID
@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SKILL.md for AI agent usage patterns
 
 ### Features
-- Command-line interface for Postiz API
+- Command-line interface for XPoz API
 - Support for scheduled posts
 - Multi-platform posting via integrations
 - Media upload functionality

@@ -1,4 +1,4 @@
-# Postiz CLI - Command Line Guide
+# XPoz CLI - Command Line Guide
 
 ## New Syntax: Multiple `-c` and `-m` Flags
 

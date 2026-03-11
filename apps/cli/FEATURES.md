@@ -1,10 +1,10 @@
-# Postiz CLI - Feature Summary
+# XPoz CLI - Feature Summary
 
 ## ✅ Complete Feature Set
 
 ### Posts with Comments and Media - FULLY SUPPORTED
 
-The Postiz CLI **fully supports** the complete API structure including:
+The XPoz CLI **fully supports** the complete API structure including:
 
 #### ✅ Posts with Comments
 - Main post content
@@ -282,6 +282,6 @@ postiz posts:create --json complex-post.json
 - ✅ Each post can have multiple images
 - ✅ Use JSON files for full control
 - ✅ See examples/ directory for working templates
-- ✅ Fully compatible with the Postiz API structure
+- ✅ Fully compatible with the XPoz API structure
 
-The CLI supports the **complete Postiz API** including all advanced features!
+The CLI supports the **complete XPoz API** including all advanced features!

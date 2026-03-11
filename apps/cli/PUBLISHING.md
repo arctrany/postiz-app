@@ -1,4 +1,4 @@
-# Publishing the Postiz CLI to npm
+# Publishing the XPoz CLI to npm
 
 ## Quick Publish (Current Name: "postiz")
 

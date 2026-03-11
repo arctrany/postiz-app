@@ -1,10 +1,10 @@
-# Postiz CLI - Advanced Examples
+# XPoz CLI - Advanced Examples
 
-This directory contains examples demonstrating the full capabilities of the Postiz CLI, including posts with comments and multiple media.
+This directory contains examples demonstrating the full capabilities of the XPoz CLI, including posts with comments and multiple media.
 
 ## Understanding the Post Structure
 
-The Postiz API supports a rich post structure:
+The XPoz API supports a rich post structure:
 
 ```typescript
 {
@@ -305,7 +305,7 @@ fs.writeFileSync('thread.json', JSON.stringify(thread, null, 2));
 Common errors and solutions:
 
 1. **Invalid integration ID** - Run `integrations:list` to get valid IDs
-2. **Invalid image path** - Ensure images are accessible URLs or uploaded to Postiz first
+2. **Invalid image path** - Ensure images are accessible URLs or uploaded to XPoz first
 3. **Missing required fields** - Check that `type`, `date`, `shortLink`, `tags`, and `posts` are all present
 4. **Invalid date format** - Use ISO 8601 format: `YYYY-MM-DDTHH:mm:ssZ`
 

@@ -1,4 +1,4 @@
-# How to Run the Postiz CLI
+# How to Run the XPoz CLI
 
 There are several ways to run the CLI, depending on your needs.
 
@@ -201,11 +201,11 @@ postiz --help
 
 ### Required
 
-- `POSTIZ_API_KEY` - Your Postiz API key (required for all operations)
+- `POSTIZ_API_KEY` - Your XPoz API key (required for all operations)
 
 ### Optional
 
-- `POSTIZ_API_URL` - Custom API endpoint (default: `https://api.postiz.com`)
+- `POSTIZ_API_URL` - Custom API endpoint (default: `https://api.xpoz.com`)
 
 ### Setting Environment Variables
 

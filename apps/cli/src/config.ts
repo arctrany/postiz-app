@@ -1,6 +1,6 @@
-import { PostizConfig } from './api';
+import { XPozConfig } from './api';
 
-export function getConfig(): PostizConfig {
+export function getConfig(): XPozConfig {
   const apiKey = process.env.POSTIZ_API_KEY;
   const apiUrl = process.env.POSTIZ_API_URL;
 

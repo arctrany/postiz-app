@@ -1,8 +1,8 @@
-# Postiz CLI - Creation Summary
+# XPoz CLI - Creation Summary
 
 ## ✅ What Was Created
 
-A complete, production-ready CLI package for the Postiz API has been successfully created at `apps/cli/`.
+A complete, production-ready CLI package for the XPoz API has been successfully created at `apps/cli/`.
 
 ### Package Details
 
@@ -19,7 +19,7 @@ A complete, production-ready CLI package for the Postiz API has been successfull
 apps/cli/
 ├── src/                          # Source code (359 lines)
 │   ├── index.ts                  # CLI entry point with yargs
-│   ├── api.ts                    # Postiz API client
+│   ├── api.ts                    # XPoz API client
 │   ├── config.ts                 # Environment configuration
 │   └── commands/
 │       ├── posts.ts              # Post management
@@ -207,7 +207,7 @@ function postToSocial(content) {
 - ✅ CLI package created in apps/cli
 - ✅ Package name is "postiz"
 - ✅ Uses POSTIZ_API_KEY environment variable
-- ✅ Integrates with Postiz public API
+- ✅ Integrates with XPoz public API
 - ✅ Built for AI agent usage
 - ✅ SKILL.md created with comprehensive guide
 - ✅ README.md with full documentation
@@ -269,7 +269,7 @@ pnpm run publish
 
 ## 🎉 Summary
 
-A complete, production-ready CLI tool for Postiz has been created with:
+A complete, production-ready CLI tool for XPoz has been created with:
 
 - ✅ All requested features implemented
 - ✅ Comprehensive documentation for users and AI agents

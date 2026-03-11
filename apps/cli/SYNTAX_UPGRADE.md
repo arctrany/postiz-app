@@ -1,4 +1,4 @@
-# Postiz CLI - Improved Syntax! 🎉
+# XPoz CLI - Improved Syntax! 🎉
 
 ## What Changed
 

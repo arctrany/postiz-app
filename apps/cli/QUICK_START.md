@@ -1,4 +1,4 @@
-# Postiz CLI - Quick Start Guide
+# XPoz CLI - Quick Start Guide
 
 ## Installation
 
@@ -45,7 +45,7 @@ pnpm add -g postiz
 
 ### 1. Get Your API Key
 
-1. Log in to your Postiz account at https://postiz.com
+1. Log in to your XPoz account at https://xpoz.com
 2. Navigate to Settings → API Keys
 3. Generate a new API key
 
@@ -278,7 +278,7 @@ postiz posts:delete --help
 
 ## Links
 
-- [Postiz Website](https://postiz.com)
-- [API Documentation](https://postiz.com/api-docs)
+- [XPoz Website](https://xpoz.com)
+- [API Documentation](https://xpoz.com/api-docs)
 - [GitHub Repository](https://github.com/gitroomhq/postiz-app)
 - [Report Issues](https://github.com/gitroomhq/postiz-app/issues)

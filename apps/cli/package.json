@@ -1,7 +1,7 @@
 {
   "name": "postiz",
   "version": "2.0.5",
-  "description": "Postiz CLI - Command line interface for the Postiz social media scheduling API",
+  "description": "XPoz CLI - Command line interface for the XPoz social media scheduling API",
   "main": "dist/index.js",
   "bin": {
     "postiz": "./dist/index.js"
@@ -33,7 +33,7 @@
     "url": "https://github.com/gitroomhq/postiz-app.git",
     "directory": "apps/cli"
   },
-  "homepage": "https://postiz.com",
+  "homepage": "https://xpoz.com",
   "bugs": {
     "url": "https://github.com/gitroomhq/postiz-app/issues"
   }
