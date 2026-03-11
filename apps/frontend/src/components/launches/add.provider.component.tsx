@@ -527,41 +527,83 @@ export const AddProviderComponent: FC<{
             return;
           }
           try {
-            const cookieResponse = await new Promise<any>((resolve, reject) => {
-              chrome.runtime.sendMessage(
-                extensionId,
-                { type: 'GET_COOKIES', provider: identifier },
-                (response: any) => {
-                  if (chrome.runtime.lastError) {
-                    reject(new Error(chrome.runtime.lastError.message));
-                  } else {
-                    resolve(response);
+            // Wechatsync 平台使用 WECHATSYNC_CHECK_AUTH
+            const isWechatsync = identifier.startsWith('wechatsync-');
+            if (isWechatsync) {
+              const platformId = identifier.replace('wechatsync-', '');
+              const authResponse = await new Promise<any>((resolve, reject) => {
+                chrome.runtime.sendMessage(
+                  extensionId,
+                  { type: 'WECHATSYNC_CHECK_AUTH', platformId },
+                  (response: any) => {
+                    if (chrome.runtime.lastError) {
+                      reject(new Error(chrome.runtime.lastError.message));
+                    } else {
+                      resolve(response);
+                    }
                   }
-                }
-              );
-            });
-            if (!cookieResponse.success) {
-              toaster.show(
-                cookieResponse.error ||
-                  t(
-                    'extension_cookies_missing',
-                    'Could not get cookies. Please log in to the platform first.'
-                  ),
-                'warning'
-              );
-              return;
+                );
+              });
+              if (!authResponse.isAuthenticated) {
+                toaster.show(
+                  authResponse.error ||
+                    t(
+                      'please_login_first',
+                      '请先在浏览器中登录该平台，然后重试。'
+                    ),
+                  'warning'
+                );
+                return;
+              }
+              const { url } = await (
+                await fetch(
+                  `/integrations/social/${identifier}${
+                    onboarding ? '?onboarding=true' : ''
+                  }`
+                )
+              ).json();
+              modal.closeAll();
+              window.location.href = `/integrations/social/${identifier}?state=${url}&code=${Buffer.from(
+                JSON.stringify(authResponse)
+              ).toString('base64')}${onboarding ? '&onboarding=true' : ''}`;
+            } else {
+              // 其他 Chrome Extension 平台使用 GET_COOKIES
+              const cookieResponse = await new Promise<any>((resolve, reject) => {
+                chrome.runtime.sendMessage(
+                  extensionId,
+                  { type: 'GET_COOKIES', provider: identifier },
+                  (response: any) => {
+                    if (chrome.runtime.lastError) {
+                      reject(new Error(chrome.runtime.lastError.message));
+                    } else {
+                      resolve(response);
+                    }
+                  }
+                );
+              });
+              if (!cookieResponse.success) {
+                toaster.show(
+                  cookieResponse.error ||
+                    t(
+                      'extension_cookies_missing',
+                      'Could not get cookies. Please log in to the platform first.'
+                    ),
+                  'warning'
+                );
+                return;
+              }
+              const { url } = await (
+                await fetch(
+                  `/integrations/social/${identifier}${
+                    onboarding ? '?onboarding=true' : ''
+                  }`
+                )
+              ).json();
+              modal.closeAll();
+              window.location.href = `/integrations/social/${identifier}?state=${url}&code=${Buffer.from(
+                JSON.stringify(cookieResponse.cookies)
+              ).toString('base64')}${onboarding ? '&onboarding=true' : ''}`;
             }
-            const { url } = await (
-              await fetch(
-                `/integrations/social/${identifier}${
-                  onboarding ? '?onboarding=true' : ''
-                }`
-              )
-            ).json();
-            modal.closeAll();
-            window.location.href = `/integrations/social/${identifier}?state=${url}&code=${Buffer.from(
-              JSON.stringify(cookieResponse.cookies)
-            ).toString('base64')}${onboarding ? '&onboarding=true' : ''}`;
           } catch {
             toaster.show(
               t(

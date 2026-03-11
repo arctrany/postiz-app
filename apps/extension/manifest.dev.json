@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "XPoz",
-  "version": "2.0.0",
+  "name": "XPoz (Dev)",
+  "version": "2.1.0",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqtH6qclAsfFf6qbUKfPmhBbfycGrt13+0h6ti/olniCGnjQjhkVVTnURfLFz+v+842Ee+pAS5HBEXo57dQ9xUtwFGXnavVR+myjN+Un9NIfFyYmYEBvLrinclsMJBwWMM8JkhxKuaOagxp1hqGgNAO4C0bzE3YN/SPoTjNpGU8TGm/ENZ/TDUneZyyVM5HEEmOTZEmjmy9FJaxbzGmZ2rixNO45pkjXMFp8+/XrFSNiCqNZt6LQNIqL5SfVIRUKGBjE3OG/gtahVToBdlXi5yzP1uYE0Qs4grJ/T1rUUzTXFAQa7heWA9mskf0xAMEtTSED4N9bZ4sF8cf5J+SGGlwIDAQAB",
-  "description": "XPoz browser extension for social media scheduling",
+  "description": "XPoz browser extension for social media scheduling — supports 55+ platforms worldwide",
   "icons": {
     "32": "icon-32.png",
     "128": "icon-128.png"
@@ -11,10 +11,37 @@
   "permissions": [
     "cookies",
     "alarms",
-    "storage"
+    "storage",
+    "declarativeNetRequest",
+    "tabs",
+    "scripting"
   ],
   "host_permissions": [
-    "*://*.skool.com/*"
+    "*://*.skool.com/*",
+    "*://*.zhihu.com/*",
+    "*://*.juejin.cn/*",
+    "*://*.csdn.net/*",
+    "*://*.toutiao.com/*",
+    "*://*.weibo.com/*",
+    "*://*.bilibili.com/*",
+    "*://*.baijiahao.baidu.com/*",
+    "*://*.mp.weixin.qq.com/*",
+    "*://*.jianshu.com/*",
+    "*://*.douban.com/*",
+    "*://*.xueqiu.com/*",
+    "*://*.sohu.com/*",
+    "*://*.mp.dayu.com/*",
+    "*://*.woshipm.com/*",
+    "*://*.yuque.com/*",
+    "*://*.yidianzixun.com/*",
+    "*://*.51cto.com/*",
+    "*://*.focus.cn/*",
+    "*://*.imooc.com/*",
+    "*://*.oschina.net/*",
+    "*://*.segmentfault.com/*",
+    "*://*.cnblogs.com/*",
+    "*://*.eastmoney.com/*",
+    "*://*.xiaohongshu.com/*"
   ],
   "background": {
     "service_worker": "background.js",
