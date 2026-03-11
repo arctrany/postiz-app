@@ -4,9 +4,21 @@ import { shuffle } from 'lodash';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
 
+// Text LLM client: supports Qwen (DashScope), OpenRouter, or any OpenAI-compatible API
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'sk-proj-',
+  ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
 });
+
+// Image generation client: may use a different API key/endpoint than text
+const imageClient = (process.env.IMAGE_API_KEY || process.env.IMAGE_BASE_URL)
+  ? new OpenAI({
+      apiKey: process.env.IMAGE_API_KEY || process.env.OPENAI_API_KEY || 'sk-proj-',
+      ...(process.env.IMAGE_BASE_URL ? { baseURL: process.env.IMAGE_BASE_URL } : {}),
+    })
+  : openai;
+
+const AI_MODEL = process.env.AI_MODEL || 'gpt-4.1';
 
 const PicturePrompt = z.object({
   prompt: z.string(),
@@ -20,10 +32,10 @@ const VoicePrompt = z.object({
 export class OpenaiService {
   async generateImage(prompt: string, isUrl: boolean, isVertical = false) {
     const generate = (
-      await openai.images.generate({
+      await imageClient.images.generate({
         prompt,
         response_format: isUrl ? 'url' : 'b64_json',
-        model: 'dall-e-3',
+        model: process.env.IMAGE_MODEL || 'dall-e-3',
         ...(isVertical ? { size: '1024x1792' } : {}),
       })
     ).data[0];
@@ -35,7 +47,7 @@ export class OpenaiService {
     return (
       (
         await openai.chat.completions.parse({
-          model: 'gpt-4.1',
+          model: AI_MODEL,
           messages: [
             {
               role: 'system',
@@ -56,7 +68,7 @@ export class OpenaiService {
     return (
       (
         await openai.chat.completions.parse({
-          model: 'gpt-4.1',
+          model: AI_MODEL,
           messages: [
             {
               role: 'system',
@@ -90,7 +102,7 @@ export class OpenaiService {
           ],
           n: 5,
           temperature: 1,
-          model: 'gpt-4.1',
+          model: AI_MODEL,
         }),
         openai.chat.completions.create({
           messages: [
@@ -106,7 +118,7 @@ export class OpenaiService {
           ],
           n: 5,
           temperature: 1,
-          model: 'gpt-4.1',
+          model: AI_MODEL,
         }),
       ])
     ).flatMap((p) => p.choices);
@@ -144,7 +156,7 @@ export class OpenaiService {
           content,
         },
       ],
-      model: 'gpt-4.1',
+      model: AI_MODEL,
     });
 
     const { content: articleContent } = websiteContent.choices[0].message;
@@ -164,7 +176,7 @@ export class OpenaiService {
     const posts =
       (
         await openai.chat.completions.parse({
-          model: 'gpt-4.1',
+          model: AI_MODEL,
           messages: [
             {
               role: 'system',
@@ -197,7 +209,7 @@ export class OpenaiService {
               return (
                 (
                   await openai.chat.completions.parse({
-                    model: 'gpt-4.1',
+                    model: AI_MODEL,
                     messages: [
                       {
                         role: 'system',
@@ -233,7 +245,7 @@ export class OpenaiService {
         const parse =
           (
             await openai.chat.completions.parse({
-              model: 'gpt-4.1',
+              model: AI_MODEL,
               messages: [
                 {
                   role: 'system',

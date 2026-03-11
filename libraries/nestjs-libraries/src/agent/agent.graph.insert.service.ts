@@ -8,10 +8,14 @@ import { z } from 'zod';
 import { agentTopics } from '@gitroom/nestjs-libraries/agent/agent.topics';
 import { PostsService } from '@gitroom/nestjs-libraries/database/prisma/posts/posts.service';
 
+// Text LLM: supports Qwen (DashScope), OpenRouter, or any OpenAI-compatible API
 const model = new ChatOpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'sk-proj-',
-  model: 'gpt-4o-2024-08-06',
+  model: process.env.AI_MODEL || 'gpt-4o-2024-08-06',
   temperature: 0,
+  ...(process.env.AI_BASE_URL
+    ? { configuration: { baseURL: process.env.AI_BASE_URL } }
+    : {}),
 });
 
 interface WorkflowChannelsState {

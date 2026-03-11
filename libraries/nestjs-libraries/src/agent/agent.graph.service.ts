@@ -21,15 +21,20 @@ const tools = !process.env.TAVILY_API_KEY
   : [new TavilySearchResults({ maxResults: 3 })];
 const toolNode = new ToolNode(tools);
 
+// Text LLM: supports Qwen (DashScope), OpenRouter, or any OpenAI-compatible API
 const model = new ChatOpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'sk-proj-',
-  model: 'gpt-4.1',
+  model: process.env.AI_MODEL || 'gpt-4.1',
   temperature: 0.7,
+  ...(process.env.AI_BASE_URL
+    ? { configuration: { baseURL: process.env.AI_BASE_URL } }
+    : {}),
 });
 
+// Image generation: DALL-E (requires separate OPENAI_API_KEY if using non-OpenAI text model)
 const dalle = new DallEAPIWrapper({
-  apiKey: process.env.OPENAI_API_KEY || 'sk-proj-',
-  model: 'dall-e-3',
+  apiKey: process.env.IMAGE_API_KEY || process.env.OPENAI_API_KEY || 'sk-proj-',
+  model: process.env.IMAGE_MODEL || 'dall-e-3',
 });
 
 interface WorkflowChannelsState {
