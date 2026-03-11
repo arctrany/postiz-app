@@ -21,14 +21,14 @@ export const startMcp = async (app: INestApplication) => {
   };
 
   const mastra = await mastraService.mastra();
-  const agent = mastra.getAgent('postiz');
+  const agent = mastra.getAgent('xpoz');
   const tools = await agent.getTools();
 
   const serverConfig = {
     name: 'XPoz MCP',
     version: '1.0.0',
     tools,
-    agents: { postiz: agent },
+    agents: { xpoz: agent },
   };
 
   const server = new MCPServer(serverConfig);

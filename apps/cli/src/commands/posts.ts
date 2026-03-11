@@ -31,7 +31,7 @@ export async function createPost(args: any) {
     if (integrations.length === 0) {
       console.error('❌ At least one integration ID is required');
       console.error('Use -i or --integrations to specify integration IDs');
-      console.error('Run "postiz integrations:list" to see available integrations');
+      console.error('Run "xpoz integrations:list" to see available integrations');
       process.exit(1);
     }
 

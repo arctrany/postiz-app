@@ -6,7 +6,7 @@ import { uploadFile } from './commands/upload';
 import type { Argv } from 'yargs';
 
 yargs(hideBin(process.argv))
-  .scriptName('postiz')
+  .scriptName('xpoz')
   .usage('$0 <command> [options]')
   .command(
     'posts:create',
