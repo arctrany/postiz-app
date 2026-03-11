@@ -1,5 +1,5 @@
 /**
- * Wechatsync 适配器初始化
+ * XSync 适配器初始化
  * 注册所有国内平台适配器到全局 Registry
  */
 import { adapterRegistry } from './adapters/registry'
@@ -80,13 +80,13 @@ function registerAllAdapters(): void {
 }
 
 /**
- * 初始化 Wechatsync
+ * 初始化 XSync
  */
-export function initWechatsync(): void {
+export function initXSync(): void {
   runtime = createChromeRuntime()
   adapterRegistry.setRuntime(runtime)
   registerAllAdapters()
-  console.log(`[XPoz] Wechatsync initialized with ${adapterRegistry.getRegisteredIds().length} adapters`)
+  console.log(`[XPoz] XSync initialized with ${adapterRegistry.getRegisteredIds().length} adapters`)
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
  * Chrome Extension Runtime
- * 实现 RuntimeInterface，让 Wechatsync 适配器在 Chrome Extension Service Worker 中运行
+ * 实现 RuntimeInterface，让 XSync 适配器在 Chrome Extension Service Worker 中运行
  */
 import type { RuntimeInterface, RuntimeConfig } from './runtime/interface'
 import type { Cookie, HeaderRule } from './types'

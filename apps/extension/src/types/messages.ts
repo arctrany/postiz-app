@@ -26,19 +26,19 @@ export interface RemoveRefreshTokenRequest {
   integrationId: string;
 }
 
-// ---- Wechatsync Request Types ----
+// ---- XSync Request Types ----
 
-export interface WechatsyncGetPlatformsRequest {
-  type: 'WECHATSYNC_GET_PLATFORMS';
+export interface XSyncGetPlatformsRequest {
+  type: 'XSYNC_GET_PLATFORMS';
 }
 
-export interface WechatsyncCheckAuthRequest {
-  type: 'WECHATSYNC_CHECK_AUTH';
+export interface XSyncCheckAuthRequest {
+  type: 'XSYNC_CHECK_AUTH';
   platformId: string;
 }
 
-export interface WechatsyncPublishRequest {
-  type: 'WECHATSYNC_PUBLISH';
+export interface XSyncPublishRequest {
+  type: 'XSYNC_PUBLISH';
   platformId: string;
   article: {
     title: string;
@@ -60,9 +60,9 @@ export type ExtensionRequest =
   | GetCookiesRequest
   | StoreRefreshTokenRequest
   | RemoveRefreshTokenRequest
-  | WechatsyncGetPlatformsRequest
-  | WechatsyncCheckAuthRequest
-  | WechatsyncPublishRequest;
+  | XSyncGetPlatformsRequest
+  | XSyncCheckAuthRequest
+  | XSyncPublishRequest;
 
 // ---- Response Types ----
 
@@ -105,9 +105,9 @@ export interface StoredRefreshEntry {
   provider: string;
 }
 
-// ---- Wechatsync Response Types ----
+// ---- XSync Response Types ----
 
-export interface WechatsyncPlatformInfo {
+export interface XSyncPlatformInfo {
   id: string;
   name: string;
   icon: string;
@@ -115,11 +115,11 @@ export interface WechatsyncPlatformInfo {
   capabilities: string[];
 }
 
-export interface WechatsyncGetPlatformsResponse {
-  platforms: WechatsyncPlatformInfo[];
+export interface XSyncGetPlatformsResponse {
+  platforms: XSyncPlatformInfo[];
 }
 
-export interface WechatsyncAuthResponse {
+export interface XSyncAuthResponse {
   platformId: string;
   isAuthenticated: boolean;
   username?: string;
@@ -128,7 +128,7 @@ export interface WechatsyncAuthResponse {
   error?: string;
 }
 
-export interface WechatsyncPublishResponse {
+export interface XSyncPublishResponse {
   platformId: string;
   success: boolean;
   postId?: string;
@@ -146,8 +146,8 @@ export type ExtensionResponse =
   | PingResponse
   | GetProvidersResponse
   | GetCookiesResponse
-  | WechatsyncGetPlatformsResponse
-  | WechatsyncAuthResponse
-  | WechatsyncPublishResponse
+  | XSyncGetPlatformsResponse
+  | XSyncAuthResponse
+  | XSyncPublishResponse
   | ErrorResponse;
 

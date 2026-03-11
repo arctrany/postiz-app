@@ -1,7 +1,7 @@
 import { ExtensionRequest, GetCookiesResponse, ProviderInfo, StoredRefreshEntry } from './types/messages';
 import { getAllProviders, getProvider } from './providers/provider.registry';
 import { CookieProvider } from './providers/cookie-provider.interface';
-import { initWechatsync, adapterRegistry } from './wechatsync/adapter-init';
+import { initXSync, adapterRegistry } from './xsync/adapter-init';
 
 const EXTENSION_VERSION = '2.1.0';
 const REFRESH_ALARM_NAME = 'cookie-refresh';
@@ -106,9 +106,9 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// --- Initialize Wechatsync adapters ---
+// --- Initialize XSync adapters ---
 
-initWechatsync();
+initXSync();
 
 // --- Ensure alarm on startup ---
 
@@ -203,9 +203,9 @@ chrome.runtime.onMessageExternal.addListener(
         return true;
       }
 
-      // ---- Wechatsync handlers ----
+      // ---- XSync handlers ----
 
-      case 'WECHATSYNC_GET_PLATFORMS': {
+      case 'XSYNC_GET_PLATFORMS': {
         const platforms = adapterRegistry.getAllMeta().map((meta) => ({
           id: meta.id,
           name: meta.name,
@@ -217,7 +217,7 @@ chrome.runtime.onMessageExternal.addListener(
         break;
       }
 
-      case 'WECHATSYNC_CHECK_AUTH': {
+      case 'XSYNC_CHECK_AUTH': {
         (async () => {
           const adapter = await adapterRegistry.get(message.platformId);
           if (!adapter) {
@@ -245,7 +245,7 @@ chrome.runtime.onMessageExternal.addListener(
         return true;
       }
 
-      case 'WECHATSYNC_PUBLISH': {
+      case 'XSYNC_PUBLISH': {
         (async () => {
           const adapter = await adapterRegistry.get(message.platformId);
           if (!adapter) {

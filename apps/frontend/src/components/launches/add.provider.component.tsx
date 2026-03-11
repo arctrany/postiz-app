@@ -527,14 +527,14 @@ export const AddProviderComponent: FC<{
             return;
           }
           try {
-            // Wechatsync 平台使用 WECHATSYNC_CHECK_AUTH
-            const isWechatsync = identifier.startsWith('wechatsync-');
-            if (isWechatsync) {
-              const platformId = identifier.replace('wechatsync-', '');
+            // XSync 平台使用 XSYNC_CHECK_AUTH
+            const isXSync = identifier.startsWith('xsync-');
+            if (isXSync) {
+              const platformId = identifier.replace('xsync-', '');
               const authResponse = await new Promise<any>((resolve, reject) => {
                 chrome.runtime.sendMessage(
                   extensionId,
-                  { type: 'WECHATSYNC_CHECK_AUTH', platformId },
+                  { type: 'XSYNC_CHECK_AUTH', platformId },
                   (response: any) => {
                     if (chrome.runtime.lastError) {
                       reject(new Error(chrome.runtime.lastError.message));

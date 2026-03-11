@@ -1,5 +1,5 @@
 /**
- * Wechatsync 核心导出
+ * XSync 核心导出
  */
 export * from './types'
 export * from './adapters/types'

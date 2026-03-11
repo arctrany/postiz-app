@@ -36,7 +36,7 @@ import { MoltbookProvider } from '@gitroom/nestjs-libraries/integrations/social/
 import { SkoolProvider } from '@gitroom/nestjs-libraries/integrations/social/skool.provider';
 import { WhopProvider } from '@gitroom/nestjs-libraries/integrations/social/whop.provider';
 import { MeweProvider } from '@gitroom/nestjs-libraries/integrations/social/mewe.provider';
-import { wechatsyncProviders } from '@gitroom/nestjs-libraries/integrations/social/wechatsync.provider';
+import { xsyncProviders } from '@gitroom/nestjs-libraries/integrations/social/xsync.provider';
 
 export const socialIntegrationList: Array<SocialAbstract & SocialProvider> = [
   new XProvider(),
@@ -73,8 +73,8 @@ export const socialIntegrationList: Array<SocialAbstract & SocialProvider> = [
   new SkoolProvider(),
   // new MeweProvider(),
   // new MastodonCustomProvider(),
-  // --- 国内平台 (Wechatsync) ---
-  ...wechatsyncProviders,
+  // --- 国内平台 (XSync) ---
+  ...xsyncProviders,
 ];
 
 @Injectable()
