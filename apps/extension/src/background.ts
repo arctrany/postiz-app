@@ -1,8 +1,9 @@
 import { ExtensionRequest, GetCookiesResponse, ProviderInfo, StoredRefreshEntry } from './types/messages';
 import { getAllProviders, getProvider } from './providers/provider.registry';
 import { CookieProvider } from './providers/cookie-provider.interface';
+import { initWechatsync, adapterRegistry } from './wechatsync/adapter-init';
 
-const EXTENSION_VERSION = '2.0.0';
+const EXTENSION_VERSION = '2.1.0';
 const REFRESH_ALARM_NAME = 'cookie-refresh';
 const STORAGE_KEY = 'refreshEntries';
 
@@ -105,6 +106,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
+// --- Initialize Wechatsync adapters ---
+
+initWechatsync();
+
 // --- Ensure alarm on startup ---
 
 (async () => {
@@ -194,6 +199,76 @@ chrome.runtime.onMessageExternal.addListener(
           await clearAlarmIfEmpty();
           sendResponse({ success: true });
         })().catch(() => sendResponse({ success: false }));
+
+        return true;
+      }
+
+      // ---- Wechatsync handlers ----
+
+      case 'WECHATSYNC_GET_PLATFORMS': {
+        const platforms = adapterRegistry.getAllMeta().map((meta) => ({
+          id: meta.id,
+          name: meta.name,
+          icon: meta.icon,
+          homepage: meta.homepage,
+          capabilities: meta.capabilities,
+        }));
+        sendResponse({ platforms });
+        break;
+      }
+
+      case 'WECHATSYNC_CHECK_AUTH': {
+        (async () => {
+          const adapter = await adapterRegistry.get(message.platformId);
+          if (!adapter) {
+            sendResponse({
+              platformId: message.platformId,
+              isAuthenticated: false,
+              error: `Unknown platform: ${message.platformId}`,
+            });
+            return;
+          }
+
+          const authResult = await adapter.checkAuth();
+          sendResponse({
+            platformId: message.platformId,
+            ...authResult,
+          });
+        })().catch((err) =>
+          sendResponse({
+            platformId: message.platformId,
+            isAuthenticated: false,
+            error: `Auth check failed: ${err.message}`,
+          })
+        );
+
+        return true;
+      }
+
+      case 'WECHATSYNC_PUBLISH': {
+        (async () => {
+          const adapter = await adapterRegistry.get(message.platformId);
+          if (!adapter) {
+            sendResponse({
+              platformId: message.platformId,
+              success: false,
+              error: `Unknown platform: ${message.platformId}`,
+            });
+            return;
+          }
+
+          const syncResult = await adapter.publish(message.article, message.options);
+          sendResponse({
+            platformId: message.platformId,
+            ...syncResult,
+          });
+        })().catch((err) =>
+          sendResponse({
+            platformId: message.platformId,
+            success: false,
+            error: `Publish failed: ${err.message}`,
+          })
+        );
 
         return true;
       }

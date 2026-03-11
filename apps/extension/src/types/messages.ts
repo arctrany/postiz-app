@@ -26,12 +26,43 @@ export interface RemoveRefreshTokenRequest {
   integrationId: string;
 }
 
+// ---- Wechatsync Request Types ----
+
+export interface WechatsyncGetPlatformsRequest {
+  type: 'WECHATSYNC_GET_PLATFORMS';
+}
+
+export interface WechatsyncCheckAuthRequest {
+  type: 'WECHATSYNC_CHECK_AUTH';
+  platformId: string;
+}
+
+export interface WechatsyncPublishRequest {
+  type: 'WECHATSYNC_PUBLISH';
+  platformId: string;
+  article: {
+    title: string;
+    markdown: string;
+    html?: string;
+    summary?: string;
+    cover?: string;
+    tags?: string[];
+    category?: string;
+  };
+  options?: {
+    draftOnly?: boolean;
+  };
+}
+
 export type ExtensionRequest =
   | PingRequest
   | GetProvidersRequest
   | GetCookiesRequest
   | StoreRefreshTokenRequest
-  | RemoveRefreshTokenRequest;
+  | RemoveRefreshTokenRequest
+  | WechatsyncGetPlatformsRequest
+  | WechatsyncCheckAuthRequest
+  | WechatsyncPublishRequest;
 
 // ---- Response Types ----
 
@@ -74,6 +105,39 @@ export interface StoredRefreshEntry {
   provider: string;
 }
 
+// ---- Wechatsync Response Types ----
+
+export interface WechatsyncPlatformInfo {
+  id: string;
+  name: string;
+  icon: string;
+  homepage: string;
+  capabilities: string[];
+}
+
+export interface WechatsyncGetPlatformsResponse {
+  platforms: WechatsyncPlatformInfo[];
+}
+
+export interface WechatsyncAuthResponse {
+  platformId: string;
+  isAuthenticated: boolean;
+  username?: string;
+  userId?: string;
+  avatar?: string;
+  error?: string;
+}
+
+export interface WechatsyncPublishResponse {
+  platformId: string;
+  success: boolean;
+  postId?: string;
+  postUrl?: string;
+  draftOnly?: boolean;
+  error?: string;
+  message?: string;
+}
+
 export interface ErrorResponse {
   error: string;
 }
@@ -82,4 +146,8 @@ export type ExtensionResponse =
   | PingResponse
   | GetProvidersResponse
   | GetCookiesResponse
+  | WechatsyncGetPlatformsResponse
+  | WechatsyncAuthResponse
+  | WechatsyncPublishResponse
   | ErrorResponse;
+

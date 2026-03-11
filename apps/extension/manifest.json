@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "XPoz",
-  "version": "2.0.0",
-  "description": "XPoz browser extension for social media scheduling",
+  "version": "2.1.0",
+  "description": "XPoz browser extension for social media scheduling — supports 55+ platforms worldwide",
   "icons": {
     "32": "icon-32.png",
     "128": "icon-128.png"
@@ -10,10 +10,37 @@
   "permissions": [
     "cookies",
     "alarms",
-    "storage"
+    "storage",
+    "declarativeNetRequest",
+    "tabs",
+    "scripting"
   ],
   "host_permissions": [
-    "*://*.skool.com/*"
+    "*://*.skool.com/*",
+    "*://*.zhihu.com/*",
+    "*://*.juejin.cn/*",
+    "*://*.csdn.net/*",
+    "*://*.toutiao.com/*",
+    "*://*.weibo.com/*",
+    "*://*.bilibili.com/*",
+    "*://*.baijiahao.baidu.com/*",
+    "*://*.mp.weixin.qq.com/*",
+    "*://*.jianshu.com/*",
+    "*://*.douban.com/*",
+    "*://*.xueqiu.com/*",
+    "*://*.sohu.com/*",
+    "*://*.mp.dayu.com/*",
+    "*://*.woshipm.com/*",
+    "*://*.yuque.com/*",
+    "*://*.yidianzixun.com/*",
+    "*://*.51cto.com/*",
+    "*://*.focus.cn/*",
+    "*://*.imooc.com/*",
+    "*://*.oschina.net/*",
+    "*://*.segmentfault.com/*",
+    "*://*.cnblogs.com/*",
+    "*://*.eastmoney.com/*",
+    "*://*.xiaohongshu.com/*"
   ],
   "background": {
     "service_worker": "background.js",
