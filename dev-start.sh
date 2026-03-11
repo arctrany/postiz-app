@@ -46,11 +46,12 @@ npx prisma db push --schema=libraries/nestjs-libraries/src/database/prisma/schem
   || npx prisma db push --schema=libraries/nestjs-libraries/src/database/prisma/schema.prisma
 info "迁移完成"
 
-# --- 4. 启动前端+后端 ---
+# --- 4. 启动前端+后端+编排器 ---
 echo ""
 echo "===== 4/4 启动开发服务器 ====="
 info "前端: http://localhost:4200"
 info "后端: http://localhost:3000"
+info "编排器 (Temporal Worker): 发帖/刷新Token 等异步任务"
 info "X OAuth 2.0 已配置 ✓"
 echo ""
-pnpm run --filter ./apps/backend --filter ./apps/frontend --parallel dev
+pnpm run --filter ./apps/backend --filter ./apps/frontend --filter ./apps/orchestrator --parallel dev
