@@ -430,22 +430,42 @@ export class XProvider extends SocialAbstract implements SocialProvider {
           p?.media?.flatMap(async (m) => {
             return {
               id: await this.runInConcurrent(
-                async () =>
-                  client.v2.uploadMedia(
-                    m.path.indexOf('mp4') > -1
-                      ? Buffer.from(await readOrFetch(m.path))
-                      : await sharp(await readOrFetch(m.path), {
-                          animated: lookup(m.path) === 'image/gif',
-                        })
-                          .resize({
-                            width: 1000,
-                          })
-                          .gif()
-                          .toBuffer(),
-                    {
-                      media_type: (lookup(m.path) || '') as any,
+                async () => {
+                  try {
+                    console.log('[X-Upload] Downloading media from:', m.path);
+                    const rawData = await readOrFetch(m.path);
+                    console.log('[X-Upload] Downloaded, size:', rawData?.length || 0);
+
+                    let buffer: Buffer;
+                    if (m.path.indexOf('mp4') > -1) {
+                      buffer = Buffer.from(rawData);
+                    } else {
+                      const mimeType = lookup(m.path) || '';
+                      const isGif = mimeType === 'image/gif';
+                      buffer = await sharp(rawData, { animated: isGif })
+                        .resize({ width: 1000 })
+                        .png()
+                        .toBuffer();
+                      console.log('[X-Upload] Processed image, size:', buffer.length);
                     }
-                  ),
+
+                    const mediaType = (lookup(m.path) || 'image/png') as any;
+                    console.log('[X-Upload] Uploading to X, media_type:', mediaType);
+                    const result = await client.v2.uploadMedia(buffer, {
+                      media_type: mediaType,
+                    });
+                    console.log('[X-Upload] Upload SUCCESS, media_id:', result);
+                    return result;
+                  } catch (uploadErr: any) {
+                    console.error('[X-Upload] FAILED:', uploadErr?.message);
+                    console.error('[X-Upload] Error details:', JSON.stringify({
+                      data: uploadErr?.data,
+                      code: uploadErr?.code,
+                      statusCode: uploadErr?.statusCode,
+                    }, null, 2));
+                    throw uploadErr;
+                  }
+                },
                 true
               ),
               postId: p.id,
