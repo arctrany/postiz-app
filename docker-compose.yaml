@@ -86,6 +86,11 @@ services:
 
       # === Misc Settings
       OPENAI_API_KEY: ''
+      # IMAGE_PROVIDER: 'openai'  # 'openai' (default) or 'fal'
+      # IMAGE_API_KEY: ''         # defaults to OPENAI_API_KEY
+      # IMAGE_MODEL: 'dall-e-3'   # provider-specific model name
+      # IMAGE_BASE_URL: ''        # for OpenAI-compatible image APIs
+      # FAL_KEY: ''               # required when IMAGE_PROVIDER='fal'
       NEXT_PUBLIC_DISCORD_SUPPORT: ''
       NEXT_PUBLIC_POLOTNO: ''
       API_LIMIT: 30

@@ -13,7 +13,7 @@ import { parseBuffer } from 'music-metadata';
 import { stringifySync } from 'subtitle';
 
 import pLimit from 'p-limit';
-import { FalService } from '@gitroom/nestjs-libraries/openai/fal.service';
+import { ImageGenerationService } from '@gitroom/nestjs-libraries/openai/image/image-generation.service';
 import { IsString } from 'class-validator';
 import { JSONSchema } from 'class-validator-jsonschema';
 const limit = pLimit(2);
@@ -54,15 +54,14 @@ class ImagesSlidesParams {
     !!process.env.ELEVENSLABS_API_KEY &&
     !!process.env.TRANSLOADIT_AUTH &&
     !!process.env.TRANSLOADIT_SECRET &&
-    !!process.env.OPENAI_API_KEY &&
-    !!process.env.FAL_KEY,
+    !!(process.env.OPENAI_API_KEY || process.env.IMAGE_API_KEY || process.env.FAL_KEY),
 })
 export class ImagesSlides extends VideoAbstract<ImagesSlidesParams> {
   override dto = ImagesSlidesParams;
   private storage = UploadFactory.createStorage();
   constructor(
     private _openaiService: OpenaiService,
-    private _falService: FalService
+    private _imageService: ImageGenerationService
   ) {
     super();
   }
@@ -81,7 +80,7 @@ export class ImagesSlides extends VideoAbstract<ImagesSlidesParams> {
           new Promise(async (res) => {
             res({
               len: 0,
-              url: await this._falService.generateImageFromText(
+              url: await this._imageService.generateImageWithModel(
                 'ideogram/v2',
                 current.imagePrompt,
                 output === 'vertical'

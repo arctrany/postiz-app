@@ -3,20 +3,13 @@ import OpenAI from 'openai';
 import { shuffle } from 'lodash';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { z } from 'zod';
+import { ImageFactory } from './image/image.factory';
 
 // Text LLM client: supports Qwen (DashScope), OpenRouter, or any OpenAI-compatible API
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || 'sk-proj-',
   ...(process.env.AI_BASE_URL ? { baseURL: process.env.AI_BASE_URL } : {}),
 });
-
-// Image generation client: may use a different API key/endpoint than text
-const imageClient = (process.env.IMAGE_API_KEY || process.env.IMAGE_BASE_URL)
-  ? new OpenAI({
-      apiKey: process.env.IMAGE_API_KEY || process.env.OPENAI_API_KEY || 'sk-proj-',
-      ...(process.env.IMAGE_BASE_URL ? { baseURL: process.env.IMAGE_BASE_URL } : {}),
-    })
-  : openai;
 
 const AI_MODEL = process.env.AI_MODEL || 'gpt-4.1';
 
@@ -30,17 +23,13 @@ const VoicePrompt = z.object({
 
 @Injectable()
 export class OpenaiService {
-  async generateImage(prompt: string, isUrl: boolean, isVertical = false) {
-    const generate = (
-      await imageClient.images.generate({
-        prompt,
-        response_format: isUrl ? 'url' : 'b64_json',
-        model: process.env.IMAGE_MODEL || 'dall-e-3',
-        ...(isVertical ? { size: '1024x1792' } : {}),
-      })
-    ).data[0];
+  private imageProvider = ImageFactory.createProvider();
 
-    return isUrl ? generate.url : generate.b64_json;
+  async generateImage(prompt: string, isUrl: boolean, isVertical = false) {
+    return this.imageProvider.generateImage(prompt, {
+      returnUrl: isUrl,
+      isVertical,
+    });
   }
 
   async generatePromptForPicture(prompt: string) {

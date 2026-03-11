@@ -35,6 +35,7 @@ import { ThirdPartyRepository } from '@gitroom/nestjs-libraries/database/prisma/
 import { ThirdPartyService } from '@gitroom/nestjs-libraries/database/prisma/third-party/third-party.service';
 import { VideoManager } from '@gitroom/nestjs-libraries/videos/video.manager';
 import { FalService } from '@gitroom/nestjs-libraries/openai/fal.service';
+import { ImageGenerationService } from '@gitroom/nestjs-libraries/openai/image/image-generation.service';
 import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
 import { OAuthRepository } from '@gitroom/nestjs-libraries/database/prisma/oauth/oauth.repository';
 import { OAuthService } from '@gitroom/nestjs-libraries/database/prisma/oauth/oauth.service';
@@ -75,6 +76,7 @@ import { OAuthService } from '@gitroom/nestjs-libraries/database/prisma/oauth/oa
     ExtractContentService,
     OpenaiService,
     FalService,
+    ImageGenerationService,
     EmailService,
     TrackService,
     ShortLinkService,
