@@ -1,6 +1,12 @@
 import * as Sentry from '@sentry/nestjs';
-import { nodeProfilingIntegration } from '@sentry/profiling-node';
 import { capitalize } from 'lodash';
+
+let nodeProfilingIntegration: any = null;
+try {
+  nodeProfilingIntegration = require('@sentry/profiling-node').nodeProfilingIntegration;
+} catch {
+  // Native CPU profiler not available (e.g. unsupported Node version)
+}
 
 export const initializeSentry = (appName: string, allowLogs = false) => {
   if (!process.env.NEXT_PUBLIC_SENTRY_DSN) {
@@ -8,6 +14,18 @@ export const initializeSentry = (appName: string, allowLogs = false) => {
   }
 
   try {
+    const integrations: any[] = [
+      Sentry.consoleLoggingIntegration({ levels: ['log', 'info', 'warn', 'error', 'debug', 'assert', 'trace'] }),
+      Sentry.openAIIntegration({
+        recordInputs: true,
+        recordOutputs: true,
+      }),
+    ];
+
+    if (nodeProfilingIntegration) {
+      integrations.unshift(nodeProfilingIntegration());
+    }
+
     Sentry.init({
       initialScope: {
         tags: {
@@ -23,21 +41,15 @@ export const initializeSentry = (appName: string, allowLogs = false) => {
       environment: process.env.NODE_ENV || 'development',
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
       spotlight: process.env.SENTRY_SPOTLIGHT === '1',
-      integrations: [
-        // Add our Profiling integration
-        nodeProfilingIntegration(),
-        Sentry.consoleLoggingIntegration({ levels: ['log', 'info', 'warn', 'error', 'debug', 'assert', 'trace'] }),
-        Sentry.openAIIntegration({
-          recordInputs: true,
-          recordOutputs: true,
-        }),
-      ],
+      integrations,
       tracesSampleRate: 1.0,
       enableLogs: true,
 
-      // Profiling
-      profileSessionSampleRate: process.env.NODE_ENV === 'development' ? 1.0 : 0.45,
-      profileLifecycle: 'trace',
+      // Profiling (only if available)
+      ...(nodeProfilingIntegration ? {
+        profileSessionSampleRate: process.env.NODE_ENV === 'development' ? 1.0 : 0.45,
+        profileLifecycle: 'trace' as const,
+      } : {}),
     });
   } catch (err) {
     console.log(err);

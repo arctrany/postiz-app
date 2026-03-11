@@ -1,4 +1,5 @@
 import { TweetV2, TwitterApi } from 'twitter-api-v2';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 import {
   AnalyticsData,
   AuthTokenDetails,
@@ -54,6 +55,11 @@ export class XProvider extends SocialAbstract implements SocialProvider {
 
   private get clientSecret(): string {
     return process.env.X_CLIENT_SECRET || process.env.X_API_SECRET || '';
+  }
+
+  private get proxyAgent() {
+    const proxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+    return proxy ? new HttpsProxyAgent(proxy) : undefined;
   }
 
   maxLength(isTwitterPremium: boolean) {
@@ -239,9 +245,12 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     }
 
     try {
+      const agent = this.proxyAgent;
       const client = new TwitterApi({
         clientId: this.clientId,
         clientSecret: this.clientSecret,
+      }, {
+        ...(agent ? { httpAgent: agent } : {}),
       });
 
       const {
@@ -251,9 +260,13 @@ export class XProvider extends SocialAbstract implements SocialProvider {
         client: refreshedClient,
       } = await client.refreshOAuth2Token(refreshTokenValue);
 
+      const refreshedMeClient = new TwitterApi(newAccessToken, {
+        ...(agent ? { httpAgent: agent } : {}),
+      });
+
       const {
         data: { username, profile_image_url, name, id },
-      } = await refreshedClient.v2.me({
+      } = await refreshedMeClient.v2.me({
         'user.fields': [
           'username',
           'profile_image_url',
@@ -285,9 +298,12 @@ export class XProvider extends SocialAbstract implements SocialProvider {
   }
 
   async generateAuthUrl() {
+    const agent = this.proxyAgent;
     const client = new TwitterApi({
       clientId: this.clientId,
       clientSecret: this.clientSecret,
+    }, {
+      ...(agent ? { httpAgent: agent } : {}),
     });
 
     const callbackUrl =
@@ -311,55 +327,69 @@ export class XProvider extends SocialAbstract implements SocialProvider {
   async authenticate(params: { code: string; codeVerifier: string }) {
     const { code, codeVerifier } = params;
 
-    const client = new TwitterApi({
-      clientId: this.clientId,
-      clientSecret: this.clientSecret,
-    });
-
     const callbackUrl =
       (process.env.X_URL || process.env.FRONTEND_URL) +
       `/integrations/social/x`;
 
-    const {
-      accessToken,
-      refreshToken,
-      expiresIn,
-      client: loggedClient,
-    } = await client.loginWithOAuth2({
-      code,
-      codeVerifier,
-      redirectUri: callbackUrl,
+    const agent = this.proxyAgent;
+    const client = new TwitterApi({
+      clientId: this.clientId,
+      clientSecret: this.clientSecret,
+    }, {
+      ...(agent ? { httpAgent: agent } : {}),
     });
 
-    const {
-      data: { username, verified, profile_image_url, name, id },
-    } = await loggedClient.v2.me({
-      'user.fields': [
-        'username',
-        'verified',
-        'verified_type',
-        'profile_image_url',
-        'name',
-      ],
-    });
+    try {
+      const {
+        accessToken,
+        refreshToken,
+        expiresIn,
+        client: loggedClient,
+      } = await client.loginWithOAuth2({
+        code,
+        codeVerifier,
+        redirectUri: callbackUrl,
+      });
 
-    return {
-      id: String(id),
-      accessToken,
-      name,
-      refreshToken: refreshToken || '',
-      expiresIn: expiresIn,
-      picture: profile_image_url || '',
-      username,
-      additionalSettings: [
-        {
-          title: 'Verified',
-          description: 'Is this a verified user? (Premium)',
-          type: 'checkbox' as const,
-          value: verified,
-        },
-      ],
-    };
+      // Create a new client with proxy for user info lookup
+      // (loggedClient from loginWithOAuth2 doesn't inherit proxy settings)
+      const meClient = new TwitterApi(accessToken, {
+        ...(agent ? { httpAgent: agent } : {}),
+      });
+
+      const {
+        data: { username, verified, profile_image_url, name, id },
+      } = await meClient.v2.me({
+        'user.fields': [
+          'username',
+          'verified',
+          'verified_type',
+          'profile_image_url',
+          'name',
+        ],
+      });
+
+      return {
+        id: String(id),
+        accessToken,
+        name,
+        refreshToken: refreshToken || '',
+        expiresIn: expiresIn,
+        picture: profile_image_url || '',
+        username,
+        additionalSettings: [
+          {
+            title: 'Verified',
+            description: 'Is this a verified user? (Premium)',
+            type: 'checkbox' as const,
+            value: verified,
+          },
+        ],
+      };
+    } catch (err: any) {
+      console.error('[X-OAuth] Token exchange failed:', err?.message);
+      throw err;
+    }
   }
 
   /**
@@ -372,16 +402,22 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     // Check if this is a legacy OAuth 1.0a token (contains ':' separator)
     if (accessToken.includes(':') && !accessToken.startsWith('ey')) {
       const [accessTokenSplit, accessSecretSplit] = accessToken.split(':');
+      const agent = this.proxyAgent;
       return new TwitterApi({
         appKey: process.env.X_API_KEY!,
         appSecret: process.env.X_API_SECRET!,
         accessToken: accessTokenSplit,
         accessSecret: accessSecretSplit,
+      }, {
+        ...(agent ? { httpAgent: agent } : {}),
       });
     }
 
     // OAuth 2.0 Bearer token
-    return new TwitterApi(accessToken);
+    const agent = this.proxyAgent;
+    return new TwitterApi(accessToken, {
+      ...(agent ? { httpAgent: agent } : {}),
+    });
   }
 
   private async uploadMedia(

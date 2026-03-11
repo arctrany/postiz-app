@@ -61,14 +61,6 @@ export const ContinueIntegration: FC<{
     [logged, push]
   );
   const modifiedParams = useMemo(() => {
-    if (provider === 'x') {
-      return {
-        state: searchParams.oauth_token || '',
-        code: searchParams.oauth_verifier || '',
-        refresh: searchParams.refresh || '',
-      };
-    }
-
     if (provider === 'vk') {
       return {
         ...searchParams,

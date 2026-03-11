@@ -110,11 +110,16 @@ export class IntegrationService {
     timezone?: number,
     customInstanceDetails?: string
   ) {
-    const uploadedPicture = picture
-      ? picture?.indexOf('imagedelivery.net') > -1
-        ? picture
-        : await this.storage.uploadSimple(picture)
-      : undefined;
+    let uploadedPicture = picture;
+    if (picture && picture.indexOf('imagedelivery.net') === -1) {
+      try {
+        uploadedPicture = await this.storage.uploadSimple(picture);
+      } catch (err) {
+        console.warn(`[Integration] Failed to download profile picture, using remote URL: ${(err as Error)?.message}`);
+        // Keep original remote URL if download fails (e.g., network/proxy issues)
+        uploadedPicture = picture;
+      }
+    }
 
     return this._integrationRepository.createOrUpdateIntegration(
       additionalSettings,

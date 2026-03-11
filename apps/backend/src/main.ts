@@ -9,6 +9,29 @@ Runtime.install({ shutdownSignals: [] });
 
 process.env.TZ = 'UTC';
 
+// Configure global proxy for ALL outbound requests (fetch, axios, etc.)
+// Respects NO_PROXY for local services (Redis, PostgreSQL, localhost)
+const _proxyUrl = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+if (_proxyUrl) {
+  try {
+    // 1. Global fetch() proxy (undici) — covers fetch() calls like uploadSimple
+    const { EnvHttpProxyAgent, setGlobalDispatcher } = require('undici');
+    setGlobalDispatcher(new EnvHttpProxyAgent());
+
+    // 2. Global axios proxy — covers axios calls like readOrFetch (media downloads)
+    const { HttpsProxyAgent: _HttpsProxyAgent } = require('https-proxy-agent');
+    const axios = require('axios');
+    const _agent = new _HttpsProxyAgent(_proxyUrl);
+    axios.defaults.httpAgent = _agent;
+    axios.defaults.httpsAgent = _agent;
+
+    console.log(`[Proxy] All outbound requests proxied via: ${_proxyUrl}`);
+    console.log(`[Proxy] NO_PROXY: ${process.env.NO_PROXY || '(not set)'}`);
+  } catch (e) {
+    console.warn(`[Proxy] Failed to configure proxy: ${e}`);
+  }
+}
+
 import cookieParser from 'cookie-parser';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -28,6 +51,7 @@ async function start() {
         'Content-Type',
         'Authorization',
         'x-copilotkit-runtime-client-gql-version',
+        ...(process.env.NOT_SECURED ? ['auth', 'showorg', 'impersonate'] : []),
       ],
       exposedHeaders: [
         'reload',

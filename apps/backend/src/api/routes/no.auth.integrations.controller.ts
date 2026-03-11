@@ -60,6 +60,7 @@ export class NoAuthIntegrationsController {
     const getCodeVerifier = integrationProvider.customFields
       ? 'none'
       : await ioRedis.get(`login:${body.state}`);
+
     if (!getCodeVerifier) {
       throw new Error('Invalid state');
     }
@@ -106,6 +107,7 @@ export class NoAuthIntegrationsController {
       // eslint-disable-next-line no-async-promise-executor
     } = await new Promise<AuthTokenDetails>(async (res) => {
       try {
+
         const auth = await integrationProvider.authenticate(
           {
             code: body.code,
@@ -114,6 +116,7 @@ export class NoAuthIntegrationsController {
           },
           details ? JSON.parse(details) : undefined
         );
+
 
         if (typeof auth === 'string') {
           return res({
@@ -150,7 +153,8 @@ export class NoAuthIntegrationsController {
         }
 
         return res(auth);
-      } catch (err) {
+      } catch (err: any) {
+
         if (err instanceof NotEnoughScopes) {
           return res({
             error: err.message,
