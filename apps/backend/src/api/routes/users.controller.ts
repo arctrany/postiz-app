@@ -75,18 +75,18 @@ export class UsersController {
     return {
       ...user,
       orgId: organization.id,
-      // @ts-ignore
-      totalChannels: !process.env.STRIPE_PUBLISHABLE_KEY ? 10000 : organization?.subscription?.totalChannels || pricing.FREE.channel,
-      // @ts-ignore
-      tier: organization?.subscription?.subscriptionTier || (!process.env.STRIPE_PUBLISHABLE_KEY ? 'ULTIMATE' : 'FREE'),
+      // @ts-ignore - Self-hosted: always unlimited channels
+      totalChannels: organization?.subscription?.totalChannels || 1000000,
+      // @ts-ignore - Self-hosted: default to ULTIMATE tier
+      tier: organization?.subscription?.subscriptionTier || 'ULTIMATE',
       // @ts-ignore
       role: organization?.users[0]?.role,
       // @ts-ignore
       isLifetime: !!organization?.subscription?.isLifetime,
       admin: !!user.isSuperAdmin,
       impersonate: !!impersonate,
-      isTrailing: !process.env.STRIPE_PUBLISHABLE_KEY ? false : organization?.isTrailing,
-      allowTrial: organization?.allowTrial,
+      isTrailing: false,
+      allowTrial: false,
       streakSince: organization?.streakSince || null,
       // @ts-ignore
       publicApi: organization?.users[0]?.role === 'SUPERADMIN' || organization?.users[0]?.role === 'ADMIN' ? organization?.apiKey : '',

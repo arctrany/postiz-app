@@ -220,10 +220,6 @@ export class SubscriptionService {
     // @ts-ignore
     const type = organization?.subscription?.subscriptionTier || 'FREE';
 
-    if (type === 'FREE') {
-      return { credits: 0 };
-    }
-
     // @ts-ignore
     let date = dayjs(organization.subscription.createdAt);
     while (date.isBefore(dayjs())) {

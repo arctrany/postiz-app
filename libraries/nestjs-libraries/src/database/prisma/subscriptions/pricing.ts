@@ -20,23 +20,24 @@ export interface PricingInterface {
   [key: string]: PricingInnerInterface;
 }
 export const pricing: PricingInterface = {
+  // Self-hosted: FREE tier has all features unlocked (equivalent to ULTIMATE)
   FREE: {
     current: 'FREE',
     month_price: 0,
     year_price: 0,
-    channel: 0,
-    image_generation_count: 0,
-    posts_per_month: 0,
-    team_members: false,
-    community_features: false,
-    featured_by_gitroom: false,
-    ai: false,
-    import_from_channels: false,
-    image_generator: false,
-    public_api: false,
-    webhooks: 0,
-    autoPost: false,
-    generate_videos: 0,
+    channel: 1000000,
+    image_generation_count: 1000000,
+    posts_per_month: 1000000,
+    team_members: true,
+    community_features: true,
+    featured_by_gitroom: true,
+    ai: true,
+    import_from_channels: true,
+    image_generator: true,
+    public_api: true,
+    webhooks: 10000,
+    autoPost: true,
+    generate_videos: 1000000,
   },
   STANDARD: {
     current: 'STANDARD',

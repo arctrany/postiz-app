@@ -258,8 +258,17 @@ export class OrganizationRepository {
       data: {
         name: body.company,
         apiKey: AuthService.fixedEncryption(makeId(20)),
-        allowTrial: true,
-        isTrailing: true,
+        allowTrial: false,
+        isTrailing: false,
+        // Self-hosted: auto-create ULTIMATE subscription for all new users
+        subscription: {
+          create: {
+            totalChannels: 1000000,
+            subscriptionTier: 'ULTIMATE',
+            isLifetime: true,
+            period: 'YEARLY',
+          },
+        },
         users: {
           create: {
             role: Role.SUPERADMIN,
