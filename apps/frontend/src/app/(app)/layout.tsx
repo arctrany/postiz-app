@@ -10,8 +10,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import clsx from 'clsx';
 import { VariableContextComponent } from '@gitroom/react/helpers/variable.context';
 import UtmSaver from '@gitroom/helpers/utils/utm.saver';
-import { DubAnalytics } from '@gitroom/frontend/components/layout/dubAnalytics';
-import { FacebookComponent } from '@gitroom/frontend/components/layout/facebook.component';
+// External analytics removed for self-hosted (DubAnalytics, FacebookComponent)
 import { headers } from 'next/headers';
 import { headerName } from '@gitroom/react/translation/i18n.config';
 import { HtmlComponent } from '@gitroom/frontend/components/layout/html.component';
@@ -49,8 +48,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           oauthDisplayName={process.env.NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME!}
           uploadDirectory={process.env.NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY!}
           mcpUrl={process.env.MCP_URL}
-          dub={!!process.env.STRIPE_PUBLISHABLE_KEY}
-          facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
+          dub={false}
+          facebookPixel={''}
           telegramBotName={process.env.TELEGRAM_BOT_NAME!}
           neynarClientId={process.env.NEYNAR_CLIENT_ID!}
           isSecured={!process.env.NOT_SECURED}
@@ -70,8 +69,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         >
           <SentryComponent>
             <HtmlComponent />
-            <DubAnalytics />
-            <FacebookComponent />
+            {/* External analytics removed for self-hosted */}
             <LayoutContext>
               <UtmSaver />
               {children}

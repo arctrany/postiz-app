@@ -43,7 +43,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           uploadDirectory={process.env.NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY!}
           mcpUrl={process.env.MCP_URL}
           dub={false}
-          facebookPixel={process.env.NEXT_PUBLIC_FACEBOOK_PIXEL!}
+          facebookPixel={''}
           telegramBotName={process.env.TELEGRAM_BOT_NAME!}
           neynarClientId={process.env.NEYNAR_CLIENT_ID!}
           isSecured={!process.env.NOT_SECURED}
