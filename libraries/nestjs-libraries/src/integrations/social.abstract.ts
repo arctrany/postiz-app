@@ -77,7 +77,11 @@ export abstract class SocialAbstract {
     let value: any;
     try {
       value = await func();
-    } catch (err) {
+    } catch (err: any) {
+      console.error('[runInConcurrent] Caught error:', err?.message || err);
+      console.error('[runInConcurrent] Error stack:', err?.stack?.split('\n').slice(0, 5).join('\n'));
+      if (err?.data) console.error('[runInConcurrent] Error data:', JSON.stringify(err.data));
+      if (err?.code) console.error('[runInConcurrent] Error code:', err.code);
       const handle = this.handleErrors(safeStringify(err));
       value = { err: true, value: 'Unknown Error', ...(handle || {}) };
     }

@@ -31,6 +31,19 @@ const OAUTH2_SCOPES = [
   'like.write',
   'bookmark.read',
   'bookmark.write',
+  'media.write',       // Required for v2 media upload
+  'media.read',
+  'dm.read',
+  'dm.write',
+  'follows.read',
+  'follows.write',
+  'mute.read',
+  'mute.write',
+  'block.read',
+  'block.write',
+  'list.read',
+  'list.write',
+  'space.read',
 ];
 
 @Rules(
@@ -422,7 +435,8 @@ export class XProvider extends SocialAbstract implements SocialProvider {
 
   private async uploadMedia(
     client: TwitterApi,
-    postDetails: PostDetails<any>[]
+    postDetails: PostDetails<any>[],
+    accessToken: string
   ) {
     return (
       await Promise.all(
@@ -437,7 +451,8 @@ export class XProvider extends SocialAbstract implements SocialProvider {
                     console.log('[X-Upload] Downloaded, size:', rawData?.length || 0);
 
                     let buffer: Buffer;
-                    if (m.path.indexOf('mp4') > -1) {
+                    const isVideo = m.path.indexOf('mp4') > -1;
+                    if (isVideo) {
                       buffer = Buffer.from(rawData);
                     } else {
                       const mimeType = lookup(m.path) || '';
@@ -449,19 +464,25 @@ export class XProvider extends SocialAbstract implements SocialProvider {
                       console.log('[X-Upload] Processed image, size:', buffer.length);
                     }
 
-                    const mediaType = (lookup(m.path) || 'image/png') as any;
-                    console.log('[X-Upload] Uploading to X, media_type:', mediaType);
-                    const result = await client.v2.uploadMedia(buffer, {
-                      media_type: mediaType,
-                    });
-                    console.log('[X-Upload] Upload SUCCESS, media_id:', result);
-                    return result;
+                    const mediaType = lookup(m.path) || 'image/png';
+                    console.log('[X-Upload] Uploading via v2 media API, type:', mediaType, 'size:', buffer.length);
+
+                    // Use X API v2 media upload (chunked) - works with OAuth 2.0 Bearer tokens
+                    const mediaId = await this.uploadMediaV2(
+                      accessToken,
+                      buffer,
+                      mediaType,
+                      isVideo ? 'tweet_video' : 'tweet_image'
+                    );
+                    console.log('[X-Upload] Upload SUCCESS, media_id:', mediaId);
+                    return mediaId;
                   } catch (uploadErr: any) {
                     console.error('[X-Upload] FAILED:', uploadErr?.message);
                     console.error('[X-Upload] Error details:', JSON.stringify({
                       data: uploadErr?.data,
                       code: uploadErr?.code,
                       statusCode: uploadErr?.statusCode,
+                      response: uploadErr?.response?.data,
                     }, null, 2));
                     throw uploadErr;
                   }
@@ -483,6 +504,124 @@ export class XProvider extends SocialAbstract implements SocialProvider {
 
       return acc;
     }, {} as Record<string, string[]>);
+  }
+
+  /**
+   * Upload media via X API v2 chunked upload (works with OAuth 2.0 Bearer token)
+   * https://developer.x.com/en/docs/x-api/media/upload-media/api-reference
+   */
+  private async uploadMediaV2(
+    accessToken: string,
+    buffer: Buffer,
+    mediaType: string,
+    mediaCategory: string
+  ): Promise<string> {
+    const proxyAgent = this.proxyAgent;
+    const fetchOptions: any = proxyAgent
+      ? { dispatcher: undefined } // undici global dispatcher handles proxy
+      : {};
+
+    const headers = {
+      'Authorization': `Bearer ${accessToken.split(':')[0]}`,
+    };
+
+    // Step 1: INIT
+    console.log('[X-Upload-V2] INIT: total_bytes:', buffer.length, 'media_type:', mediaType);
+    const initForm = new URLSearchParams();
+    initForm.append('command', 'INIT');
+    initForm.append('total_bytes', buffer.length.toString());
+    initForm.append('media_type', mediaType);
+    initForm.append('media_category', mediaCategory);
+
+    const initRes = await fetch('https://api.x.com/2/media/upload', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: initForm.toString(),
+      ...fetchOptions,
+    });
+
+    if (!initRes.ok) {
+      const errText = await initRes.text();
+      console.error('[X-Upload-V2] INIT failed:', initRes.status, errText);
+      throw new Error(`Media upload INIT failed: ${initRes.status} ${errText}`);
+    }
+
+    const initData = await initRes.json() as any;
+    const mediaId = initData.id || initData.media_id_string;
+    console.log('[X-Upload-V2] INIT success, media_id:', mediaId);
+
+    // Step 2: APPEND (single chunk for images < 5MB)
+    const chunkSize = 5 * 1024 * 1024; // 5MB
+    for (let i = 0; i < buffer.length; i += chunkSize) {
+      const chunk = buffer.subarray(i, Math.min(i + chunkSize, buffer.length));
+      const segmentIndex = Math.floor(i / chunkSize);
+
+      const formData = new FormData();
+      formData.append('command', 'APPEND');
+      formData.append('media_id', mediaId);
+      formData.append('segment_index', segmentIndex.toString());
+      formData.append('media_data', chunk.toString('base64'));
+
+      console.log('[X-Upload-V2] APPEND segment:', segmentIndex, 'size:', chunk.length);
+      const appendRes = await fetch('https://api.x.com/2/media/upload', {
+        method: 'POST',
+        headers,
+        body: formData,
+        ...fetchOptions,
+      });
+
+      if (!appendRes.ok && appendRes.status !== 204) {
+        const errText = await appendRes.text();
+        console.error('[X-Upload-V2] APPEND failed:', appendRes.status, errText);
+        throw new Error(`Media upload APPEND failed: ${appendRes.status} ${errText}`);
+      }
+    }
+    console.log('[X-Upload-V2] APPEND complete');
+
+    // Step 3: FINALIZE
+    const finalForm = new URLSearchParams();
+    finalForm.append('command', 'FINALIZE');
+    finalForm.append('media_id', mediaId);
+
+    const finalRes = await fetch('https://api.x.com/2/media/upload', {
+      method: 'POST',
+      headers: { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: finalForm.toString(),
+      ...fetchOptions,
+    });
+
+    if (!finalRes.ok) {
+      const errText = await finalRes.text();
+      console.error('[X-Upload-V2] FINALIZE failed:', finalRes.status, errText);
+      throw new Error(`Media upload FINALIZE failed: ${finalRes.status} ${errText}`);
+    }
+
+    const finalData = await finalRes.json() as any;
+    console.log('[X-Upload-V2] FINALIZE success:', JSON.stringify(finalData));
+
+    // Handle async processing (for videos)
+    if (finalData.processing_info) {
+      let state = finalData.processing_info.state;
+      while (state === 'pending' || state === 'in_progress') {
+        const waitSecs = finalData.processing_info.check_after_secs || 5;
+        console.log('[X-Upload-V2] Processing, waiting', waitSecs, 'seconds...');
+        await new Promise(r => setTimeout(r, waitSecs * 1000));
+
+        const statusRes = await fetch(
+          `https://api.x.com/2/media/upload?command=STATUS&media_id=${mediaId}`,
+          { method: 'GET', headers, ...fetchOptions }
+        );
+        const statusData = await statusRes.json() as any;
+        state = statusData.processing_info?.state;
+        console.log('[X-Upload-V2] Processing status:', state);
+      }
+
+      if (state === 'failed') {
+        throw new Error('Media processing failed');
+      }
+    }
+
+    return mediaId;
   }
 
   async post(
@@ -512,7 +651,7 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     const [firstPost] = postDetails;
 
     // upload media for the first post
-    const uploadAll = await this.uploadMedia(client, [firstPost]);
+    const uploadAll = await this.uploadMedia(client, [firstPost], accessToken);
 
     const media_ids = (uploadAll[firstPost.id] || []).filter((f) => f);
 
@@ -572,7 +711,7 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     const [commentPost] = postDetails;
 
     // upload media for the comment
-    const uploadAll = await this.uploadMedia(client, [commentPost]);
+    const uploadAll = await this.uploadMedia(client, [commentPost], accessToken);
 
     const media_ids = (uploadAll[commentPost.id] || []).filter((f) => f);
 
