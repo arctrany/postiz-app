@@ -39,6 +39,14 @@ import MoltbookProvider from '@xpoz/frontend/components/new-launch/providers/mol
 import SkoolProvider from '@xpoz/frontend/components/new-launch/providers/skool/skool.provider';
 import WhopProvider from '@xpoz/frontend/components/new-launch/providers/whop/whop.provider';
 import MeweProvider from '@xpoz/frontend/components/new-launch/providers/mewe/mewe.provider';
+import XSyncGeneralProvider, {
+  XSyncWeixinProvider,
+  XSyncZhihuProvider,
+  XSyncWeiboProvider,
+  XSyncToutiaoProvider,
+  XSyncArticleProvider,
+  XSyncXiaohongshuProvider,
+} from '@xpoz/frontend/components/new-launch/providers/xsync/xsync.provider';
 
 export const Providers = [
   {
@@ -173,6 +181,31 @@ export const Providers = [
     identifier: 'mewe',
     component: MeweProvider,
   },
+  // ── XSync 国内平台（25个）──────────────────────────────
+  { identifier: 'xsync-weixin', component: XSyncWeixinProvider },
+  { identifier: 'xsync-weibo', component: XSyncWeiboProvider },
+  { identifier: 'xsync-zhihu', component: XSyncZhihuProvider },
+  { identifier: 'xsync-toutiao', component: XSyncToutiaoProvider },
+  { identifier: 'xsync-xiaohongshu', component: XSyncXiaohongshuProvider },
+  { identifier: 'xsync-bilibili', component: XSyncArticleProvider },
+  { identifier: 'xsync-baijiahao', component: XSyncArticleProvider },
+  { identifier: 'xsync-juejin', component: XSyncArticleProvider },
+  { identifier: 'xsync-csdn', component: XSyncArticleProvider },
+  { identifier: 'xsync-jianshu', component: XSyncArticleProvider },
+  { identifier: 'xsync-douban', component: XSyncGeneralProvider },
+  { identifier: 'xsync-xueqiu', component: XSyncGeneralProvider },
+  { identifier: 'xsync-yuque', component: XSyncArticleProvider },
+  { identifier: 'xsync-oschina', component: XSyncArticleProvider },
+  { identifier: 'xsync-segmentfault', component: XSyncArticleProvider },
+  { identifier: 'xsync-cnblogs', component: XSyncArticleProvider },
+  { identifier: 'xsync-woshipm', component: XSyncArticleProvider },
+  { identifier: 'xsync-sohu', component: XSyncArticleProvider },
+  { identifier: 'xsync-dayu', component: XSyncArticleProvider },
+  { identifier: 'xsync-51cto', component: XSyncArticleProvider },
+  { identifier: 'xsync-yidian', component: XSyncArticleProvider },
+  { identifier: 'xsync-eastmoney', component: XSyncGeneralProvider },
+  { identifier: 'xsync-imooc', component: XSyncArticleProvider },
+  { identifier: 'xsync-sohufocus', component: XSyncArticleProvider },
 ];
 export const ShowAllProviders = forwardRef((props, ref) => {
   const { date, current, global, selectedIntegrations, allIntegrations } =

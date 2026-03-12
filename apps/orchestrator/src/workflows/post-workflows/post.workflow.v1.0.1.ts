@@ -140,11 +140,30 @@ export async function postWorkflowV101({
       try {
         // first post the main post
         if (i === 0) {
-          postsResults.push(
-            ...(await postSocial(post.integration as Integration, [
-              postsList[i],
-            ]))
-          );
+          const rawResult = await postSocial(post.integration as Integration, [
+            postsList[i],
+          ]);
+
+          // XSync 国内平台：postSocial 返回 PENDING_EXTENSION 而非实际 postId
+          // 需要等待前端 Chrome Extension 完成实际发布后回写状态
+          if (
+            Array.isArray(rawResult) &&
+            rawResult.length === 1 &&
+            (rawResult[0] as any)?.status === 'PENDING_EXTENSION'
+          ) {
+            await changeState(postsList[0].id, 'PENDING_EXTENSION' as any);
+            await inAppNotification(
+              post.organizationId,
+              `${capitalize(post.integration.providerIdentifier)} 等待发布`,
+              `请确保 XPoz Extension 在浏览器中处于运行状态，内容将自动发布到 ${capitalize(post.integration.providerIdentifier)}。`,
+              false,
+              false,
+              'info'
+            );
+            return;
+          }
+
+          postsResults.push(...(rawResult as PostResponse[]));
 
           // then post the comments if any
         } else {

@@ -8,6 +8,51 @@ import { ModuleRef } from '@nestjs/core';
 import { toolList } from '@xpoz/nestjs-libraries/chat/tools/tool.list';
 import dayjs from 'dayjs';
 
+/**
+ * createLLM — AI 模型工厂函数
+ *
+ * 通过环境变量切换底层模型，无需修改业务代码：
+ *   AI_PROVIDER=openai   → OpenAI gpt-4.1（默认）
+ *   AI_PROVIDER=google   → Google Gemini 2.5 Pro
+ *   AI_PROVIDER=anthropic → Anthropic Claude Opus
+ *   AI_PROVIDER=openrouter → OpenRouter（任意模型路由）
+ */
+function createLLM() {
+  const provider = process.env.AI_PROVIDER || 'openai';
+
+  switch (provider) {
+    case 'google': {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { google } = require('@ai-sdk/google');
+      return google(process.env.GEMINI_MODEL || 'gemini-2.5-pro');
+    }
+
+    case 'anthropic': {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { anthropic } = require('@ai-sdk/anthropic');
+      return anthropic(process.env.ANTHROPIC_MODEL || 'claude-opus-4-5');
+    }
+
+    case 'openrouter': {
+      // OpenRouter 兼容 OpenAI 接口，通过 baseURL 路由
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { createOpenAI } = require('@ai-sdk/openai');
+      const openrouter = createOpenAI({
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: 'https://openrouter.ai/api/v1',
+      });
+      return openrouter(
+        process.env.OPENROUTER_MODEL || 'anthropic/claude-3.5-sonnet'
+      );
+    }
+
+    case 'openai':
+    default:
+      return openai(process.env.OPENAI_MODEL || 'gpt-4.1');
+  }
+}
+
+
 export const AgentState = object({
   proverbs: array(string()).default([]),
 });
@@ -85,7 +130,7 @@ export class LoadToolsService {
       )}
 `;
       },
-      model: openai('gpt-5.2'),
+      model: createLLM(),
       tools,
       memory: new Memory({
         storage: pStore,

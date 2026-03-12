@@ -285,7 +285,71 @@ export const cnblogsProvider = new XSyncProvider({
   maxContentLength: 100000,
 });
 
-/** 所有 XSync Provider 列表 */
+export const woshipmProvider = new XSyncProvider({
+  id: 'woshipm',
+  name: '人人都是产品经理',
+  toolTip: '人人都是产品经理文章发布',
+  editor: 'html',
+  maxContentLength: 100000,
+});
+
+export const sohuProvider = new XSyncProvider({
+  id: 'sohu',
+  name: '搜狐号',
+  toolTip: '搜狐号文章发布',
+  editor: 'html',
+  maxContentLength: 50000,
+});
+
+export const dayuProvider = new XSyncProvider({
+  id: 'dayu',
+  name: '大鱼号',
+  toolTip: '大鱼号文章发布',
+  editor: 'html',
+  maxContentLength: 50000,
+});
+
+export const cto51Provider = new XSyncProvider({
+  id: '51cto',
+  name: '51CTO',
+  toolTip: '51CTO 技术博客发布',
+  editor: 'markdown',
+  maxContentLength: 100000,
+});
+
+export const yidianProvider = new XSyncProvider({
+  id: 'yidian',
+  name: '一点号',
+  toolTip: '一点资讯号文章发布',
+  editor: 'html',
+  maxContentLength: 50000,
+});
+
+export const eastmoneyProvider = new XSyncProvider({
+  id: 'eastmoney',
+  name: '东方财富',
+  toolTip: '东方财富财经文章发布',
+  editor: 'html',
+  maxContentLength: 50000,
+});
+
+export const imoocProvider = new XSyncProvider({
+  id: 'imooc',
+  name: '慕课网',
+  toolTip: '慕课网技术文章发布',
+  editor: 'markdown',
+  maxContentLength: 100000,
+});
+
+export const sohufocusProvider = new XSyncProvider({
+  id: 'sohufocus',
+  name: '搜狐焦点',
+  toolTip: '搜狐焦点房产资讯发布',
+  editor: 'html',
+  maxContentLength: 50000,
+});
+
+/** 所有 XSync Provider 列表（25 个国内平台）*/
 export const xsyncProviders = [
   zhihuProvider,
   juejinProvider,
@@ -303,4 +367,12 @@ export const xsyncProviders = [
   oschinaProvider,
   segmentfaultProvider,
   cnblogsProvider,
+  woshipmProvider,
+  sohuProvider,
+  dayuProvider,
+  cto51Provider,
+  yidianProvider,
+  eastmoneyProvider,
+  imoocProvider,
+  sohufocusProvider,
 ];

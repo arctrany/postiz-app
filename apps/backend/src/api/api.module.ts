@@ -42,6 +42,7 @@ import { GoogleProvider } from '@xpoz/backend/services/auth/providers/google.pro
 import { FarcasterProvider } from '@xpoz/backend/services/auth/providers/farcaster.provider';
 import { WalletProvider } from '@xpoz/backend/services/auth/providers/wallet.provider';
 import { OauthProvider } from '@xpoz/backend/services/auth/providers/oauth.provider';
+import { A2AController } from '@xpoz/backend/api/routes/a2a.controller';
 
 const authenticatedController = [
   UsersController,
@@ -73,6 +74,7 @@ const authenticatedController = [
     EnterpriseController,
     NoAuthIntegrationsController,
     OAuthController,
+    A2AController,
     ...authenticatedController,
   ],
   providers: [

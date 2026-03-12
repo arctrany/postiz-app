@@ -876,4 +876,37 @@ export class PostsRepository {
       },
     });
   }
+
+  /**
+   * 查询指定 state 下的所有帖子（用于 PENDING_EXTENSION 轮询）
+   */
+  getPostsByState(orgId: string, state: State) {
+    return this._post.model.post.findMany({
+      where: {
+        organizationId: orgId,
+        state,
+        deletedAt: null,
+        parentPostId: null,
+      },
+      select: {
+        id: true,
+        content: true,
+        publishDate: true,
+        settings: true,
+        image: true,
+        releaseURL: true,
+        state: true,
+        integration: {
+          select: {
+            id: true,
+            name: true,
+            providerIdentifier: true,
+            picture: true,
+            type: true,
+            token: true,
+          },
+        },
+      },
+    });
+  }
 }

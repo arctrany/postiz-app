@@ -903,6 +903,7 @@ enum State {
   PUBLISHED
   ERROR
   DRAFT
+  PENDING_EXTENSION
 }
 
 enum SubscriptionTier {

@@ -746,6 +746,51 @@ export class PostsService {
     return this._postRepository.changeState(id, state, err, body);
   }
 
+  /**
+   * XSync Extension 发布回写：将帖子从 PENDING_EXTENSION 更新为 PUBLISHED 或 ERROR
+   */
+  async markExtensionPublished(
+    orgId: string,
+    postId: string,
+    releaseURL?: string,
+    error?: string
+  ) {
+    const post = await this._postRepository.getPostById(postId, orgId);
+    if (!post) {
+      throw new BadRequestException(`Post ${postId} not found`);
+    }
+    if (post.state !== ('PENDING_EXTENSION' as State)) {
+      throw new BadRequestException(
+        `Post ${postId} is not in PENDING_EXTENSION state (current: ${post.state})`
+      );
+    }
+
+    if (error) {
+      await this._postRepository.changeState(
+        postId,
+        'ERROR' as State,
+        new Error(error),
+        []
+      );
+      return { success: false, error };
+    }
+
+    // 更新 releaseURL 并将状态改为 PUBLISHED
+    await this._postRepository.updatePost(postId, postId, releaseURL || '');
+    return { success: true, releaseURL };
+  }
+
+  /**
+   * 获取当前 org 下所有 PENDING_EXTENSION 状态的帖子，供前端轮询触发 Extension
+   */
+  async getPendingExtensionPosts(orgId: string) {
+    return this._postRepository.getPostsByState(
+      orgId,
+      'PENDING_EXTENSION' as State
+    );
+  }
+
+
   async changeDate(
     orgId: string,
     id: string,

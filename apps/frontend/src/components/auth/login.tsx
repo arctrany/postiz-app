@@ -62,14 +62,17 @@ export function Login() {
   };
   return (
     <FormProvider {...form}>
-      <form className="flex-1 flex" onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col flex-1">
-          <div>
-            <h1 className="text-[40px] font-[500] -tracking-[0.8px] text-start cursor-pointer">
+      <form className="flex w-full" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-col w-full">
+          <div className="mb-[8px]">
+            <h1 className="text-[32px] md:text-[40px] font-[600] tracking-tight text-white mb-[8px]">
               {t('sign_in', 'Sign In')}
             </h1>
+            <p className="text-gray-400 text-[15px]">
+              欢迎回到 XPoz，连接全渠道受众
+            </p>
           </div>
-          <div className="text-[14px] mt-[32px] mb-[12px]">
+          <div className="text-[13px] text-gray-500 mt-[32px] mb-[16px] font-[500] uppercase tracking-wider">
             {t('continue_with', 'Continue With')}
           </div>
           <div className="flex flex-col">
@@ -84,16 +87,16 @@ export function Login() {
                 {billingEnabled && <WalletProvider />}
               </div>
             )}
-            <div className="h-[20px] mb-[24px] mt-[24px] relative">
-              <div className="absolute w-full h-[1px] bg-fifth top-[50%] -translate-y-[50%]" />
+            <div className="h-[20px] mb-[32px] mt-[32px] relative flex items-center">
+              <div className="absolute w-full h-[1px] bg-white/10" />
               <div
-                className={`absolute z-[1] justify-center items-center w-full start-0 -top-[4px] flex`}
+                className={`absolute z-[1] justify-center items-center w-full flex`}
               >
-                <div className="px-[16px]">{t('or', 'or')}</div>
+                <div className="px-[16px] text-gray-500 text-[12px] uppercase tracking-widest bg-[#0a0a0a] rounded-full py-[2px] border border-white/5 backdrop-blur-md">{t('or', 'or')}</div>
               </div>
             </div>
-            <div className="flex flex-col gap-[12px]">
-              <div className="text-textColor">
+            <div className="flex flex-col gap-[20px]">
+              <div className="flex flex-col gap-[16px]">
                 <Input
                   label="Email"
                   translationKey="label_email"
@@ -126,30 +129,32 @@ export function Login() {
                   </Link>
                 </div>
               )}
-              <div className="text-center mt-6">
+              <div className="text-center mt-[12px]">
                 <div className="w-full flex">
                   <Button
                     type="submit"
-                    className="flex-1 rounded-[10px] !h-[52px]"
+                    className="flex-1 rounded-[12px] !h-[56px] text-[16px] font-[600] shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] transition-shadow"
                     loading={loading}
                   >
                     {t('sign_in_1', 'Sign in')}
                   </Button>
                 </div>
-                <p className="mt-4 text-sm">
-                  {t('don_t_have_an_account', "Don't Have An Account?")}&nbsp;
-                  <Link href="/auth" className="underline cursor-pointer">
-                    {t('sign_up', 'Sign Up')}
-                  </Link>
-                </p>
-                <p className="mt-4 text-sm">
-                  <Link
-                    href="/auth/forgot"
-                    className="underline hover:font-bold cursor-pointer"
-                  >
-                    {t('forgot_password', 'Forgot password')}
-                  </Link>
-                </p>
+                <div className="mt-[24px] flex flex-col gap-[10px]">
+                  <p className="text-[14px] text-gray-400">
+                    {t('don_t_have_an_account', "Don't Have An Account?")}
+                    <Link href="/auth" className="text-white hover:text-[#6366F1] font-[500] ml-[6px] transition-colors">
+                      {t('sign_up', 'Sign Up')}
+                    </Link>
+                  </p>
+                  <p className="text-[14px]">
+                    <Link
+                      href="/auth/forgot"
+                      className="text-gray-500 hover:text-white transition-colors"
+                    >
+                      {t('forgot_password', 'Forgot password?')}
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
           </div>

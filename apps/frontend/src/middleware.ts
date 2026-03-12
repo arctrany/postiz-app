@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
   const topResponse = NextResponse.next();
 
   if (lng) {
-    topResponse.headers.set(cookieName, lng);
+    topResponse.headers.set(headerName, lng);
   }
 
   if (nextUrl.pathname.startsWith('/modal/') && !authCookie) {

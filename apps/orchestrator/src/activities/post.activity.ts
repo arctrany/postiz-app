@@ -161,6 +161,18 @@ export class PostActivity {
       integration.providerIdentifier
     );
 
+    // XSync（国内）平台需要 Chrome Extension 执行实际发布
+    // 后端无法直接调用 Extension，返回 PENDING_EXTENSION 标记
+    // 前端轮询检测此状态，触发 Extension 实际发布，完成后调用 /posts/:id/mark-published
+    if (getIntegration.isChromeExtension) {
+      return {
+        status: 'PENDING_EXTENSION',
+        postIds: posts.map((p) => p.id),
+        integrationId: integration.id,
+        provider: integration.providerIdentifier,
+      };
+    }
+
     const newPosts = await this._postService.updateTags(
       integration.organizationId,
       posts

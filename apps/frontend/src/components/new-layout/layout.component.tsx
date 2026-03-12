@@ -40,6 +40,7 @@ import { StreakComponent } from '@xpoz/frontend/components/layout/streak.compone
 import { PreConditionComponent } from '@xpoz/frontend/components/layout/pre-condition.component';
 import { AttachToFeedbackIcon } from '@xpoz/frontend/components/new-layout/sentry.feedback.component';
 import { FirstBillingComponent } from '@xpoz/frontend/components/billing/first.billing.component';
+import { useXSyncPublisher } from '@xpoz/frontend/components/xsync/useXSyncPublisher';
 
 const jakartaSans = Plus_Jakarta_Sans({
   weight: ['600', '500', '700'],
@@ -49,6 +50,8 @@ const jakartaSans = Plus_Jakarta_Sans({
 
 export const LayoutComponent = ({ children }: { children: ReactNode }) => {
   const fetch = useFetch();
+  // XSync 国内平台：轮询 PENDING_EXTENSION 帖子并触发 Extension 执行实际发布
+  useXSyncPublisher();
 
   const { backendUrl, billingEnabled, isGeneral } = useVariables();
 
