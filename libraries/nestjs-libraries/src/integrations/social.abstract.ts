@@ -78,12 +78,32 @@ export abstract class SocialAbstract {
     try {
       value = await func();
     } catch (err: any) {
-      console.error('[runInConcurrent] Caught error:', err?.message || err);
-      console.error('[runInConcurrent] Error stack:', err?.stack?.split('\n').slice(0, 5).join('\n'));
-      if (err?.data) console.error('[runInConcurrent] Error data:', JSON.stringify(err.data));
-      if (err?.code) console.error('[runInConcurrent] Error code:', err.code);
-      const handle = this.handleErrors(safeStringify(err));
-      value = { err: true, value: 'Unknown Error', ...(handle || {}) };
+      const errMsg = err?.message || err?.toString?.() || 'Unknown Error';
+      console.error('[runInConcurrent] Caught error:', errMsg);
+      if (err?.stack) console.error('[runInConcurrent] Stack:', err.stack.split('\n').slice(0, 5).join('\n'));
+      if (err?.data) console.error('[runInConcurrent] Data:', JSON.stringify(err.data));
+      if (err?.code) console.error('[runInConcurrent] Code:', err.code);
+
+      const serialized = safeStringify(err);
+      const handle = this.handleErrors(serialized);
+
+      // If handleErrors recognized the error, use its type and message
+      if (handle) {
+        value = { err: true, ...handle };
+      } else {
+        // Check for auth-related errors (401, token expired, etc.)
+        const isAuthError = errMsg.includes('401') ||
+          errMsg.includes('Unauthorized') ||
+          errMsg.includes('token') ||
+          serialized.includes('401') ||
+          serialized.includes('Unauthorized');
+
+        if (isAuthError) {
+          value = { err: true, type: 'refresh-token', value: errMsg };
+        } else {
+          value = { err: true, value: errMsg };
+        }
+      }
     }
 
     if (value && value?.err && value?.value) {

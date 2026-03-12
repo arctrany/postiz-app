@@ -83,9 +83,9 @@ apps/cli/
 ### Configuration Files
 
 #### `package.json`
-- Package name: `postiz`
+- Package name: `xpoz`
 - Version: `1.0.0`
-- Executable bin: `postiz` → `dist/index.js`
+- Executable bin: `xpoz` → `dist/index.js`
 - Scripts: `dev`, `build`, `start`, `publish`
 - Repository and metadata information
 
@@ -320,7 +320,7 @@ POSTIZ_API_KEY=test node dist/index.js integrations:list
 
 2. **Features**
    - Interactive mode
-   - Config file support (~/.postizrc)
+   - Config file support (~/.xpozrc)
    - Output formatting (JSON, table, CSV)
    - Verbose/debug mode
    - Batch operations from file

@@ -1,8 +1,8 @@
 | Property | Value |
 |----------|-------|
-| **name** | postiz |
+| **name** | xpoz |
 | **description** | Social media automation CLI for scheduling posts across 28+ platforms |
-| **allowed-tools** | Bash(postiz:*) |
+| **allowed-tools** | Bash(xpoz:*) |
 
 ---
 
@@ -17,17 +17,17 @@ The fundamental pattern for using XPoz CLI:
 
 ```bash
 # 1. Discover
-postiz integrations:list
-postiz integrations:settings <integration-id>
+xpoz integrations:list
+xpoz integrations:settings <integration-id>
 
 # 2. Fetch (if needed)
-postiz integrations:trigger <integration-id> <method> -d '{"key":"value"}'
+xpoz integrations:trigger <integration-id> <method> -d '{"key":"value"}'
 
 # 3. Prepare
-postiz upload image.jpg
+xpoz upload image.jpg
 
 # 4. Post
-postiz posts:create -c "Content" -m "image.jpg" -i "<integration-id>"
+xpoz posts:create -c "Content" -m "image.jpg" -i "<integration-id>"
 ```
 
 ---
@@ -48,30 +48,30 @@ export POSTIZ_API_URL=https://custom-api-url.com
 
 ```bash
 # List all connected integrations
-postiz integrations:list
+xpoz integrations:list
 
 # Get settings schema for specific integration
-postiz integrations:settings <integration-id>
+xpoz integrations:settings <integration-id>
 
 # Trigger integration tool to fetch dynamic data
-postiz integrations:trigger <integration-id> <method-name>
-postiz integrations:trigger <integration-id> <method-name> -d '{"param":"value"}'
+xpoz integrations:trigger <integration-id> <method-name>
+xpoz integrations:trigger <integration-id> <method-name> -d '{"param":"value"}'
 ```
 
 ### Creating Posts
 
 ```bash
 # Simple post (date is REQUIRED)
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "integration-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "integration-id"
 
 # Draft post
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -t draft -i "integration-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -t draft -i "integration-id"
 
 # Post with media
-postiz posts:create -c "Content" -m "img1.jpg,img2.jpg" -s "2024-12-31T12:00:00Z" -i "integration-id"
+xpoz posts:create -c "Content" -m "img1.jpg,img2.jpg" -s "2024-12-31T12:00:00Z" -i "integration-id"
 
 # Post with comments (each with own media)
-postiz posts:create \
+xpoz posts:create \
   -c "Main post" -m "main.jpg" \
   -c "First comment" -m "comment1.jpg" \
   -c "Second comment" -m "comment2.jpg,comment3.jpg" \
@@ -79,30 +79,30 @@ postiz posts:create \
   -i "integration-id"
 
 # Multi-platform post
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "twitter-id,linkedin-id,facebook-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "twitter-id,linkedin-id,facebook-id"
 
 # Platform-specific settings
-postiz posts:create \
+xpoz posts:create \
   -c "Content" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"subreddit":[{"value":{"subreddit":"programming","title":"My Post","type":"text"}}]}' \
   -i "reddit-id"
 
 # Complex post from JSON file
-postiz posts:create --json post.json
+xpoz posts:create --json post.json
 ```
 
 ### Managing Posts
 
 ```bash
 # List posts (defaults to last 30 days to next 30 days)
-postiz posts:list
+xpoz posts:list
 
 # List posts in date range
-postiz posts:list --startDate "2024-01-01T00:00:00Z" --endDate "2024-12-31T23:59:59Z"
+xpoz posts:list --startDate "2024-01-01T00:00:00Z" --endDate "2024-12-31T23:59:59Z"
 
 # Delete post
-postiz posts:delete <post-id>
+xpoz posts:delete <post-id>
 ```
 
 ### Media Upload
@@ -111,15 +111,15 @@ postiz posts:delete <post-id>
 
 ```bash
 # Upload file and get URL
-postiz upload image.jpg
+xpoz upload image.jpg
 
 # Supports: images (PNG, JPG, GIF, WEBP, SVG), videos (MP4, MOV, AVI, MKV, WEBM),
 # audio (MP3, WAV, OGG, AAC), documents (PDF, DOC, DOCX)
 
 # Workflow: Upload → Extract URL → Use in post
-VIDEO=$(postiz upload video.mp4)
+VIDEO=$(xpoz upload video.mp4)
 VIDEO_PATH=$(echo "$VIDEO" | jq -r '.path')
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -m "$VIDEO_PATH" -i "tiktok-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -m "$VIDEO_PATH" -i "tiktok-id"
 ```
 
 ---
@@ -131,14 +131,14 @@ postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -m "$VIDEO_PATH" -i "
 **Reddit - Get flairs for a subreddit:**
 ```bash
 # Get Reddit integration ID
-REDDIT_ID=$(postiz integrations:list | jq -r '.[] | select(.identifier=="reddit") | .id')
+REDDIT_ID=$(xpoz integrations:list | jq -r '.[] | select(.identifier=="reddit") | .id')
 
 # Fetch available flairs
-FLAIRS=$(postiz integrations:trigger "$REDDIT_ID" getFlairs -d '{"subreddit":"programming"}')
+FLAIRS=$(xpoz integrations:trigger "$REDDIT_ID" getFlairs -d '{"subreddit":"programming"}')
 FLAIR_ID=$(echo "$FLAIRS" | jq -r '.output[0].id')
 
 # Use in post
-postiz posts:create \
+xpoz posts:create \
   -c "My post content" \
   -s "2024-12-31T12:00:00Z" \
   --settings "{\"subreddit\":[{\"value\":{\"subreddit\":\"programming\",\"title\":\"Post Title\",\"type\":\"text\",\"is_flair_required\":true,\"flair\":{\"id\":\"$FLAIR_ID\",\"name\":\"Discussion\"}}}]}" \
@@ -147,11 +147,11 @@ postiz posts:create \
 
 **YouTube - Get playlists:**
 ```bash
-YOUTUBE_ID=$(postiz integrations:list | jq -r '.[] | select(.identifier=="youtube") | .id')
-PLAYLISTS=$(postiz integrations:trigger "$YOUTUBE_ID" getPlaylists)
+YOUTUBE_ID=$(xpoz integrations:list | jq -r '.[] | select(.identifier=="youtube") | .id')
+PLAYLISTS=$(xpoz integrations:trigger "$YOUTUBE_ID" getPlaylists)
 PLAYLIST_ID=$(echo "$PLAYLISTS" | jq -r '.output[0].id')
 
-postiz posts:create \
+xpoz posts:create \
   -c "Video description" \
   -s "2024-12-31T12:00:00Z" \
   --settings "{\"title\":\"My Video\",\"type\":\"public\",\"playlistId\":\"$PLAYLIST_ID\"}" \
@@ -161,11 +161,11 @@ postiz posts:create \
 
 **LinkedIn - Post as company:**
 ```bash
-LINKEDIN_ID=$(postiz integrations:list | jq -r '.[] | select(.identifier=="linkedin") | .id')
-COMPANIES=$(postiz integrations:trigger "$LINKEDIN_ID" getCompanies)
+LINKEDIN_ID=$(xpoz integrations:list | jq -r '.[] | select(.identifier=="linkedin") | .id')
+COMPANIES=$(xpoz integrations:trigger "$LINKEDIN_ID" getCompanies)
 COMPANY_ID=$(echo "$COMPANIES" | jq -r '.output[0].id')
 
-postiz posts:create \
+xpoz posts:create \
   -c "Company announcement" \
   -s "2024-12-31T12:00:00Z" \
   --settings "{\"companyId\":\"$COMPANY_ID\"}" \
@@ -176,14 +176,14 @@ postiz posts:create \
 
 ```bash
 # Upload multiple files
-VIDEO_RESULT=$(postiz upload video.mp4)
+VIDEO_RESULT=$(xpoz upload video.mp4)
 VIDEO_PATH=$(echo "$VIDEO_RESULT" | jq -r '.path')
 
-THUMB_RESULT=$(postiz upload thumbnail.jpg)
+THUMB_RESULT=$(xpoz upload thumbnail.jpg)
 THUMB_PATH=$(echo "$THUMB_RESULT" | jq -r '.path')
 
 # Use in post
-postiz posts:create \
+xpoz posts:create \
   -c "Check out my video!" \
   -s "2024-12-31T12:00:00Z" \
   -m "$VIDEO_PATH" \
@@ -193,7 +193,7 @@ postiz posts:create \
 ### Pattern 3: Twitter Thread
 
 ```bash
-postiz posts:create \
+xpoz posts:create \
   -c "🧵 Thread starter (1/4)" -m "intro.jpg" \
   -c "Point one (2/4)" -m "point1.jpg" \
   -c "Point two (3/4)" -m "point2.jpg" \
@@ -233,7 +233,7 @@ cat > campaign.json << 'EOF'
 }
 EOF
 
-postiz posts:create --json campaign.json
+xpoz posts:create --json campaign.json
 ```
 
 ### Pattern 5: Validate Settings Before Posting
@@ -244,7 +244,7 @@ const { execSync } = require('child_process');
 function validateAndPost(content, integrationId, settings) {
   // Get integration settings
   const settingsResult = execSync(
-    `postiz integrations:settings ${integrationId}`,
+    `xpoz integrations:settings ${integrationId}`,
     { encoding: 'utf-8' }
   );
   const schema = JSON.parse(settingsResult);
@@ -257,7 +257,7 @@ function validateAndPost(content, integrationId, settings) {
 
   // Create post
   const result = execSync(
-    `postiz posts:create -c "${content}" -s "2024-12-31T12:00:00Z" --settings '${JSON.stringify(settings)}' -i "${integrationId}"`,
+    `xpoz posts:create -c "${content}" -s "2024-12-31T12:00:00Z" --settings '${JSON.stringify(settings)}' -i "${integrationId}"`,
     { encoding: 'utf-8' }
   );
 
@@ -284,7 +284,7 @@ CONTENT=(
 )
 
 for i in "${!DATES[@]}"; do
-  postiz posts:create \
+  xpoz posts:create \
     -c "${CONTENT[$i]}" \
     -s "${DATES[$i]}" \
     -i "twitter-id" \
@@ -302,7 +302,7 @@ async function postWithRetry(content, integrationId, date, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const result = execSync(
-        `postiz posts:create -c "${content}" -s "${date}" -i "${integrationId}"`,
+        `xpoz posts:create -c "${content}" -s "${date}" -i "${integrationId}"`,
         { encoding: 'utf-8', stdio: 'pipe' }
       );
       console.log('✅ Post created successfully');
@@ -371,7 +371,7 @@ Platform-specific settings use a discriminator pattern with `__type` field:
 
 Pass settings directly:
 ```bash
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" --settings '{"subreddit":[...]}' -i "reddit-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" --settings '{"subreddit":[...]}' -i "reddit-id"
 # Backend automatically adds "__type" based on integration ID
 ```
 
@@ -381,7 +381,7 @@ Posts can have comments (threads on Twitter/X, replies elsewhere). Each comment 
 
 ```bash
 # Using multiple -c and -m flags
-postiz posts:create \
+xpoz posts:create \
   -c "Main post" -m "image1.jpg,image2.jpg" \
   -c "Comment 1" -m "comment-img.jpg" \
   -c "Comment 2" -m "another.jpg,more.jpg" \
@@ -423,21 +423,21 @@ Upload returns JSON with path and metadata:
 
 Extract path for use in posts:
 ```bash
-RESULT=$(postiz upload image.jpg)
+RESULT=$(xpoz upload image.jpg)
 PATH=$(echo "$RESULT" | jq -r '.path')
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -m "$PATH" -i "integration-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -m "$PATH" -i "integration-id"
 ```
 
 ### JSON Mode vs CLI Flags
 
 **CLI flags** - Quick posts:
 ```bash
-postiz posts:create -c "Content" -m "img.jpg" -i "twitter-id"
+xpoz posts:create -c "Content" -m "img.jpg" -i "twitter-id"
 ```
 
 **JSON mode** - Complex posts with multiple platforms and settings:
 ```bash
-postiz posts:create --json post.json
+xpoz posts:create --json post.json
 ```
 
 JSON mode supports:
@@ -453,7 +453,7 @@ JSON mode supports:
 
 ### Reddit
 ```bash
-postiz posts:create \
+xpoz posts:create \
   -c "Post content" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"subreddit":[{"value":{"subreddit":"programming","title":"My Title","type":"text","url":"","is_flair_required":false}}]}' \
@@ -463,10 +463,10 @@ postiz posts:create \
 ### YouTube
 ```bash
 # Upload video first (required!)
-VIDEO=$(postiz upload video.mp4)
+VIDEO=$(xpoz upload video.mp4)
 VIDEO_URL=$(echo "$VIDEO" | jq -r '.path')
 
-postiz posts:create \
+xpoz posts:create \
   -c "Video description" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"title":"Video Title","type":"public","tags":[{"value":"tech","label":"Tech"}]}' \
@@ -477,10 +477,10 @@ postiz posts:create \
 ### TikTok
 ```bash
 # Upload video first (TikTok only accepts verified URLs!)
-VIDEO=$(postiz upload video.mp4)
+VIDEO=$(xpoz upload video.mp4)
 VIDEO_URL=$(echo "$VIDEO" | jq -r '.path')
 
-postiz posts:create \
+xpoz posts:create \
   -c "Video caption #fyp" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"privacy":"PUBLIC_TO_EVERYONE","duet":true,"stitch":true}' \
@@ -490,7 +490,7 @@ postiz posts:create \
 
 ### X (Twitter)
 ```bash
-postiz posts:create \
+xpoz posts:create \
   -c "Tweet content" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"who_can_reply_post":"everyone"}' \
@@ -500,10 +500,10 @@ postiz posts:create \
 ### LinkedIn
 ```bash
 # Personal post
-postiz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "linkedin-id"
+xpoz posts:create -c "Content" -s "2024-12-31T12:00:00Z" -i "linkedin-id"
 
 # Company post
-postiz posts:create \
+xpoz posts:create \
   -c "Content" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"companyId":"company-123"}' \
@@ -513,11 +513,11 @@ postiz posts:create \
 ### Instagram
 ```bash
 # Upload image first (Instagram requires verified URLs!)
-IMAGE=$(postiz upload image.jpg)
+IMAGE=$(xpoz upload image.jpg)
 IMAGE_URL=$(echo "$IMAGE" | jq -r '.path')
 
 # Regular post
-postiz posts:create \
+xpoz posts:create \
   -c "Caption #hashtag" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"post_type":"post"}' \
@@ -525,10 +525,10 @@ postiz posts:create \
   -i "instagram-id"
 
 # Story
-STORY=$(postiz upload story.jpg)
+STORY=$(xpoz upload story.jpg)
 STORY_URL=$(echo "$STORY" | jq -r '.path')
 
-postiz posts:create \
+xpoz posts:create \
   -c "" \
   -s "2024-12-31T12:00:00Z" \
   --settings '{"post_type":"story"}' \
@@ -567,7 +567,7 @@ postiz posts:create \
 1. **API Key not set** - Always `export POSTIZ_API_KEY=key` before using CLI
 2. **Invalid integration ID** - Run `integrations:list` to get current IDs
 3. **Settings schema mismatch** - Check `integrations:settings` for required fields
-4. **Media MUST be uploaded to XPoz first** - ⚠️ **CRITICAL:** TikTok, Instagram, YouTube, and many platforms only accept verified URLs. Upload files via `postiz upload` first, then use the returned URL in `-m`. External URLs will be rejected!
+4. **Media MUST be uploaded to XPoz first** - ⚠️ **CRITICAL:** TikTok, Instagram, YouTube, and many platforms only accept verified URLs. Upload files via `xpoz upload` first, then use the returned URL in `-m`. External URLs will be rejected!
 5. **JSON escaping in shell** - Use single quotes for JSON: `--settings '{...}'`
 6. **Date format** - Must be ISO 8601: `"2024-12-31T12:00:00Z"` and is REQUIRED
 7. **Tool not found** - Check available tools in `integrations:settings` output
@@ -584,24 +584,24 @@ postiz posts:create \
 export POSTIZ_API_KEY=key
 
 # Discovery
-postiz integrations:list                           # Get integration IDs
-postiz integrations:settings <id>                  # Get settings schema
-postiz integrations:trigger <id> <method> -d '{}'  # Fetch dynamic data
+xpoz integrations:list                           # Get integration IDs
+xpoz integrations:settings <id>                  # Get settings schema
+xpoz integrations:trigger <id> <method> -d '{}'  # Fetch dynamic data
 
 # Posting (date is REQUIRED)
-postiz posts:create -c "text" -s "2024-12-31T12:00:00Z" -i "id"                  # Simple
-postiz posts:create -c "text" -s "2024-12-31T12:00:00Z" -t draft -i "id"        # Draft
-postiz posts:create -c "text" -m "img.jpg" -s "2024-12-31T12:00:00Z" -i "id"    # With media
-postiz posts:create -c "main" -c "comment" -s "2024-12-31T12:00:00Z" -i "id"    # With comment
-postiz posts:create -c "text" -s "2024-12-31T12:00:00Z" --settings '{}' -i "id" # Platform-specific
-postiz posts:create --json file.json                                             # Complex
+xpoz posts:create -c "text" -s "2024-12-31T12:00:00Z" -i "id"                  # Simple
+xpoz posts:create -c "text" -s "2024-12-31T12:00:00Z" -t draft -i "id"        # Draft
+xpoz posts:create -c "text" -m "img.jpg" -s "2024-12-31T12:00:00Z" -i "id"    # With media
+xpoz posts:create -c "main" -c "comment" -s "2024-12-31T12:00:00Z" -i "id"    # With comment
+xpoz posts:create -c "text" -s "2024-12-31T12:00:00Z" --settings '{}' -i "id" # Platform-specific
+xpoz posts:create --json file.json                                             # Complex
 
 # Management
-postiz posts:list                                  # List posts
-postiz posts:delete <id>                          # Delete post
-postiz upload <file>                              # Upload media
+xpoz posts:list                                  # List posts
+xpoz posts:delete <id>                          # Delete post
+xpoz upload <file>                              # Upload media
 
 # Help
-postiz --help                                     # Show help
-postiz posts:create --help                        # Command help
+xpoz --help                                     # Show help
+xpoz posts:create --help                        # Command help
 ```

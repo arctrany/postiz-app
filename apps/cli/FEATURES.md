@@ -38,13 +38,13 @@ For quick, simple posts:
 
 ```bash
 # Single post
-postiz posts:create -c "Hello!" -i "twitter-123"
+xpoz posts:create -c "Hello!" -i "twitter-123"
 
 # With multiple images
-postiz posts:create -c "Post" --image "img1.jpg,img2.jpg,img3.jpg" -i "twitter-123"
+xpoz posts:create -c "Post" --image "img1.jpg,img2.jpg,img3.jpg" -i "twitter-123"
 
 # With comments (no custom media per comment)
-postiz posts:create -c "Main" --comments "Comment 1;Comment 2" -i "twitter-123"
+xpoz posts:create -c "Main" --comments "Comment 1;Comment 2" -i "twitter-123"
 ```
 
 **Limitations of Simple Mode:**
@@ -57,7 +57,7 @@ postiz posts:create -c "Main" --comments "Comment 1;Comment 2" -i "twitter-123"
 For complex posts with comments that have their own media:
 
 ```bash
-postiz posts:create --json complex-post.json
+xpoz posts:create --json complex-post.json
 ```
 
 **Capabilities:**

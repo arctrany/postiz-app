@@ -9,7 +9,7 @@ Get the settings schema, validation rules, and maximum character limits for any 
 ## Usage
 
 ```bash
-postiz integrations:settings <integration-id>
+xpoz integrations:settings <integration-id>
 ```
 
 ## What It Returns
@@ -40,7 +40,7 @@ postiz integrations:settings <integration-id>
 ### 1. List Your Integrations
 
 ```bash
-postiz integrations:list
+xpoz integrations:list
 ```
 
 Output:
@@ -70,7 +70,7 @@ Output:
 ### 2. Get Settings for Specific Integration
 
 ```bash
-postiz integrations:settings reddit-abc123
+xpoz integrations:settings reddit-abc123
 ```
 
 Output:
@@ -132,7 +132,7 @@ Output:
 Now you know what settings are available and required!
 
 ```bash
-postiz posts:create \
+xpoz posts:create \
   -c "My post content" \
   -p reddit \
   --settings '{
@@ -154,7 +154,7 @@ postiz posts:create \
 ### Reddit
 
 ```bash
-postiz integrations:settings reddit-abc123
+xpoz integrations:settings reddit-abc123
 ```
 
 Returns:
@@ -165,7 +165,7 @@ Returns:
 ### YouTube
 
 ```bash
-postiz integrations:settings youtube-def456
+xpoz integrations:settings youtube-def456
 ```
 
 Returns:
@@ -176,7 +176,7 @@ Returns:
 ### X (Twitter)
 
 ```bash
-postiz integrations:settings twitter-ghi789
+xpoz integrations:settings twitter-ghi789
 ```
 
 Returns:
@@ -187,7 +187,7 @@ Returns:
 ### LinkedIn
 
 ```bash
-postiz integrations:settings linkedin-jkl012
+xpoz integrations:settings linkedin-jkl012
 ```
 
 Returns:
@@ -197,7 +197,7 @@ Returns:
 ### TikTok
 
 ```bash
-postiz integrations:settings tiktok-mno345
+xpoz integrations:settings tiktok-mno345
 ```
 
 Returns:
@@ -208,7 +208,7 @@ Returns:
 ### Instagram
 
 ```bash
-postiz integrations:settings instagram-pqr678
+xpoz integrations:settings instagram-pqr678
 ```
 
 Returns:
@@ -221,7 +221,7 @@ Returns:
 Some platforms don't require specific settings:
 
 ```bash
-postiz integrations:settings threads-stu901
+xpoz integrations:settings threads-stu901
 ```
 
 Returns:
@@ -250,10 +250,10 @@ Find out what settings are available before posting:
 
 ```bash
 # What settings does YouTube support?
-postiz integrations:settings youtube-123
+xpoz integrations:settings youtube-123
 
 # What settings does Reddit support?
-postiz integrations:settings reddit-456
+xpoz integrations:settings reddit-456
 ```
 
 ### 2. Validation
@@ -261,7 +261,7 @@ postiz integrations:settings reddit-456
 Check maximum character limits:
 
 ```bash
-postiz integrations:settings twitter-789 | jq '.output.maxLength'
+xpoz integrations:settings twitter-789 | jq '.output.maxLength'
 # Output: 280
 ```
 
@@ -275,7 +275,7 @@ AI agents can call this endpoint to:
 ```javascript
 // Get settings schema
 const settings = await execSync(
-  `postiz integrations:settings ${integrationId}`,
+  `xpoz integrations:settings ${integrationId}`,
   { encoding: 'utf-8' }
 );
 const schema = JSON.parse(settings);
@@ -315,19 +315,19 @@ export POSTIZ_API_KEY=your_key
 
 # 1. List integrations
 echo "📋 Available integrations:"
-postiz integrations:list
+xpoz integrations:list
 
 # 2. Get settings for Reddit
 echo ""
 echo "⚙️  Reddit settings:"
-SETTINGS=$(postiz integrations:settings reddit-123)
+SETTINGS=$(xpoz integrations:settings reddit-123)
 echo $SETTINGS | jq '.output.maxLength'
 echo $SETTINGS | jq '.output.settings'
 
 # 3. Create post with correct settings
 echo ""
 echo "📝 Creating post..."
-postiz posts:create \
+xpoz posts:create \
   -c "My post content" \
   -p reddit \
   --settings '{
@@ -366,14 +366,14 @@ Returns:
 ### Integration Not Found
 
 ```bash
-postiz integrations:settings invalid-id
+xpoz integrations:settings invalid-id
 # ❌ Failed to get integration settings: Integration not found
 ```
 
 ### API Key Not Set
 
 ```bash
-postiz integrations:settings reddit-123
+xpoz integrations:settings reddit-123
 # ❌ Error: POSTIZ_API_KEY environment variable is required
 ```
 
@@ -399,7 +399,7 @@ postiz integrations:settings reddit-123
 
 ```bash
 # Discover settings programmatically
-postiz integrations:settings reddit-123
+xpoz integrations:settings reddit-123
 
 # See exactly what's required and optional
 # Know the exact character limits

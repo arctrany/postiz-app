@@ -6,9 +6,9 @@ A complete, production-ready CLI package for the XPoz API has been successfully 
 
 ### Package Details
 
-- **Package Name:** `postiz`
+- **Package Name:** `xpoz`
 - **Version:** 1.0.0
-- **Executable:** `postiz` command
+- **Executable:** `xpoz` command
 - **Lines of Code:** 359 lines
 - **Build Size:** ~491KB (compressed)
 - **License:** AGPL-3.0
@@ -146,13 +146,13 @@ apps/cli/
 export POSTIZ_API_KEY=your_api_key
 
 # Create a post
-postiz posts:create -c "Hello World!" -i "twitter-123"
+xpoz posts:create -c "Hello World!" -i "twitter-123"
 
 # List posts
-postiz posts:list
+xpoz posts:list
 
 # Upload media
-postiz upload ./image.png
+xpoz upload ./image.png
 ```
 
 ### AI Agent Usage
@@ -161,7 +161,7 @@ postiz upload ./image.png
 const { execSync } = require('child_process');
 
 function postToSocial(content) {
-  return execSync(`postiz posts:create -c "${content}"`, {
+  return execSync(`xpoz posts:create -c "${content}"`, {
     env: { ...process.env, POSTIZ_API_KEY: 'your_key' }
   });
 }
@@ -196,16 +196,16 @@ function postToSocial(content) {
 
 ```
 ✅ pnpm run build:cli - SUCCESS
-✅ postiz --help - SUCCESS
-✅ postiz --version - SUCCESS
-✅ postiz posts:create --help - SUCCESS
+✅ xpoz --help - SUCCESS
+✅ xpoz --version - SUCCESS
+✅ xpoz posts:create --help - SUCCESS
 ✅ Error without API key - WORKS AS EXPECTED
 ```
 
 ## 📋 Checklist
 
 - ✅ CLI package created in apps/cli
-- ✅ Package name is "postiz"
+- ✅ Package name is "xpoz"
 - ✅ Uses POSTIZ_API_KEY environment variable
 - ✅ Integrates with XPoz public API
 - ✅ Built for AI agent usage
@@ -234,7 +234,7 @@ cd apps/cli
 pnpm link --global
 
 # Use anywhere
-postiz --help
+xpoz --help
 ```
 
 ### To Publish to npm
@@ -250,7 +250,7 @@ pnpm run publish
 
 ### To Use in AI Agents
 
-1. Install: `npm install -g postiz`
+1. Install: `npm install -g xpoz`
 2. Set API key: `export POSTIZ_API_KEY=your_key`
 3. Use commands programmatically
 4. Parse JSON output

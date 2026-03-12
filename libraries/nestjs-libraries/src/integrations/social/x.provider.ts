@@ -22,6 +22,8 @@ import { XDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/x.
 import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
 
 // OAuth 2.0 scopes required for full functionality
+// Ref: https://developer.x.com/en/docs/authentication/oauth-2-0/authorization-code
+// Note: media upload uses OAuth 1.0a separately (v2 media upload requires it)
 const OAUTH2_SCOPES = [
   'tweet.read',
   'tweet.write',
@@ -31,8 +33,6 @@ const OAUTH2_SCOPES = [
   'like.write',
   'bookmark.read',
   'bookmark.write',
-  'media.write',       // Required for v2 media upload
-  'media.read',
   'dm.read',
   'dm.write',
   'follows.read',
@@ -507,115 +507,226 @@ export class XProvider extends SocialAbstract implements SocialProvider {
   }
 
   /**
-   * Upload media via X API v2 chunked upload (works with OAuth 2.0 Bearer token)
-   * https://developer.x.com/en/docs/x-api/media/upload-media/api-reference
+   * Generate OAuth 1.0a Authorization header for X API requests.
+   * Required because v2 media upload needs OAuth 1.0a, not Bearer tokens.
+   */
+  private generateOAuth1Header(
+    method: string,
+    url: string,
+    params: Record<string, string> = {}
+  ): string {
+    const crypto = require('crypto');
+    const apiKey = process.env.X_API_KEY!;
+    const apiSecret = process.env.X_API_SECRET!;
+    const accessToken = process.env.X_ACCESS_TOKEN!;
+    const accessSecret = process.env.X_ACCESS_TOKEN_SECRET!;
+
+    const nonce = crypto.randomBytes(16).toString('hex');
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+
+    const oauthParams: Record<string, string> = {
+      oauth_consumer_key: apiKey,
+      oauth_nonce: nonce,
+      oauth_signature_method: 'HMAC-SHA1',
+      oauth_timestamp: timestamp,
+      oauth_token: accessToken,
+      oauth_version: '1.0',
+    };
+
+    // Combine OAuth params with request params for signature
+    const allParams = { ...oauthParams, ...params };
+    const paramString = Object.keys(allParams)
+      .sort()
+      .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(allParams[k])}`)
+      .join('&');
+
+    const baseString = `${method}&${encodeURIComponent(url)}&${encodeURIComponent(paramString)}`;
+    const signingKey = `${encodeURIComponent(apiSecret)}&${encodeURIComponent(accessSecret)}`;
+    const signature = crypto
+      .createHmac('sha1', signingKey)
+      .update(baseString)
+      .digest('base64');
+
+    oauthParams['oauth_signature'] = signature;
+    return (
+      'OAuth ' +
+      Object.keys(oauthParams)
+        .sort()
+        .map((k) => `${encodeURIComponent(k)}="${encodeURIComponent(oauthParams[k])}"`)
+        .join(', ')
+    );
+  }
+
+  /**
+   * Upload media to X API v2 with OAuth 1.0a authentication.
+   *
+   * v2 API format (from docs.x.com):
+   * - Simple upload: POST /2/media/upload  {media, media_type, media_category}
+   * - Chunked INIT: POST /2/media/upload/initialize
+   * - Chunked APPEND: POST /2/media/upload/{id}/append
+   * - Chunked FINALIZE: POST /2/media/upload/{id}/finalize
+   * - Status: GET /2/media/upload?media_id={id}
    */
   private async uploadMediaV2(
-    accessToken: string,
+    _accessToken: string,
     buffer: Buffer,
     mediaType: string,
     mediaCategory: string
   ): Promise<string> {
-    const proxyAgent = this.proxyAgent;
-    const fetchOptions: any = proxyAgent
-      ? { dispatcher: undefined } // undici global dispatcher handles proxy
-      : {};
+    const apiKey = process.env.X_API_KEY;
+    const apiSecret = process.env.X_API_SECRET;
+    const accessToken = process.env.X_ACCESS_TOKEN;
+    const accessSecret = process.env.X_ACCESS_TOKEN_SECRET;
 
-    const headers = {
-      'Authorization': `Bearer ${accessToken.split(':')[0]}`,
+    if (!apiKey || !apiSecret || !accessToken || !accessSecret) {
+      throw new Error(
+        'Media upload requires OAuth 1.0a credentials. ' +
+        'Set X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET in .env'
+      );
+    }
+
+    const BASE_URL = 'https://api.x.com/2/media/upload';
+    const proxyEnv = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+
+    const doFetch = async (url: string, options: RequestInit) => {
+      if (proxyEnv) {
+        const { HttpsProxyAgent } = await import('https-proxy-agent');
+        const agent = new HttpsProxyAgent(proxyEnv);
+        return fetch(url, { ...options, agent } as any);
+      }
+      return fetch(url, options);
     };
 
-    // Step 1: INIT
-    console.log('[X-Upload-V2] INIT: total_bytes:', buffer.length, 'media_type:', mediaType);
-    const initForm = new URLSearchParams();
-    initForm.append('command', 'INIT');
-    initForm.append('total_bytes', buffer.length.toString());
-    initForm.append('media_type', mediaType);
-    initForm.append('media_category', mediaCategory);
+    const isVideo = mediaType.startsWith('video/');
+    const MAX_SIMPLE_SIZE = 5 * 1024 * 1024; // 5MB
 
-    const initRes = await fetch('https://api.x.com/2/media/upload', {
+    if (!isVideo && buffer.length < MAX_SIMPLE_SIZE) {
+      // ── SIMPLE UPLOAD (images < 5MB) ──
+      const auth = this.generateOAuth1Header('POST', BASE_URL);
+      console.log('[X-Upload] Simple upload:', buffer.length, 'bytes,', mediaType);
+
+      const res = await doFetch(BASE_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: auth,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          media: buffer.toString('base64'),
+          media_type: mediaType,
+          media_category: mediaCategory,
+        }),
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('[X-Upload] Simple upload failed:', res.status, errText);
+        throw new Error(`Media upload failed: ${res.status} ${errText}`);
+      }
+
+      const data = (await res.json()) as any;
+      const mediaId = data?.data?.id || data?.id || data?.media_id_string;
+      console.log('[X-Upload] Simple upload OK, media_id:', mediaId);
+      return mediaId;
+    }
+
+    // ── CHUNKED UPLOAD (videos or large files) ──
+
+    // INIT
+    const initUrl = `${BASE_URL}/initialize`;
+    const initAuth = this.generateOAuth1Header('POST', initUrl);
+    console.log('[X-Upload] Chunked INIT:', buffer.length, 'bytes,', mediaType);
+
+    const initRes = await doFetch(initUrl, {
       method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: initForm.toString(),
-      ...fetchOptions,
+      headers: {
+        Authorization: initAuth,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        total_bytes: buffer.length,
+        media_type: mediaType,
+        media_category: mediaCategory,
+      }),
     });
 
     if (!initRes.ok) {
       const errText = await initRes.text();
-      console.error('[X-Upload-V2] INIT failed:', initRes.status, errText);
-      throw new Error(`Media upload INIT failed: ${initRes.status} ${errText}`);
+      console.error('[X-Upload] INIT failed:', initRes.status, errText);
+      throw new Error(`INIT failed: ${initRes.status} ${errText}`);
     }
 
-    const initData = await initRes.json() as any;
-    const mediaId = initData.id || initData.media_id_string;
-    console.log('[X-Upload-V2] INIT success, media_id:', mediaId);
+    const initData = (await initRes.json()) as any;
+    const mediaId = initData?.data?.id || initData?.id || initData?.media_id_string;
+    console.log('[X-Upload] INIT OK, media_id:', mediaId);
 
-    // Step 2: APPEND (single chunk for images < 5MB)
-    const chunkSize = 5 * 1024 * 1024; // 5MB
-    for (let i = 0; i < buffer.length; i += chunkSize) {
-      const chunk = buffer.subarray(i, Math.min(i + chunkSize, buffer.length));
-      const segmentIndex = Math.floor(i / chunkSize);
+    // APPEND (5MB chunks)
+    const CHUNK_SIZE = 5 * 1024 * 1024;
+    for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
+      const chunk = buffer.subarray(i, Math.min(i + CHUNK_SIZE, buffer.length));
+      const segmentIndex = Math.floor(i / CHUNK_SIZE);
+      const appendUrl = `${BASE_URL}/${mediaId}/append`;
+      const appendAuth = this.generateOAuth1Header('POST', appendUrl);
 
-      const formData = new FormData();
-      formData.append('command', 'APPEND');
-      formData.append('media_id', mediaId);
-      formData.append('segment_index', segmentIndex.toString());
-      formData.append('media_data', chunk.toString('base64'));
-
-      console.log('[X-Upload-V2] APPEND segment:', segmentIndex, 'size:', chunk.length);
-      const appendRes = await fetch('https://api.x.com/2/media/upload', {
+      console.log('[X-Upload] APPEND segment', segmentIndex, ':', chunk.length, 'bytes');
+      const appendRes = await doFetch(appendUrl, {
         method: 'POST',
-        headers,
-        body: formData,
-        ...fetchOptions,
+        headers: {
+          Authorization: appendAuth,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          media: chunk.toString('base64'),
+          segment_index: segmentIndex,
+        }),
       });
 
       if (!appendRes.ok && appendRes.status !== 204) {
         const errText = await appendRes.text();
-        console.error('[X-Upload-V2] APPEND failed:', appendRes.status, errText);
-        throw new Error(`Media upload APPEND failed: ${appendRes.status} ${errText}`);
+        console.error('[X-Upload] APPEND failed:', appendRes.status, errText);
+        throw new Error(`APPEND failed: ${appendRes.status} ${errText}`);
       }
     }
-    console.log('[X-Upload-V2] APPEND complete');
+    console.log('[X-Upload] APPEND complete');
 
-    // Step 3: FINALIZE
-    const finalForm = new URLSearchParams();
-    finalForm.append('command', 'FINALIZE');
-    finalForm.append('media_id', mediaId);
+    // FINALIZE
+    const finalUrl = `${BASE_URL}/${mediaId}/finalize`;
+    const finalAuth = this.generateOAuth1Header('POST', finalUrl);
 
-    const finalRes = await fetch('https://api.x.com/2/media/upload', {
+    const finalRes = await doFetch(finalUrl, {
       method: 'POST',
-      headers: { ...headers, 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: finalForm.toString(),
-      ...fetchOptions,
+      headers: {
+        Authorization: finalAuth,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!finalRes.ok) {
       const errText = await finalRes.text();
-      console.error('[X-Upload-V2] FINALIZE failed:', finalRes.status, errText);
-      throw new Error(`Media upload FINALIZE failed: ${finalRes.status} ${errText}`);
+      console.error('[X-Upload] FINALIZE failed:', finalRes.status, errText);
+      throw new Error(`FINALIZE failed: ${finalRes.status} ${errText}`);
     }
 
-    const finalData = await finalRes.json() as any;
-    console.log('[X-Upload-V2] FINALIZE success:', JSON.stringify(finalData));
+    const finalData = (await finalRes.json()) as any;
+    console.log('[X-Upload] FINALIZE OK:', JSON.stringify(finalData));
 
-    // Handle async processing (for videos)
+    // Handle async processing (videos)
     if (finalData.processing_info) {
       let state = finalData.processing_info.state;
       while (state === 'pending' || state === 'in_progress') {
         const waitSecs = finalData.processing_info.check_after_secs || 5;
-        console.log('[X-Upload-V2] Processing, waiting', waitSecs, 'seconds...');
-        await new Promise(r => setTimeout(r, waitSecs * 1000));
-
-        const statusRes = await fetch(
-          `https://api.x.com/2/media/upload?command=STATUS&media_id=${mediaId}`,
-          { method: 'GET', headers, ...fetchOptions }
-        );
-        const statusData = await statusRes.json() as any;
+        console.log('[X-Upload] Processing, wait', waitSecs, 's...');
+        await new Promise((r) => setTimeout(r, waitSecs * 1000));
+        const statusUrl = `${BASE_URL}?media_id=${mediaId}`;
+        const statusAuth = this.generateOAuth1Header('GET', statusUrl);
+        const statusRes = await doFetch(statusUrl, {
+          method: 'GET',
+          headers: { Authorization: statusAuth },
+        });
+        const statusData = (await statusRes.json()) as any;
         state = statusData.processing_info?.state;
-        console.log('[X-Upload-V2] Processing status:', state);
+        console.log('[X-Upload] Status:', state);
       }
-
       if (state === 'failed') {
         throw new Error('Media processing failed');
       }

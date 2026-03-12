@@ -7,13 +7,13 @@ The XPoz CLI now correctly detects and uploads various media types.
 The CLI automatically detects the MIME type based on the file extension:
 
 ```bash
-postiz upload video.mp4
+xpoz upload video.mp4
 # ✅ Detected as: video/mp4
 
-postiz upload image.png
+xpoz upload image.png
 # ✅ Detected as: image/png
 
-postiz upload audio.mp3
+xpoz upload audio.mp3
 # ✅ Detected as: audio/mpeg
 ```
 
@@ -33,10 +33,10 @@ postiz upload audio.mp3
 
 **Examples:**
 ```bash
-postiz upload photo.jpg
-postiz upload logo.png
-postiz upload animation.gif
-postiz upload icon.svg
+xpoz upload photo.jpg
+xpoz upload logo.png
+xpoz upload animation.gif
+xpoz upload icon.svg
 ```
 
 ### Videos
@@ -56,10 +56,10 @@ postiz upload icon.svg
 
 **Examples:**
 ```bash
-postiz upload video.mp4
-postiz upload clip.mov
-postiz upload recording.webm
-postiz upload movie.mkv
+xpoz upload video.mp4
+xpoz upload clip.mov
+xpoz upload recording.webm
+xpoz upload movie.mkv
 ```
 
 ### Audio
@@ -75,9 +75,9 @@ postiz upload movie.mkv
 
 **Examples:**
 ```bash
-postiz upload podcast.mp3
-postiz upload song.wav
-postiz upload audio.ogg
+xpoz upload podcast.mp3
+xpoz upload song.wav
+xpoz upload audio.ogg
 ```
 
 ### Documents
@@ -90,8 +90,8 @@ postiz upload audio.ogg
 
 **Examples:**
 ```bash
-postiz upload document.pdf
-postiz upload report.docx
+xpoz upload document.pdf
+xpoz upload report.docx
 ```
 
 ### Other Files
@@ -105,7 +105,7 @@ For file types not listed above, the CLI uses:
 ### Upload an Image
 
 ```bash
-postiz upload ./images/photo.jpg
+xpoz upload ./images/photo.jpg
 ```
 
 Response:
@@ -120,7 +120,7 @@ Response:
 ### Upload a Video (MP4)
 
 ```bash
-postiz upload ./videos/promo.mp4
+xpoz upload ./videos/promo.mp4
 ```
 
 Response:
@@ -136,14 +136,14 @@ Response:
 
 ```bash
 # 1. Upload the file
-RESULT=$(postiz upload video.mp4)
+RESULT=$(xpoz upload video.mp4)
 echo $RESULT
 
 # 2. Extract the path (you'll need jq or similar)
 PATH=$(echo $RESULT | jq -r '.path')
 
 # 3. Use in a post
-postiz posts:create \
+xpoz posts:create \
   -c "Check out my video!" \
   -m "$PATH" \
   -i "tiktok-123"
@@ -153,13 +153,13 @@ postiz posts:create \
 
 ```bash
 # Upload images
-postiz upload image1.jpg
-postiz upload image2.png
-postiz upload image3.gif
+xpoz upload image1.jpg
+xpoz upload image2.png
+xpoz upload image3.gif
 
 # Upload videos
-postiz upload video1.mp4
-postiz upload video2.mov
+xpoz upload video1.mp4
+xpoz upload video2.mov
 ```
 
 ## What Changed (Fix)
@@ -167,7 +167,7 @@ postiz upload video2.mov
 ### Before (❌ Bug)
 
 ```bash
-postiz upload video.mp4
+xpoz upload video.mp4
 # ❌ Was detected as: image/jpeg (WRONG!)
 ```
 
@@ -176,13 +176,13 @@ The problem: The CLI defaulted to `image/jpeg` for any unknown file type.
 ### After (✅ Fixed)
 
 ```bash
-postiz upload video.mp4
+xpoz upload video.mp4
 # ✅ Correctly detected as: video/mp4
 
-postiz upload audio.mp3
+xpoz upload audio.mp3
 # ✅ Correctly detected as: audio/mpeg
 
-postiz upload document.pdf
+xpoz upload document.pdf
 # ✅ Correctly detected as: application/pdf
 ```
 
@@ -224,7 +224,7 @@ Some platforms may not accept certain file types. Check the platform's documenta
 ffmpeg -i video.avi video.mp4
 
 # Then upload
-postiz upload video.mp4
+xpoz upload video.mp4
 ```
 
 ### File Size Limits
@@ -243,10 +243,10 @@ If you renamed a file with the wrong extension:
 ```bash
 # ❌ Wrong: PNG file renamed to .jpg
 mv image.png image.jpg
-postiz upload image.jpg  # Might fail
+xpoz upload image.jpg  # Might fail
 
 # ✅ Correct: Keep original extension
-postiz upload image.png
+xpoz upload image.png
 ```
 
 ## Testing File Upload
@@ -256,13 +256,13 @@ postiz upload image.png
 export POSTIZ_API_KEY=your_key
 
 # Test image upload
-postiz upload test-image.jpg
+xpoz upload test-image.jpg
 
 # Test video upload
-postiz upload test-video.mp4
+xpoz upload test-video.mp4
 
 # Test audio upload
-postiz upload test-audio.mp3
+xpoz upload test-audio.mp3
 ```
 
 ## Error Messages
