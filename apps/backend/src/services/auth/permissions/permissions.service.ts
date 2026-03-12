@@ -46,6 +46,18 @@ export class PermissionsService {
       Ability<[AuthorizationActions, Sections]>
     >(Ability as AbilityClass<AppAbility>);
 
+    // Stripe billing disabled — all users get ULTIMATE tier with full permissions
+    for (const [action, section] of requestedPermission) {
+      can(action, section);
+    }
+    return build({
+      detectSubjectType: (item) =>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        item.constructor,
+    });
+
+    /* --- Original Stripe-based permission checks (disabled) ---
     if (
       requestedPermission.length === 0 ||
       !process.env.STRIPE_PUBLISHABLE_KEY
@@ -55,7 +67,6 @@ export class PermissionsService {
       }
       return build({
         detectSubjectType: (item) =>
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           item.constructor,
       });
@@ -63,12 +74,10 @@ export class PermissionsService {
 
     const { subscription, options } = await this.getPackageOptions(orgId);
     for (const [action, section] of requestedPermission) {
-      // check for the amount of channels
       if (section === Sections.CHANNEL) {
         const totalChannels = (
           await this._integrationService.getIntegrationsList(orgId)
         ).filter((f) => !f.refreshNeeded).length;
-
         if (
           (options.channel && options.channel > totalChannels) ||
           (subscription?.totalChannels || 0) > totalChannels
@@ -77,7 +86,6 @@ export class PermissionsService {
           continue;
         }
       }
-
       if (section === Sections.WEBHOOKS) {
         const totalWebhooks = await this._webhooksService.getTotal(orgId);
         if (totalWebhooks < options.webhooks) {
@@ -85,74 +93,26 @@ export class PermissionsService {
           continue;
         }
       }
-
-      // check for posts per month
       if (section === Sections.POSTS_PER_MONTH) {
         const createdAt =
           (await this._subscriptionService.getSubscription(orgId))?.createdAt ||
           created_at;
-        const totalMonthPast = Math.abs(
-          dayjs(createdAt).diff(dayjs(), 'month')
-        );
+        const totalMonthPast = Math.abs(dayjs(createdAt).diff(dayjs(), 'month'));
         const checkFrom = dayjs(createdAt).add(totalMonthPast, 'month');
-        const count = await this._postsService.countPostsFromDay(
-          orgId,
-          checkFrom.toDate()
-        );
-
+        const count = await this._postsService.countPostsFromDay(orgId, checkFrom.toDate());
         if (count < options.posts_per_month) {
           can(action, section);
           continue;
         }
       }
-
-      if (section === Sections.TEAM_MEMBERS && options.team_members) {
-        can(action, section);
-        continue;
-      }
-
-      if (
-        section === Sections.ADMIN &&
-        ['ADMIN', 'SUPERADMIN'].includes(permission)
-      ) {
-        can(action, section);
-        continue;
-      }
-
-      if (
-        section === Sections.COMMUNITY_FEATURES &&
-        options.community_features
-      ) {
-        can(action, section);
-        continue;
-      }
-
-      if (
-        section === Sections.FEATURED_BY_GITROOM &&
-        options.featured_by_gitroom
-      ) {
-        can(action, section);
-        continue;
-      }
-
-      if (section === Sections.AI && options.ai) {
-        can(action, section);
-        continue;
-      }
-
-      if (
-        section === Sections.IMPORT_FROM_CHANNELS &&
-        options.import_from_channels
-      ) {
-        can(action, section);
-      }
+      if (section === Sections.TEAM_MEMBERS && options.team_members) { can(action, section); continue; }
+      if (section === Sections.ADMIN && ['ADMIN', 'SUPERADMIN'].includes(permission)) { can(action, section); continue; }
+      if (section === Sections.COMMUNITY_FEATURES && options.community_features) { can(action, section); continue; }
+      if (section === Sections.FEATURED_BY_XPOZ && options.featured_by_xpoz) { can(action, section); continue; }
+      if (section === Sections.AI && options.ai) { can(action, section); continue; }
+      if (section === Sections.IMPORT_FROM_CHANNELS && options.import_from_channels) { can(action, section); }
     }
-
-    return build({
-      detectSubjectType: (item) =>
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        item.constructor,
-    });
+    return build({ detectSubjectType: (item) => item.constructor });
+    --- End of original Stripe-based permission checks --- */
   }
 }

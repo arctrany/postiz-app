@@ -6,7 +6,7 @@ export interface PricingInnerInterface {
   posts_per_month: number;
   team_members: boolean;
   community_features: boolean;
-  featured_by_gitroom: boolean;
+  featured_by_xpoz: boolean;
   ai: boolean;
   import_from_channels: boolean;
   image_generator?: boolean;
@@ -30,7 +30,7 @@ export const pricing: PricingInterface = {
     posts_per_month: 1000000,
     team_members: true,
     community_features: true,
-    featured_by_gitroom: true,
+    featured_by_xpoz: true,
     ai: true,
     import_from_channels: true,
     image_generator: true,
@@ -49,7 +49,7 @@ export const pricing: PricingInterface = {
     team_members: false,
     ai: true,
     community_features: false,
-    featured_by_gitroom: false,
+    featured_by_xpoz: false,
     import_from_channels: true,
     image_generator: false,
     public_api: true,
@@ -66,7 +66,7 @@ export const pricing: PricingInterface = {
     image_generation_count: 100,
     community_features: true,
     team_members: true,
-    featured_by_gitroom: true,
+    featured_by_xpoz: true,
     ai: true,
     import_from_channels: true,
     image_generator: true,
@@ -84,7 +84,7 @@ export const pricing: PricingInterface = {
     image_generation_count: 300,
     community_features: true,
     team_members: true,
-    featured_by_gitroom: true,
+    featured_by_xpoz: true,
     ai: true,
     import_from_channels: true,
     image_generator: true,
@@ -102,7 +102,7 @@ export const pricing: PricingInterface = {
     image_generation_count: 500,
     community_features: true,
     team_members: true,
-    featured_by_gitroom: true,
+    featured_by_xpoz: true,
     ai: true,
     import_from_channels: true,
     image_generator: true,

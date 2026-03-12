@@ -14,6 +14,10 @@ export const languages = [
   'ar',
   'tr',
   'vi',
+  'th',  // Thai
+  'id',  // Indonesian
+  'ms',  // Malay
+  'tl',  // Filipino/Tagalog
 ];
 
 export const defaultNS = 'translation';

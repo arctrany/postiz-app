@@ -17,6 +17,10 @@ export class StripeController {
 
   @Post('/')
   stripe(@Req() req: RawBodyRequest<Request>) {
+    // Stripe billing disabled — webhook events are not processed
+    return { ok: true };
+
+    /* --- Original Stripe webhook handler (disabled) ---
     const event = this._stripeService.validateRequest(
       req.rawBody,
       // @ts-ignore
@@ -24,10 +28,8 @@ export class StripeController {
       process.env.STRIPE_SIGNING_KEY
     );
 
-    // Maybe it comes from another stripe webhook
     if (
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      event?.data?.object?.metadata?.service !== 'xpoz' &&
       event?.data?.object?.metadata?.service !== 'gitroom' &&
       event.type !== 'invoice.payment_succeeded'
     ) {
@@ -50,5 +52,6 @@ export class StripeController {
     } catch (e) {
       throw new HttpException(e, 500);
     }
+    --- End of original Stripe webhook handler --- */
   }
 }

@@ -11,7 +11,7 @@ services:
       JWT_SECRET: 'random string that is unique to every install - just type random characters here!'
       DATABASE_URL: 'postgresql://xpoz-user:xpoz-password@xpoz-postgres:5432/xpoz-db-local'
       REDIS_URL: 'redis://xpoz-redis:6379'
-      BACKEND_INTERNAL_URL: 'http://localhost:3000'
+      BACKEND_INTERNAL_URL: 'http://localhost:3333'
       TEMPORAL_ADDRESS: "temporal:7233"
       IS_GENERAL: 'true'
       DISABLE_REGISTRATION: 'false'
@@ -68,16 +68,16 @@ services:
       MASTODON_CLIENT_SECRET: ''
 
       # === OAuth & Authentik Settings
-      # NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: 'Authentik'
-      # NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png'
-      # POSTIZ_GENERIC_OAUTH: 'false'
-      # POSTIZ_OAUTH_URL: 'https://auth.example.com'
-      # POSTIZ_OAUTH_AUTH_URL: 'https://auth.example.com/application/o/authorize'
-      # POSTIZ_OAUTH_TOKEN_URL: 'https://auth.example.com/application/o/token'
-      # POSTIZ_OAUTH_USERINFO_URL: 'https://authentik.example.com/application/o/userinfo'
-      # POSTIZ_OAUTH_CLIENT_ID: ''
-      # POSTIZ_OAUTH_CLIENT_SECRET: ''
-      # POSTIZ_OAUTH_SCOPE: "openid profile email"  # Optional: uncomment to override default scope
+      # NEXT_PUBLIC_XPOZ_OAUTH_DISPLAY_NAME: 'Authentik'
+      # NEXT_PUBLIC_XPOZ_OAUTH_LOGO_URL: 'https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png'
+      # XPOZ_GENERIC_OAUTH: 'false'
+      # XPOZ_OAUTH_URL: 'https://auth.example.com'
+      # XPOZ_OAUTH_AUTH_URL: 'https://auth.example.com/application/o/authorize'
+      # XPOZ_OAUTH_TOKEN_URL: 'https://auth.example.com/application/o/token'
+      # XPOZ_OAUTH_USERINFO_URL: 'https://authentik.example.com/application/o/userinfo'
+      # XPOZ_OAUTH_CLIENT_ID: ''
+      # XPOZ_OAUTH_CLIENT_SECRET: ''
+      # XPOZ_OAUTH_SCOPE: "openid profile email"  # Optional: uncomment to override default scope
 
       # === Sentry
 

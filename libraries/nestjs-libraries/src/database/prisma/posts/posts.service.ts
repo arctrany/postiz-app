@@ -463,6 +463,15 @@ export class PostsService {
 
   async getPost(orgId: string, id: string, convertToJPEG = false) {
     const posts = await this.getPostsRecursively(id, true, orgId, true);
+    if (!posts || posts.length === 0) {
+      return {
+        group: '',
+        posts: [],
+        integrationPicture: '',
+        integration: '',
+        settings: {},
+      };
+    }
     const list = {
       group: posts?.[0]?.group,
       posts: await Promise.all(
@@ -476,8 +485,8 @@ export class PostsService {
         }))
       ),
       integrationPicture: posts[0]?.integration?.picture,
-      integration: posts[0].integrationId,
-      settings: JSON.parse(posts[0].settings || '{}'),
+      integration: posts[0]?.integrationId,
+      settings: JSON.parse(posts[0]?.settings || '{}'),
     };
 
     return list;

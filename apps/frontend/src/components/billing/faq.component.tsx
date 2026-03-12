@@ -26,11 +26,11 @@ const useFaqList = () => {
       : []),
     {
       title: t(
-        'faq_can_i_trust_postiz_gitroom',
+        'faq_can_i_trust_xpoz',
         `Can I trust ${'XPoz'}?`
       ),
       description: t(
-        'faq_postiz_gitroom_is_proudly_open_source',
+        'faq_xpoz_is_proudly_open_source',
         `${
           'XPoz'
         } is proudly open-source! We believe in an ethical and transparent culture, meaning that ${
@@ -41,7 +41,7 @@ const useFaqList = () => {
     {
       title: t('faq_what_are_channels', 'What are channels?'),
       description: t(
-        'faq_postiz_gitroom_allows_you_to_schedule_posts',
+        'faq_xpoz_allows_you_to_schedule_posts',
         `${
           'XPoz'
         } allows you to schedule your posts between different channels.

@@ -318,7 +318,7 @@ export class StripeService {
     if (sub.cancel_at_period_end) {
       const { cancel_at } = await stripe.subscriptions.update(sub.id, {
         cancel_at_period_end: false,
-        metadata: { service: 'gitroom', id },
+        metadata: { service: 'xpoz', id },
       });
 
       return {
@@ -348,7 +348,7 @@ export class StripeService {
     // Payment succeeded — cancel at end of billing period
     const { cancel_at } = await stripe.subscriptions.update(sub.id, {
       cancel_at_period_end: true,
-      metadata: { service: 'gitroom', id },
+      metadata: { service: 'xpoz', id },
     });
 
     return {
@@ -463,7 +463,7 @@ export class StripeService {
       subscription_data: {
         ...(allowTrial ? { trial_period_days: 7 } : {}),
         metadata: {
-          service: 'gitroom',
+          service: 'xpoz',
           ...body,
           userId,
           uniqueId,
@@ -524,7 +524,7 @@ export class StripeService {
       subscription_data: {
         ...(allowTrial ? { trial_period_days: 7 } : {}),
         metadata: {
-          service: 'gitroom',
+          service: 'xpoz',
           ...body,
           userId,
           uniqueId,
@@ -798,7 +798,7 @@ export class StripeService {
       await stripe.subscriptions.update(currentUserSubscription.data[0].id, {
         cancel_at_period_end: false,
         metadata: {
-          service: 'gitroom',
+          service: 'xpoz',
           ...body,
           userId,
           id,
