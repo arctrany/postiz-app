@@ -1,14 +1,14 @@
 'use client';
 
 import { FC, useCallback, useState } from 'react';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Button } from '@gitroom/react/form/button';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { useDecisionModal, useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { MediaBox } from '@gitroom/frontend/components/media/media.component';
+import { Button } from '@xpoz/react/form/button';
+import { useToaster } from '@xpoz/react/toaster/toaster';
+import { useDecisionModal, useModals } from '@xpoz/frontend/components/layout/new-modal';
+import { MediaBox } from '@xpoz/frontend/components/media/media.component';
 import copy from 'copy-to-clipboard';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 
 const useOAuthApp = () => {
   const fetch = useFetch();

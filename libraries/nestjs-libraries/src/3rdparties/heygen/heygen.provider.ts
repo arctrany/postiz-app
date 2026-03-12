@@ -1,9 +1,9 @@
 import {
   ThirdParty,
   ThirdPartyAbstract,
-} from '@gitroom/nestjs-libraries/3rdparties/thirdparty.interface';
-import { OpenaiService } from '@gitroom/nestjs-libraries/openai/openai.service';
-import { timer } from '@gitroom/helpers/utils/timer';
+} from '@xpoz/nestjs-libraries/3rdparties/thirdparty.interface';
+import { OpenaiService } from '@xpoz/nestjs-libraries/openai/openai.service';
+import { timer } from '@xpoz/helpers/utils/timer';
 
 @ThirdParty({
   identifier: 'heygen',

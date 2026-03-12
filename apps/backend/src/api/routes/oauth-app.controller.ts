@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
-import { GetOrgFromRequest } from '@gitroom/nestjs-libraries/user/org.from.request';
+import { GetOrgFromRequest } from '@xpoz/nestjs-libraries/user/org.from.request';
 import { Organization } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-import { OAuthService } from '@gitroom/nestjs-libraries/database/prisma/oauth/oauth.service';
-import { CheckPolicies } from '@gitroom/backend/services/auth/permissions/permissions.ability';
+import { OAuthService } from '@xpoz/nestjs-libraries/database/prisma/oauth/oauth.service';
+import { CheckPolicies } from '@xpoz/backend/services/auth/permissions/permissions.ability';
 import {
   AuthorizationActions,
   Sections,
-} from '@gitroom/backend/services/auth/permissions/permission.exception.class';
-import { CreateOAuthAppDto } from '@gitroom/nestjs-libraries/dtos/oauth/create-oauth-app.dto';
-import { UpdateOAuthAppDto } from '@gitroom/nestjs-libraries/dtos/oauth/update-oauth-app.dto';
+} from '@xpoz/backend/services/auth/permissions/permission.exception.class';
+import { CreateOAuthAppDto } from '@xpoz/nestjs-libraries/dtos/oauth/create-oauth-app.dto';
+import { UpdateOAuthAppDto } from '@xpoz/nestjs-libraries/dtos/oauth/update-oauth-app.dto';
 
 @ApiTags('OAuth App')
 @Controller('/user/oauth-app')

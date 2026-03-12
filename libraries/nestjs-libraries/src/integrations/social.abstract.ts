@@ -1,4 +1,4 @@
-import { timer } from '@gitroom/helpers/utils/timer';
+import { timer } from '@xpoz/helpers/utils/timer';
 import { Integration } from '@prisma/client';
 import { ApplicationFailure } from '@temporalio/activity';
 

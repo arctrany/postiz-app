@@ -1,12 +1,12 @@
-import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
+import { useIntegration } from '@xpoz/frontend/components/launches/helpers/use.integration';
+import { useMediaDirectory } from '@xpoz/react/helpers/use.media.directory';
 import clsx from 'clsx';
-import { VideoOrImage } from '@gitroom/react/helpers/video.or.image';
+import { VideoOrImage } from '@xpoz/react/helpers/video.or.image';
 import { FC } from 'react';
-import { textSlicer } from '@gitroom/helpers/utils/count.length';
+import { textSlicer } from '@xpoz/helpers/utils/count.length';
 import Image from 'next/image';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
-import { stripHtmlValidation } from '@gitroom/helpers/utils/strip.html.validation';
+import { useLaunchStore } from '@xpoz/frontend/components/new-launch/store';
+import { stripHtmlValidation } from '@xpoz/helpers/utils/strip.html.validation';
 
 export const GeneralPreviewComponent: FC<{
   maximumCharacters?: number;

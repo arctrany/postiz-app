@@ -3,14 +3,14 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { HttpStatusCode } from 'axios';
 import { useRouter } from 'next/navigation';
-import { Redirect } from '@gitroom/frontend/components/layout/redirect';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { Redirect } from '@xpoz/frontend/components/layout/redirect';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import dayjs from 'dayjs';
-import { continueProviderList } from '@gitroom/frontend/components/new-launch/providers/continue-provider/list';
-import { IntegrationContext } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { continueProviderList } from '@xpoz/frontend/components/new-launch/providers/continue-provider/list';
+import { IntegrationContext } from '@xpoz/frontend/components/launches/helpers/use.integration';
+import { newDayjs } from '@xpoz/frontend/components/layout/set.timezone';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
 
 interface TwoStepState {
   integrationId: string;

@@ -380,7 +380,7 @@ xpoz integrations:trigger invalid-id getFlairs
 
 ```bash
 #!/bin/bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 INTEGRATION_ID="reddit-abc123"
 
 # 1. Get settings

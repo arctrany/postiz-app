@@ -1,26 +1,26 @@
 'use client';
 
 import React, { FC, useCallback, useMemo, useState } from 'react';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
+import { useUser } from '@xpoz/frontend/components/layout/user.context';
 import { useRouter } from 'next/navigation';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { deleteDialog } from '@xpoz/react/helpers/delete.dialog';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
-import { GeneratorDto } from '@gitroom/nestjs-libraries/dtos/generator/generator.dto';
-import { Button } from '@gitroom/react/form/button';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Textarea } from '@gitroom/react/form/textarea';
-import { Checkbox } from '@gitroom/react/form/checkbox';
+import { GeneratorDto } from '@xpoz/nestjs-libraries/dtos/generator/generator.dto';
+import { Button } from '@xpoz/react/form/button';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { Textarea } from '@xpoz/react/form/textarea';
+import { Checkbox } from '@xpoz/react/form/checkbox';
 import clsx from 'clsx';
 import {
   CalendarWeekProvider,
   useCalendar,
-} from '@gitroom/frontend/components/launches/calendar.context';
+} from '@xpoz/frontend/components/launches/calendar.context';
 import dayjs from 'dayjs';
-import { Select } from '@gitroom/react/form/select';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
+import { Select } from '@xpoz/react/form/select';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { AddEditModal } from '@xpoz/frontend/components/new-launch/add.edit.modal';
 
 const FirstStep: FC = (props) => {
   const { integrations, reloadCalendarView } = useCalendar();

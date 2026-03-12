@@ -1,6 +1,6 @@
 # XPoz 全媒体平台 — 完整改造规划
 
-> 基于 Postiz + Wechatsync 融合，品牌升级为 XPoz
+> 基于 XPoz + Wechatsync 融合，品牌升级为 XPoz
 >
 > **目标**：覆盖全球 + 国内 55+ 平台，AI Agent 互联互通
 
@@ -38,7 +38,7 @@
 
 ### 背景
 
-- **Postiz Extension**：当前已有，功能为抓取 Cookie 中继给后端（仅支持 Skool 一个平台）
+- **XPoz Extension**：当前已有，功能为抓取 Cookie 中继给后端（仅支持 Skool 一个平台）
 - **Wechatsync Extension**：已有，支持25个国内平台直接在浏览器内发布
 - **目标**：合并为单一 `XPoz Extension`，统一品牌、统一能力
 
@@ -324,30 +324,30 @@ const openclawAnalysisTool = createTool({
 
 | 文件 | 问题 | 操作 |
 |------|------|------|
-| `apps/frontend/src/app/(app)/layout.tsx:48` | Plausible 统计 → 数据上报给 postiz.com | **删除或改域名** |
-| `apps/frontend/src/app/(app)/layout.tsx:99` | PostHog 统计 → 数据上报给 postiz.com | **删除或改域名** |
+| `apps/frontend/src/app/(app)/layout.tsx:48` | Plausible 统计 → 数据上报给 xpoz.com | **删除或改域名** |
+| `apps/frontend/src/app/(app)/layout.tsx:99` | PostHog 统计 → 数据上报给 xpoz.com | **删除或改域名** |
 | `apps/frontend/src/components/layout/dubAnalytics.tsx:13` | Dub 链接追踪 | 删除或修改 |
-| `libraries/nestjs-libraries/src/database/prisma/agencies/agencies.service.ts:88` | 硬编码原作者邮箱 `nevo@postiz.com` | **改为自己邮箱** |
+| `libraries/nestjs-libraries/src/database/prisma/agencies/agencies.service.ts:88` | 硬编码原作者邮箱 `nevo@xpoz.com` | **改为自己邮箱** |
 
 ### 外链替换清单（grep 精确定位）
 
 | 文件 | 当前值 | 改为 |
 |------|--------|------|
-| `agencies.service.ts:53,196,199` | `postiz.com/agencies/...` | `xpoz.com/agencies/...` |
-| `organization.repository.ts:42` | `@postiz.com` 临时邮箱后缀 | `@xpoz.com` |
-| `top.menu.tsx:251` | `affiliate.postiz.com` | 删除 |
+| `agencies.service.ts:53,196,199` | `xpoz.com/agencies/...` | `xpoz.com/agencies/...` |
+| `organization.repository.ts:42` | `@xpoz.com` 临时邮箱后缀 | `@xpoz.com` |
+| `top.menu.tsx:251` | `affiliate.xpoz.com` | 删除 |
 | `chrome.extension.component.tsx:9` | Chrome Store 旧扩展 ID | 发布新扩展后更新 |
 | `add.provider.component.tsx:271` | 同上 | 同上 |
-| `developer.component.tsx` | `docs.postiz.com/public-api` | 暂时注释或改为 README 链接 |
-| `public.component.tsx:67,77` | `docs.postiz.com` / `n8n-nodes-postiz` | 暂时注释 |
-| `register.tsx:222,231` | `postiz.com/terms` / `postiz.com/privacy` | 改为自建页面或删除 |
-| `apps/sdk/src/index.ts:18` | `https://api.postiz.com` 默认值 | `https://api.xpoz.com` |
-| `apps/cli/src/api.ts:14` | `https://api.postiz.com` 默认值 | `https://api.xpoz.com` |
-| `billing/faq.component.tsx:38` | `gitroomhq/postiz-app` GitHub 链接 | 改为新 repo |
+| `developer.component.tsx` | `docs.xpoz.com/public-api` | 暂时注释或改为 README 链接 |
+| `public.component.tsx:67,77` | `docs.xpoz.com` / `n8n-nodes-postiz` | 暂时注释 |
+| `register.tsx:222,231` | `xpoz.com/terms` / `xpoz.com/privacy` | 改为自建页面或删除 |
+| `apps/sdk/src/index.ts:18` | `https://api.xpoz.com` 默认值 | `https://api.xpoz.com` |
+| `apps/cli/src/api.ts:14` | `https://api.xpoz.com` 默认值 | `https://api.xpoz.com` |
+| `billing/faq.component.tsx:38` | `gitroomhq/xpoz-app` GitHub 链接 | 改为新 repo |
 | `agents/agent.chat.tsx:49` | `agent="postiz"` | `agent="xpoz"` |
 | `app/(preview)/p/[id]/page.tsx:61` | `/postiz.svg` | `/xpoz.svg` |
-| `apps/extension/manifest.json:26` | `postiz.com` 白名单 | `xpoz.com` |
-| `apps/extension/src/background.ts:11` | `postiz.com` 正则 | `xpoz.com` |
+| `apps/extension/manifest.json:26` | `xpoz.com` 白名单 | `xpoz.com` |
+| `apps/extension/src/background.ts:11` | `xpoz.com` 正则 | `xpoz.com` |
 
 ### Logo 文件位置
 
@@ -537,9 +537,9 @@ private async getClient(accessToken: string) {
 - [ ] 生成 XPoz Logo（AI 生成 SVG + PNG）
 - [ ] 替换前端 Logo 组件和 SVG 文件
 - [ ] **移除 Plausible / PostHog 数据回传**（防止用户数据外泄）
-- [ ] 替换硬编码 `nevo@postiz.com` 邮箱
+- [ ] 替换硬编码 `nevo@xpoz.com` 邮箱
 - [ ] 更新 Extension manifest（名称 + 域名白名单）
-- [ ] 批量替换其余 postiz.com 外链（见上清单）
+- [ ] 批量替换其余 xpoz.com 外链（见上清单）
 
 ### 阶段 0.5 — X (Twitter) OAuth 2.0 升级（1-2天）
 

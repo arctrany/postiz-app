@@ -2,18 +2,18 @@
 import 'reflect-metadata';
 
 import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
-import { useToaster } from '@gitroom/react/toaster/toaster';
+import { useUser } from '@xpoz/frontend/components/layout/user.context';
+import { Button } from '@xpoz/react/form/button';
+import { Input } from '@xpoz/react/form/input';
+import { useToaster } from '@xpoz/react/toaster/toaster';
 import clsx from 'clsx';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
-import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { deleteDialog } from '@xpoz/react/helpers/delete.dialog';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { AddEditModal } from '@xpoz/frontend/components/new-launch/add.edit.modal';
+import { newDayjs } from '@xpoz/frontend/components/layout/set.timezone';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 
 const SaveSetModal: FC<{
   postData: any;

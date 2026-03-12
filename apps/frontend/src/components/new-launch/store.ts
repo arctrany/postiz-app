@@ -2,10 +2,10 @@
 
 import { create } from 'zustand';
 import dayjs from 'dayjs';
-import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
+import { Integrations } from '@xpoz/frontend/components/launches/calendar.context';
 import { createRef, RefObject } from 'react';
-import { PostComment } from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
-import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
+import { PostComment } from '@xpoz/frontend/components/new-launch/providers/high.order.provider';
+import { newDayjs } from '@xpoz/frontend/components/layout/set.timezone';
 
 interface Values {
   id: string;

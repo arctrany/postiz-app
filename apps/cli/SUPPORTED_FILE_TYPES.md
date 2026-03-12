@@ -253,7 +253,7 @@ xpoz upload image.png
 
 ```bash
 # Set API key
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # Test image upload
 xpoz upload test-image.jpg
@@ -291,7 +291,7 @@ chmod 644 your-file.mp4
 
 **Solution:** Set your API key:
 ```bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 ```
 
 ## Summary

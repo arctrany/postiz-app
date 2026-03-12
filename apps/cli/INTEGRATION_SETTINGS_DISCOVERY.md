@@ -311,7 +311,7 @@ Complete workflow for posting with correct settings:
 
 ```bash
 #!/bin/bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # 1. List integrations
 echo "📋 Available integrations:"
@@ -374,7 +374,7 @@ xpoz integrations:settings invalid-id
 
 ```bash
 xpoz integrations:settings reddit-123
-# ❌ Error: POSTIZ_API_KEY environment variable is required
+# ❌ Error: XPOZ_API_KEY environment variable is required
 ```
 
 ## Tips

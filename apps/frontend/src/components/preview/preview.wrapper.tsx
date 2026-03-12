@@ -1,12 +1,12 @@
 'use client';
 
 import useSWR from 'swr';
-import { ContextWrapper } from '@gitroom/frontend/components/layout/user.context';
+import { ContextWrapper } from '@xpoz/frontend/components/layout/user.context';
 import { ReactNode, useCallback } from 'react';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Toaster } from '@gitroom/react/toaster/toaster';
-import { MantineWrapper } from '@gitroom/react/helpers/mantine.wrapper';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { Toaster } from '@xpoz/react/toaster/toaster';
+import { MantineWrapper } from '@xpoz/react/helpers/mantine.wrapper';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
 import { CopilotKit } from '@copilotkit/react-core';
 export const PreviewWrapper = ({ children }: { children: ReactNode }) => {
   const fetch = useFetch();

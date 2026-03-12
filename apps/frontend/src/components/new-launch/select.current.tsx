@@ -4,17 +4,17 @@ import { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import {
   SelectedIntegrations,
   useLaunchStore,
-} from '@gitroom/frontend/components/new-launch/store';
+} from '@xpoz/frontend/components/new-launch/store';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useShallow } from 'zustand/react/shallow';
-import { GlobalIcon } from '@gitroom/frontend/components/ui/icons';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
+import { GlobalIcon } from '@xpoz/frontend/components/ui/icons';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { Integrations } from '@xpoz/frontend/components/launches/calendar.context';
 import {
   useDecisionModal,
   useModals,
-} from '@gitroom/frontend/components/layout/new-modal';
+} from '@xpoz/frontend/components/layout/new-modal';
 
 export function useHasScroll(ref: RefObject<HTMLElement>): boolean {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);

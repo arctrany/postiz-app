@@ -12,7 +12,7 @@
  * 与 Skool Provider 类似，使用 isChromeExtension 标记。
  * 但发布逻辑完全由 Extension 中的 XSync 适配器处理。
  */
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+import { makeId } from '@xpoz/nestjs-libraries/services/make.is';
 import { SocialAbstract } from '../social.abstract';
 import {
   AuthTokenDetails,

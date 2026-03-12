@@ -1,9 +1,9 @@
-import { SettingsPopup } from '@gitroom/frontend/components/layout/settings.component';
+import { SettingsPopup } from '@xpoz/frontend/components/layout/settings.component';
 export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
-import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
+import { isGeneralServerSide } from '@xpoz/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'XPoz' : 'Gitroom'} Settings`,
+  title: `${'XPoz'} Settings`,
   description: '',
 };
 export default async function Index({

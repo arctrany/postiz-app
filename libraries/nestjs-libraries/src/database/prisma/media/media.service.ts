@@ -1,17 +1,17 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { MediaRepository } from '@gitroom/nestjs-libraries/database/prisma/media/media.repository';
-import { OpenaiService } from '@gitroom/nestjs-libraries/openai/openai.service';
-import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/subscription.service';
+import { MediaRepository } from '@xpoz/nestjs-libraries/database/prisma/media/media.repository';
+import { OpenaiService } from '@xpoz/nestjs-libraries/openai/openai.service';
+import { SubscriptionService } from '@xpoz/nestjs-libraries/database/prisma/subscriptions/subscription.service';
 import { Organization } from '@prisma/client';
-import { SaveMediaInformationDto } from '@gitroom/nestjs-libraries/dtos/media/save.media.information.dto';
-import { VideoManager } from '@gitroom/nestjs-libraries/videos/video.manager';
-import { VideoDto } from '@gitroom/nestjs-libraries/dtos/videos/video.dto';
-import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
+import { SaveMediaInformationDto } from '@xpoz/nestjs-libraries/dtos/media/save.media.information.dto';
+import { VideoManager } from '@xpoz/nestjs-libraries/videos/video.manager';
+import { VideoDto } from '@xpoz/nestjs-libraries/dtos/videos/video.dto';
+import { UploadFactory } from '@xpoz/nestjs-libraries/upload/upload.factory';
 import {
   AuthorizationActions,
   Sections,
   SubscriptionException,
-} from '@gitroom/backend/services/auth/permissions/permission.exception.class';
+} from '@xpoz/backend/services/auth/permissions/permission.exception.class';
 
 @Injectable()
 export class MediaService {

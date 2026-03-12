@@ -74,8 +74,8 @@ apps/cli/
 
 ### Technical Features
 
-- ✅ Environment variable configuration (POSTIZ_API_KEY)
-- ✅ Custom API URL support (POSTIZ_API_URL)
+- ✅ Environment variable configuration (XPOZ_API_KEY)
+- ✅ Custom API URL support (XPOZ_API_URL)
 - ✅ Comprehensive error handling
 - ✅ User-friendly error messages with emojis
 - ✅ JSON output for programmatic parsing
@@ -143,7 +143,7 @@ apps/cli/
 
 ```bash
 # Set API key
-export POSTIZ_API_KEY=your_api_key
+export XPOZ_API_KEY=your_api_key
 
 # Create a post
 xpoz posts:create -c "Hello World!" -i "twitter-123"
@@ -162,7 +162,7 @@ const { execSync } = require('child_process');
 
 function postToSocial(content) {
   return execSync(`xpoz posts:create -c "${content}"`, {
-    env: { ...process.env, POSTIZ_API_KEY: 'your_key' }
+    env: { ...process.env, XPOZ_API_KEY: 'your_key' }
   });
 }
 ```
@@ -206,7 +206,7 @@ function postToSocial(content) {
 
 - ✅ CLI package created in apps/cli
 - ✅ Package name is "xpoz"
-- ✅ Uses POSTIZ_API_KEY environment variable
+- ✅ Uses XPOZ_API_KEY environment variable
 - ✅ Integrates with XPoz public API
 - ✅ Built for AI agent usage
 - ✅ SKILL.md created with comprehensive guide
@@ -251,7 +251,7 @@ pnpm run publish
 ### To Use in AI Agents
 
 1. Install: `npm install -g xpoz`
-2. Set API key: `export POSTIZ_API_KEY=your_key`
+2. Set API key: `export XPOZ_API_KEY=your_key`
 3. Use commands programmatically
 4. Parse JSON output
 5. See SKILL.md for patterns

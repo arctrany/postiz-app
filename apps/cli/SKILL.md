@@ -38,10 +38,10 @@ xpoz posts:create -c "Content" -m "image.jpg" -i "<integration-id>"
 
 ```bash
 # Required environment variable
-export POSTIZ_API_KEY=your_api_key_here
+export XPOZ_API_KEY=your_api_key_here
 
 # Optional custom API URL
-export POSTIZ_API_URL=https://custom-api-url.com
+export XPOZ_API_URL=https://custom-api-url.com
 ```
 
 ### Integration Discovery
@@ -564,7 +564,7 @@ xpoz posts:create \
 
 ## Common Gotchas
 
-1. **API Key not set** - Always `export POSTIZ_API_KEY=key` before using CLI
+1. **API Key not set** - Always `export XPOZ_API_KEY=key` before using CLI
 2. **Invalid integration ID** - Run `integrations:list` to get current IDs
 3. **Settings schema mismatch** - Check `integrations:settings` for required fields
 4. **Media MUST be uploaded to XPoz first** - ⚠️ **CRITICAL:** TikTok, Instagram, YouTube, and many platforms only accept verified URLs. Upload files via `xpoz upload` first, then use the returned URL in `-m`. External URLs will be rejected!
@@ -581,7 +581,7 @@ xpoz posts:create \
 
 ```bash
 # Environment
-export POSTIZ_API_KEY=key
+export XPOZ_API_KEY=key
 
 # Discovery
 xpoz integrations:list                           # Get integration IDs

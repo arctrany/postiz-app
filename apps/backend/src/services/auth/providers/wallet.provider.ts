@@ -1,9 +1,9 @@
 import {
   AuthProvider,
   AuthProviderAbstract,
-} from '@gitroom/backend/services/auth/providers.interface';
+} from '@xpoz/backend/services/auth/providers.interface';
 import { randomBytes } from 'crypto';
-import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
+import { ioRedis } from '@xpoz/nestjs-libraries/redis/redis.service';
 import bs58 from 'bs58';
 import nacl from 'tweetnacl';
 

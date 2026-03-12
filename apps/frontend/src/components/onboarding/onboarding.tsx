@@ -2,9 +2,9 @@
 
 import { FC, useCallback, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { OnboardingModal } from '@gitroom/frontend/components/onboarding/onboarding.modal';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { OnboardingModal } from '@xpoz/frontend/components/onboarding/onboarding.modal';
 
 export const Onboarding: FC = () => {
   const query = useSearchParams();

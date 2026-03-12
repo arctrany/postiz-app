@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `posts:delete` - Delete posts by ID
 - `integrations:list` - List connected social media integrations
 - `upload` - Upload media files (images)
-- Environment variable configuration (POSTIZ_API_KEY, POSTIZ_API_URL)
+- Environment variable configuration (XPOZ_API_KEY, XPOZ_API_URL)
 - Comprehensive help documentation
 - Example scripts for basic usage and AI agent integration
 - SKILL.md for AI agent usage patterns

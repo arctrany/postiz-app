@@ -13,16 +13,16 @@ import {
 } from 'react';
 import dayjs from 'dayjs';
 import useSWR from 'swr';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import { Post, Integration, Tags } from '@prisma/client';
 import { useSearchParams } from 'next/navigation';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { extend } from 'dayjs';
 import useCookie from 'react-use-cookie';
-import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
-import { timer } from '@gitroom/helpers/utils/timer';
-import { expandPostsList, expandPosts } from '@gitroom/helpers/utils/posts.list.minify';
+import { newDayjs } from '@xpoz/frontend/components/layout/set.timezone';
+import { timer } from '@xpoz/helpers/utils/timer';
+import { expandPostsList, expandPosts } from '@xpoz/helpers/utils/posts.list.minify';
 extend(isoWeek);
 extend(weekOfYear);
 

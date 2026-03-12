@@ -1,9 +1,9 @@
-import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { TopTitle } from '@xpoz/frontend/components/launches/helpers/top.title.component';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 import React, { FC } from 'react';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@xpoz/react/form/button';
 import copy from 'copy-to-clipboard';
-import { useToaster } from '@gitroom/react/toaster/toaster';
+import { useToaster } from '@xpoz/react/toaster/toaster';
 
 export const DummyCodeComponent: FC<{ code: any }> = ({ code }) => {
   const modal = useModals();

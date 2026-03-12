@@ -4,14 +4,14 @@ import { FC } from 'react';
 import {
   PostComment,
   withProvider,
-} from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
-import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Input } from '@gitroom/react/form/input';
-import { MediumPublications } from '@gitroom/frontend/components/new-launch/providers/medium/medium.publications';
-import { MediumTags } from '@gitroom/frontend/components/new-launch/providers/medium/medium.tags';
-import { MediumSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/medium.settings.dto';
-import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { Canonical } from '@gitroom/react/form/canonical';
+} from '@xpoz/frontend/components/new-launch/providers/high.order.provider';
+import { useSettings } from '@xpoz/frontend/components/launches/helpers/use.values';
+import { Input } from '@xpoz/react/form/input';
+import { MediumPublications } from '@xpoz/frontend/components/new-launch/providers/medium/medium.publications';
+import { MediumTags } from '@xpoz/frontend/components/new-launch/providers/medium/medium.tags';
+import { MediumSettingsDto } from '@xpoz/nestjs-libraries/dtos/posts/providers-settings/medium.settings.dto';
+import { useIntegration } from '@xpoz/frontend/components/launches/helpers/use.integration';
+import { Canonical } from '@xpoz/react/form/canonical';
 
 const MediumSettings: FC = () => {
   const form = useSettings();

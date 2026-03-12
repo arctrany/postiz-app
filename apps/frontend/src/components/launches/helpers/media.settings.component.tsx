@@ -2,10 +2,10 @@
 
 import { EventEmitter } from 'events';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { TopTitle } from '@xpoz/frontend/components/launches/helpers/top.title.component';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { useLaunchStore } from '@xpoz/frontend/components/new-launch/store';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
 const postUrlEmitter = new EventEmitter();
 
 export const MediaSettingsLayout = () => {

@@ -1,11 +1,11 @@
 'use client';
 
 import { FC, ReactNode, useCallback } from 'react';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { MenuItem } from '@gitroom/frontend/components/new-layout/menu-item';
+import { useUser } from '@xpoz/frontend/components/layout/user.context';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { MenuItem } from '@xpoz/frontend/components/new-layout/menu-item';
 
 interface MenuItemInterface {
   name: string;

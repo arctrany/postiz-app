@@ -1,16 +1,16 @@
 import Stripe from 'stripe';
 import { Injectable } from '@nestjs/common';
 import { Organization, User } from '@prisma/client';
-import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/subscription.service';
-import { OrganizationService } from '@gitroom/nestjs-libraries/database/prisma/organizations/organization.service';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
-import { BillingSubscribeDto } from '@gitroom/nestjs-libraries/dtos/billing/billing.subscribe.dto';
+import { SubscriptionService } from '@xpoz/nestjs-libraries/database/prisma/subscriptions/subscription.service';
+import { OrganizationService } from '@xpoz/nestjs-libraries/database/prisma/organizations/organization.service';
+import { makeId } from '@xpoz/nestjs-libraries/services/make.is';
+import { BillingSubscribeDto } from '@xpoz/nestjs-libraries/dtos/billing/billing.subscribe.dto';
 import { groupBy } from 'lodash';
-import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
-import { AuthService } from '@gitroom/helpers/auth/auth.service';
-import { TrackService } from '@gitroom/nestjs-libraries/track/track.service';
-import { UsersService } from '@gitroom/nestjs-libraries/database/prisma/users/users.service';
-import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
+import { pricing } from '@xpoz/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { AuthService } from '@xpoz/helpers/auth/auth.service';
+import { TrackService } from '@xpoz/nestjs-libraries/track/track.service';
+import { UsersService } from '@xpoz/nestjs-libraries/database/prisma/users/users.service';
+import { TrackEnum } from '@xpoz/nestjs-libraries/user/track.enum';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_nothing');
 

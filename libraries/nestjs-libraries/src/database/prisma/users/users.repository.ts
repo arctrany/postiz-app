@@ -1,9 +1,9 @@
-import { PrismaRepository } from '@gitroom/nestjs-libraries/database/prisma/prisma.service';
+import { PrismaRepository } from '@xpoz/nestjs-libraries/database/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Provider } from '@prisma/client';
-import { AuthService } from '@gitroom/helpers/auth/auth.service';
-import { UserDetailDto } from '@gitroom/nestjs-libraries/dtos/users/user.details.dto';
-import { EmailNotificationsDto } from '@gitroom/nestjs-libraries/dtos/users/email-notifications.dto';
+import { AuthService } from '@xpoz/helpers/auth/auth.service';
+import { UserDetailDto } from '@xpoz/nestjs-libraries/dtos/users/user.details.dto';
+import { EmailNotificationsDto } from '@xpoz/nestjs-libraries/dtos/users/email-notifications.dto';
 
 @Injectable()
 export class UsersRepository {

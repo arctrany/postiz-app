@@ -10,26 +10,26 @@ import React, {
   useState,
 } from 'react';
 import { useClickOutside } from '@mantine/hooks';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { TimeTable } from '@gitroom/frontend/components/launches/time.table';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { deleteDialog } from '@xpoz/react/helpers/delete.dialog';
+import { useToaster } from '@xpoz/react/toaster/toaster';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
+import { TimeTable } from '@xpoz/frontend/components/launches/time.table';
 import {
   Integrations,
   useCalendar,
-} from '@gitroom/frontend/components/launches/calendar.context';
-import { BotPicture } from '@gitroom/frontend/components/launches/bot.picture';
-import { CustomerModal } from '@gitroom/frontend/components/launches/customer.modal';
+} from '@xpoz/frontend/components/launches/calendar.context';
+import { BotPicture } from '@xpoz/frontend/components/launches/bot.picture';
+import { CustomerModal } from '@xpoz/frontend/components/launches/customer.modal';
 import { Integration } from '@prisma/client';
-import { SettingsModal } from '@gitroom/frontend/components/launches/settings.modal';
-import { CustomVariables } from '@gitroom/frontend/components/launches/add.provider.component';
+import { SettingsModal } from '@xpoz/frontend/components/launches/settings.modal';
+import { CustomVariables } from '@xpoz/frontend/components/launches/add.provider.component';
 import { useRouter } from 'next/navigation';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { AddEditModal } from '@xpoz/frontend/components/new-launch/add.edit.modal';
 import dayjs from 'dayjs';
-import { ModalWrapperComponent } from '@gitroom/frontend/components/new-launch/modal.wrapper.component';
+import { ModalWrapperComponent } from '@xpoz/frontend/components/new-launch/modal.wrapper.component';
 import copy from 'copy-to-clipboard';
 
 export const Menu: FC<{

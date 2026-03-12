@@ -1,20 +1,20 @@
-import { internalFetch } from '@gitroom/helpers/utils/internal.fetch';
+import { internalFetch } from '@xpoz/helpers/utils/internal.fetch';
 export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
-import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
+import { isGeneralServerSide } from '@xpoz/helpers/utils/is.general.server.side';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CommentsComponents } from '@gitroom/frontend/components/preview/comments.components';
+import { CommentsComponents } from '@xpoz/frontend/components/preview/comments.components';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { VideoOrImage } from '@gitroom/react/helpers/video.or.image';
-import { CopyClient } from '@gitroom/frontend/components/preview/copy.client';
-import { getT } from '@gitroom/react/translation/get.translation.service.backend';
+import { VideoOrImage } from '@xpoz/react/helpers/video.or.image';
+import { CopyClient } from '@xpoz/frontend/components/preview/copy.client';
+import { getT } from '@xpoz/react/translation/get.translation.service.backend';
 import dynamicLoad from 'next/dynamic';
 
 const RenderPreviewDate = dynamicLoad(
   () =>
-    import('@gitroom/frontend/components/preview/render.preview.date').then(
+    import('@xpoz/frontend/components/preview/render.preview.date').then(
       (mod) => mod.RenderPreviewDate
     ),
   { ssr: false }
@@ -22,7 +22,7 @@ const RenderPreviewDate = dynamicLoad(
 
 dayjs.extend(utc);
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'XPoz' : 'Gitroom'} Preview`,
+  title: `${'XPoz'} Preview`,
   description: '',
 };
 export default async function Auth({

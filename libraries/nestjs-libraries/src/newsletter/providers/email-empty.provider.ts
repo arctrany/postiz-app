@@ -1,4 +1,4 @@
-import { NewsletterInterface } from '@gitroom/nestjs-libraries/newsletter/newsletter.interface';
+import { NewsletterInterface } from '@xpoz/nestjs-libraries/newsletter/newsletter.interface';
 
 export class EmailEmptyProvider implements NewsletterInterface {
   name = 'empty';

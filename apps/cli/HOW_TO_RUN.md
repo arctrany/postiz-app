@@ -14,7 +14,7 @@ node apps/cli/dist/index.js --help
 ./apps/cli/dist/index.js --help
 
 # Example command
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 node apps/cli/dist/index.js posts:list
 ```
 
@@ -72,10 +72,10 @@ pnpm run build:cli
 ### Step 2: Set Your API Key
 
 ```bash
-export POSTIZ_API_KEY=your_api_key_here
+export XPOZ_API_KEY=your_api_key_here
 
 # To make it permanent, add to your shell profile:
-echo 'export POSTIZ_API_KEY=your_api_key' >> ~/.bashrc
+echo 'export XPOZ_API_KEY=your_api_key' >> ~/.bashrc
 # or ~/.zshrc if you use zsh
 ```
 
@@ -111,13 +111,13 @@ pnpm link --global
 echo $PATH
 ```
 
-### "POSTIZ_API_KEY is not set"
+### "XPOZ_API_KEY is not set"
 
 ```bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # Verify it's set
-echo $POSTIZ_API_KEY
+echo $XPOZ_API_KEY
 ```
 
 ### Permission Denied
@@ -154,7 +154,7 @@ xpoz posts:create --help
 ### Test with Sample Command (requires API key)
 
 ```bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # List integrations
 xpoz integrations:list
@@ -201,28 +201,28 @@ xpoz --help
 
 ### Required
 
-- `POSTIZ_API_KEY` - Your XPoz API key (required for all operations)
+- `XPOZ_API_KEY` - Your XPoz API key (required for all operations)
 
 ### Optional
 
-- `POSTIZ_API_URL` - Custom API endpoint (default: `https://api.xpoz.com`)
+- `XPOZ_API_URL` - Custom API endpoint (default: `https://api.xpoz.com`)
 
 ### Setting Environment Variables
 
 **Temporary (current session):**
 ```bash
-export POSTIZ_API_KEY=your_key
-export POSTIZ_API_URL=https://custom-api.com
+export XPOZ_API_KEY=your_key
+export XPOZ_API_URL=https://custom-api.com
 ```
 
 **Permanent (add to shell profile):**
 ```bash
 # For bash
-echo 'export POSTIZ_API_KEY=your_key' >> ~/.bashrc
+echo 'export XPOZ_API_KEY=your_key' >> ~/.bashrc
 source ~/.bashrc
 
 # For zsh
-echo 'export POSTIZ_API_KEY=your_key' >> ~/.zshrc
+echo 'export XPOZ_API_KEY=your_key' >> ~/.zshrc
 source ~/.zshrc
 ```
 
@@ -287,7 +287,7 @@ cd apps/cli
 pnpm link --global
 
 # 3. Set API key
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # 4. Test
 xpoz --help

@@ -53,20 +53,20 @@ pnpm add -g xpoz
 
 ```bash
 # Bash/Zsh
-export POSTIZ_API_KEY=your_api_key_here
+export XPOZ_API_KEY=your_api_key_here
 
 # Fish
-set -x POSTIZ_API_KEY your_api_key_here
+set -x XPOZ_API_KEY your_api_key_here
 
 # PowerShell
-$env:POSTIZ_API_KEY="your_api_key_here"
+$env:XPOZ_API_KEY="your_api_key_here"
 ```
 
 To make it permanent, add it to your shell profile:
 
 ```bash
 # ~/.bashrc or ~/.zshrc
-echo 'export POSTIZ_API_KEY=your_api_key_here' >> ~/.bashrc
+echo 'export XPOZ_API_KEY=your_api_key_here' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -214,7 +214,7 @@ done
 
 ```bash
 # Custom API endpoint (for self-hosted)
-export POSTIZ_API_URL=https://your-instance.com
+export XPOZ_API_URL=https://your-instance.com
 
 # Use the CLI with custom endpoint
 xpoz posts:list
@@ -225,12 +225,12 @@ xpoz posts:list
 ### API Key Not Set
 
 ```
-❌ Error: POSTIZ_API_KEY environment variable is required
+❌ Error: XPOZ_API_KEY environment variable is required
 ```
 
 **Solution:** Set the environment variable:
 ```bash
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 ```
 
 ### Command Not Found

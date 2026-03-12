@@ -3,27 +3,27 @@ import {
   Injectable,
   ValidationPipe,
 } from '@nestjs/common';
-import { PostsRepository } from '@gitroom/nestjs-libraries/database/prisma/posts/posts.repository';
-import { CreatePostDto } from '@gitroom/nestjs-libraries/dtos/posts/create.post.dto';
+import { PostsRepository } from '@xpoz/nestjs-libraries/database/prisma/posts/posts.repository';
+import { CreatePostDto } from '@xpoz/nestjs-libraries/dtos/posts/create.post.dto';
 import dayjs from 'dayjs';
-import { IntegrationManager } from '@gitroom/nestjs-libraries/integrations/integration.manager';
+import { IntegrationManager } from '@xpoz/nestjs-libraries/integrations/integration.manager';
 import { Integration, Post, Media, From, State } from '@prisma/client';
-import { GetPostsDto } from '@gitroom/nestjs-libraries/dtos/posts/get.posts.dto';
-import { GetPostsListDto } from '@gitroom/nestjs-libraries/dtos/posts/get.posts.list.dto';
+import { GetPostsDto } from '@xpoz/nestjs-libraries/dtos/posts/get.posts.dto';
+import { GetPostsListDto } from '@xpoz/nestjs-libraries/dtos/posts/get.posts.list.dto';
 import { shuffle } from 'lodash';
-import { CreateGeneratedPostsDto } from '@gitroom/nestjs-libraries/dtos/generator/create.generated.posts.dto';
-import { IntegrationService } from '@gitroom/nestjs-libraries/database/prisma/integrations/integration.service';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+import { CreateGeneratedPostsDto } from '@xpoz/nestjs-libraries/dtos/generator/create.generated.posts.dto';
+import { IntegrationService } from '@xpoz/nestjs-libraries/database/prisma/integrations/integration.service';
+import { makeId } from '@xpoz/nestjs-libraries/services/make.is';
 import utc from 'dayjs/plugin/utc';
-import { MediaService } from '@gitroom/nestjs-libraries/database/prisma/media/media.service';
-import { ShortLinkService } from '@gitroom/nestjs-libraries/short-linking/short.link.service';
-import { CreateTagDto } from '@gitroom/nestjs-libraries/dtos/posts/create.tag.dto';
-import { minifyPostsList, minifyPosts } from '@gitroom/helpers/utils/posts.list.minify';
+import { MediaService } from '@xpoz/nestjs-libraries/database/prisma/media/media.service';
+import { ShortLinkService } from '@xpoz/nestjs-libraries/short-linking/short.link.service';
+import { CreateTagDto } from '@xpoz/nestjs-libraries/dtos/posts/create.tag.dto';
+import { minifyPostsList, minifyPosts } from '@xpoz/helpers/utils/posts.list.minify';
 import axios from 'axios';
 import sharp from 'sharp';
-import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
+import { UploadFactory } from '@xpoz/nestjs-libraries/upload/upload.factory';
 import { Readable } from 'stream';
-import { OpenaiService } from '@gitroom/nestjs-libraries/openai/openai.service';
+import { OpenaiService } from '@xpoz/nestjs-libraries/openai/openai.service';
 dayjs.extend(utc);
 import * as Sentry from '@sentry/nestjs';
 import { TemporalService } from 'nestjs-temporal-core';
@@ -31,12 +31,12 @@ import { TypedSearchAttributes } from '@temporalio/common';
 import {
   organizationId,
   postId as postIdSearchParam,
-} from '@gitroom/nestjs-libraries/temporal/temporal.search.attribute';
-import { AnalyticsData } from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
-import { timer } from '@gitroom/helpers/utils/timer';
-import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
-import { RefreshToken } from '@gitroom/nestjs-libraries/integrations/social.abstract';
-import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
+} from '@xpoz/nestjs-libraries/temporal/temporal.search.attribute';
+import { AnalyticsData } from '@xpoz/nestjs-libraries/integrations/social/social.integrations.interface';
+import { timer } from '@xpoz/helpers/utils/timer';
+import { ioRedis } from '@xpoz/nestjs-libraries/redis/redis.service';
+import { RefreshToken } from '@xpoz/nestjs-libraries/integrations/social.abstract';
+import { RefreshIntegrationService } from '@xpoz/nestjs-libraries/integrations/refresh.integration.service';
 
 type PostWithConditionals = Post & {
   integration?: Integration;

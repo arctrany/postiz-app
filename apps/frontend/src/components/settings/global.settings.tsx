@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 import dynamic from 'next/dynamic';
-import EmailNotificationsComponent from '@gitroom/frontend/components/settings/email-notifications.component';
-import ShortlinkPreferenceComponent from '@gitroom/frontend/components/settings/shortlink-preference.component';
+import EmailNotificationsComponent from '@xpoz/frontend/components/settings/email-notifications.component';
+import ShortlinkPreferenceComponent from '@xpoz/frontend/components/settings/shortlink-preference.component';
 
 const MetricComponent = dynamic(
-  () => import('@gitroom/frontend/components/settings/metric.component'),
+  () => import('@xpoz/frontend/components/settings/metric.component'),
   {
     ssr: false,
   }

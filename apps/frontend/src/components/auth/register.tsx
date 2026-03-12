@@ -1,30 +1,30 @@
 'use client';
 
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@xpoz/react/form/button';
+import { Input } from '@xpoz/react/form/input';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
-import { CreateOrgUserDto } from '@gitroom/nestjs-libraries/dtos/auth/create.org.user.dto';
-import { GithubProvider } from '@gitroom/frontend/components/auth/providers/github.provider';
+import { CreateOrgUserDto } from '@xpoz/nestjs-libraries/dtos/auth/create.org.user.dto';
+import { GithubProvider } from '@xpoz/frontend/components/auth/providers/github.provider';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
+import { LoadingComponent } from '@xpoz/frontend/components/layout/loading';
 import clsx from 'clsx';
-import { GoogleProvider } from '@gitroom/frontend/components/auth/providers/google.provider';
-import { OauthProvider } from '@gitroom/frontend/components/auth/providers/oauth.provider';
-import { useFireEvents } from '@gitroom/helpers/utils/use.fire.events';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { useTrack } from '@gitroom/react/helpers/use.track';
-import { TrackEnum } from '@gitroom/nestjs-libraries/user/track.enum';
-import { FarcasterProvider } from '@gitroom/frontend/components/auth/providers/farcaster.provider';
+import { GoogleProvider } from '@xpoz/frontend/components/auth/providers/google.provider';
+import { OauthProvider } from '@xpoz/frontend/components/auth/providers/oauth.provider';
+import { useFireEvents } from '@xpoz/helpers/utils/use.fire.events';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
+import { useTrack } from '@xpoz/react/helpers/use.track';
+import { TrackEnum } from '@xpoz/nestjs-libraries/user/track.enum';
+import { FarcasterProvider } from '@xpoz/frontend/components/auth/providers/farcaster.provider';
 import dynamic from 'next/dynamic';
-import { WalletUiProvider } from '@gitroom/frontend/components/auth/providers/placeholder/wallet.ui.provider';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { WalletUiProvider } from '@xpoz/frontend/components/auth/providers/placeholder/wallet.ui.provider';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 import useCookie from 'react-use-cookie';
 const WalletProvider = dynamic(
-  () => import('@gitroom/frontend/components/auth/providers/wallet.provider'),
+  () => import('@xpoz/frontend/components/auth/providers/wallet.provider'),
   {
     ssr: false,
     loading: () => <WalletUiProvider />,

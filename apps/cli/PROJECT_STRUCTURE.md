@@ -220,8 +220,8 @@ Output to console
 
 | Variable | Required | Default | Usage |
 |----------|----------|---------|-------|
-| `POSTIZ_API_KEY` | ✅ Yes | - | Authentication token |
-| `POSTIZ_API_URL` | ❌ No | `https://api.xpoz.com` | Custom API endpoint |
+| `XPOZ_API_KEY` | ✅ Yes | - | Authentication token |
+| `XPOZ_API_URL` | ❌ No | `https://api.xpoz.com` | Custom API endpoint |
 
 ## Dependencies
 
@@ -302,7 +302,7 @@ node dist/index.js --help
 node dist/index.js posts:list
 
 # Test with API key (requires valid key)
-POSTIZ_API_KEY=test node dist/index.js integrations:list
+XPOZ_API_KEY=test node dist/index.js integrations:list
 ```
 
 ### Automated Testing (Future)

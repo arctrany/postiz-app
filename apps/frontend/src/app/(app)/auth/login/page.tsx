@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic';
-import { Login } from '@gitroom/frontend/components/auth/login';
+import { Login } from '@xpoz/frontend/components/auth/login';
 import { Metadata } from 'next';
-import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
+import { isGeneralServerSide } from '@xpoz/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'XPoz' : 'Gitroom'} Login`,
+  title: `${'XPoz'} Login`,
   description: '',
 };
 export default async function Auth() {

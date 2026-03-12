@@ -1,12 +1,12 @@
 'use client';
 
 import { FC, useMemo, useState } from 'react';
-import { Select } from '@gitroom/react/form/select';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Select } from '@xpoz/react/form/select';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 import { useClickOutside } from '@mantine/hooks';
-import { isUSCitizen } from '@gitroom/frontend/components/launches/helpers/isuscitizen.utils';
+import { isUSCitizen } from '@xpoz/frontend/components/launches/helpers/isuscitizen.utils';
 import clsx from 'clsx';
-import { RepeatIcon, DropdownArrowIcon } from '@gitroom/frontend/components/ui/icons';
+import { RepeatIcon, DropdownArrowIcon } from '@xpoz/frontend/components/ui/icons';
 const getList = (t: (key: string, fallback: string) => string) => [
   {
     value: 1,

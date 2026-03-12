@@ -1,19 +1,19 @@
 'use client';
 
 import { FC, FormEvent, useCallback, useMemo, useState } from 'react';
-import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { Input } from '@gitroom/react/form/input';
+import { useCustomProviderFunction } from '@xpoz/frontend/components/launches/helpers/use.custom.provider.function';
+import { Input } from '@xpoz/react/form/input';
 import { useDebouncedCallback } from 'use-debounce';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@xpoz/react/form/button';
 import clsx from 'clsx';
-import { MultiMediaComponent } from '@gitroom/frontend/components/media/media.component';
+import { MultiMediaComponent } from '@xpoz/frontend/components/media/media.component';
 import { useWatch } from 'react-hook-form';
-import { Select } from '@gitroom/react/form/select';
-import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Canonical } from '@gitroom/react/form/canonical';
-import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
+import { Select } from '@xpoz/react/form/select';
+import { useSettings } from '@xpoz/frontend/components/launches/helpers/use.values';
+import { Canonical } from '@xpoz/react/form/canonical';
+import { useIntegration } from '@xpoz/frontend/components/launches/helpers/use.integration';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useLaunchStore } from '@xpoz/frontend/components/new-launch/store';
 export const RenderOptions: FC<{
   options: Array<'self' | 'link' | 'media'>;
   onClick: (current: 'self' | 'link' | 'media') => void;

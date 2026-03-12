@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { useIntegration } from '@gitroom/frontend/components/launches/helpers/use.integration';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
-import { useMediaDirectory } from '@gitroom/react/helpers/use.media.directory';
-import { stripHtmlValidation } from '@gitroom/helpers/utils/strip.html.validation';
-import { textSlicer } from '@gitroom/helpers/utils/count.length';
-import { VideoOrImage } from '@gitroom/react/helpers/video.or.image';
+import { useIntegration } from '@xpoz/frontend/components/launches/helpers/use.integration';
+import { useLaunchStore } from '@xpoz/frontend/components/new-launch/store';
+import { useMediaDirectory } from '@xpoz/react/helpers/use.media.directory';
+import { stripHtmlValidation } from '@xpoz/helpers/utils/strip.html.validation';
+import { textSlicer } from '@xpoz/helpers/utils/count.length';
+import { VideoOrImage } from '@xpoz/react/helpers/video.or.image';
 
 export const YoutubePreview: FC<{
   maximumCharacters?: number;

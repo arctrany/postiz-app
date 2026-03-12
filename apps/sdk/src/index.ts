@@ -1,5 +1,5 @@
-import { CreatePostDto } from '@gitroom/nestjs-libraries/dtos/posts/create.post.dto';
-import { GetPostsDto } from '@gitroom/nestjs-libraries/dtos/posts/get.posts.dto';
+import { CreatePostDto } from '@xpoz/nestjs-libraries/dtos/posts/create.post.dto';
+import { GetPostsDto } from '@xpoz/nestjs-libraries/dtos/posts/get.posts.dto';
 import fetch, { FormData } from 'node-fetch';
 
 function toQueryString(obj: Record<string, any>): string {

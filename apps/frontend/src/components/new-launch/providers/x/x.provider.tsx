@@ -3,13 +3,13 @@
 import {
   PostComment,
   withProvider,
-} from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
-import { ThreadFinisher } from '@gitroom/frontend/components/new-launch/finisher/thread.finisher';
-import { Select } from '@gitroom/react/form/select';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { XDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/x.dto';
-import { Input } from '@gitroom/react/form/input';
+} from '@xpoz/frontend/components/new-launch/providers/high.order.provider';
+import { ThreadFinisher } from '@xpoz/frontend/components/new-launch/finisher/thread.finisher';
+import { Select } from '@xpoz/react/form/select';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useSettings } from '@xpoz/frontend/components/launches/helpers/use.values';
+import { XDto } from '@xpoz/nestjs-libraries/dtos/posts/providers-settings/x.dto';
+import { Input } from '@xpoz/react/form/input';
 
 const whoCanReply = [
   {

@@ -235,6 +235,6 @@ yargs(hideBin(process.argv))
   .version()
   .alias('v', 'version')
   .epilogue(
-    'For more information, visit: https://xpoz.com\n\nSet your API key: export POSTIZ_API_KEY=your_api_key'
+    'For more information, visit: https://xpoz.com\n\nSet your API key: export XPOZ_API_KEY=your_api_key'
   )
   .parse();

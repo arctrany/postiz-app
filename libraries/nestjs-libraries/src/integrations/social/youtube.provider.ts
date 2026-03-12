@@ -4,21 +4,21 @@ import {
   PostDetails,
   PostResponse,
   SocialProvider,
-} from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
+} from '@xpoz/nestjs-libraries/integrations/social/social.integrations.interface';
+import { makeId } from '@xpoz/nestjs-libraries/services/make.is';
 import { google, youtube_v3 } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library/build/src/auth/oauth2client';
 import axios from 'axios';
-import { YoutubeSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/youtube.settings.dto';
+import { YoutubeSettingsDto } from '@xpoz/nestjs-libraries/dtos/posts/providers-settings/youtube.settings.dto';
 import {
   BadBody,
   SocialAbstract,
-} from '@gitroom/nestjs-libraries/integrations/social.abstract';
+} from '@xpoz/nestjs-libraries/integrations/social.abstract';
 import * as process from 'node:process';
 import dayjs from 'dayjs';
 import { GaxiosResponse } from 'gaxios/build/src/common';
 import Schema$Video = youtube_v3.Schema$Video;
-import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
+import { Rules } from '@xpoz/nestjs-libraries/chat/rules.description.decorator';
 
 const clientAndYoutube = () => {
   const client = new google.auth.OAuth2({

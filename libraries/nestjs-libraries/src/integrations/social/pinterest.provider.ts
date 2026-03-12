@@ -4,16 +4,16 @@ import {
   PostDetails,
   PostResponse,
   SocialProvider,
-} from '@gitroom/nestjs-libraries/integrations/social/social.integrations.interface';
-import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
-import { PinterestSettingsDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/pinterest.dto';
+} from '@xpoz/nestjs-libraries/integrations/social/social.integrations.interface';
+import { makeId } from '@xpoz/nestjs-libraries/services/make.is';
+import { PinterestSettingsDto } from '@xpoz/nestjs-libraries/dtos/posts/providers-settings/pinterest.dto';
 import axios from 'axios';
 import FormData from 'form-data';
-import { timer } from '@gitroom/helpers/utils/timer';
-import { SocialAbstract } from '@gitroom/nestjs-libraries/integrations/social.abstract';
+import { timer } from '@xpoz/helpers/utils/timer';
+import { SocialAbstract } from '@xpoz/nestjs-libraries/integrations/social.abstract';
 import dayjs from 'dayjs';
-import { Tool } from '@gitroom/nestjs-libraries/integrations/tool.decorator';
-import { Rules } from '@gitroom/nestjs-libraries/chat/rules.description.decorator';
+import { Tool } from '@xpoz/nestjs-libraries/integrations/tool.decorator';
+import { Rules } from '@xpoz/nestjs-libraries/chat/rules.description.decorator';
 
 @Rules(
   'Pinterest requires at least one media, if posting a video, you must have two attachment, one for video, one for the cover picture, When posting a video, there can be only one'

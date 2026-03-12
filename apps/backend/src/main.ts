@@ -1,8 +1,8 @@
-import { initializeSentry } from '@gitroom/nestjs-libraries/sentry/initialize.sentry';
+import { initializeSentry } from '@xpoz/nestjs-libraries/sentry/initialize.sentry';
 initializeSentry('backend', true);
 import compression from 'compression';
 
-import { loadSwagger } from '@gitroom/helpers/swagger/load.swagger';
+import { loadSwagger } from '@xpoz/helpers/swagger/load.swagger';
 import { json } from 'express';
 import { Runtime } from '@temporalio/worker';
 Runtime.install({ shutdownSignals: [] });
@@ -37,10 +37,10 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-import { SubscriptionExceptionFilter } from '@gitroom/backend/services/auth/permissions/subscription.exception';
-import { HttpExceptionFilter } from '@gitroom/nestjs-libraries/services/exception.filter';
-import { ConfigurationChecker } from '@gitroom/helpers/configuration/configuration.checker';
-import { startMcp } from '@gitroom/nestjs-libraries/chat/start.mcp';
+import { SubscriptionExceptionFilter } from '@xpoz/backend/services/auth/permissions/subscription.exception';
+import { HttpExceptionFilter } from '@xpoz/nestjs-libraries/services/exception.filter';
+import { ConfigurationChecker } from '@xpoz/helpers/configuration/configuration.checker';
+import { startMcp } from '@xpoz/nestjs-libraries/chat/start.mcp';
 
 async function start() {
   const app = await NestFactory.create(AppModule, {

@@ -8,12 +8,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { OAuthService } from '@gitroom/nestjs-libraries/database/prisma/oauth/oauth.service';
-import { GetUserFromRequest } from '@gitroom/nestjs-libraries/user/user.from.request';
-import { GetOrgFromRequest } from '@gitroom/nestjs-libraries/user/org.from.request';
+import { OAuthService } from '@xpoz/nestjs-libraries/database/prisma/oauth/oauth.service';
+import { GetUserFromRequest } from '@xpoz/nestjs-libraries/user/user.from.request';
+import { GetOrgFromRequest } from '@xpoz/nestjs-libraries/user/org.from.request';
 import { User, Organization } from '@prisma/client';
-import { AuthorizeOAuthQueryDto, ApproveOAuthDto } from '@gitroom/nestjs-libraries/dtos/oauth/authorize-oauth.dto';
-import { TokenExchangeDto } from '@gitroom/nestjs-libraries/dtos/oauth/token-exchange.dto';
+import { AuthorizeOAuthQueryDto, ApproveOAuthDto } from '@xpoz/nestjs-libraries/dtos/oauth/authorize-oauth.dto';
+import { TokenExchangeDto } from '@xpoz/nestjs-libraries/dtos/oauth/token-exchange.dto';
 
 @ApiTags('OAuth')
 @Controller('/oauth')

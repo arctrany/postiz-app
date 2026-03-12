@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 import dayjs from 'dayjs';
-import { useCalendar } from '@gitroom/frontend/components/launches/calendar.context';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { SetSelectionModal } from '@gitroom/frontend/components/launches/calendar';
-import { AddEditModal } from '@gitroom/frontend/components/new-launch/add.edit.modal';
-import { ModalWrapperComponent } from '@gitroom/frontend/components/new-launch/modal.wrapper.component';
+import { useCalendar } from '@xpoz/frontend/components/launches/calendar.context';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { SetSelectionModal } from '@xpoz/frontend/components/launches/calendar';
+import { AddEditModal } from '@xpoz/frontend/components/new-launch/add.edit.modal';
+import { ModalWrapperComponent } from '@xpoz/frontend/components/new-launch/modal.wrapper.component';
 
 export const NewPost = () => {
   const fetch = useFetch();

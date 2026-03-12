@@ -1,22 +1,22 @@
 'use client';
 
 import React, { FC, Fragment, useCallback, useMemo, useState } from 'react';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Button } from '@gitroom/react/form/button';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@xpoz/react/form/button';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
+import { Input } from '@xpoz/react/form/input';
 import { FormProvider, useForm } from 'react-hook-form';
 import { array, boolean, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Select } from '@gitroom/react/form/select';
-import { PickPlatforms } from '@gitroom/frontend/components/launches/helpers/pick.platform.component';
-import { useToaster } from '@gitroom/react/toaster/toaster';
+import { Select } from '@xpoz/react/form/select';
+import { PickPlatforms } from '@xpoz/frontend/components/launches/helpers/pick.platform.component';
+import { useToaster } from '@xpoz/react/toaster/toaster';
 import clsx from 'clsx';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
+import { deleteDialog } from '@xpoz/react/helpers/delete.dialog';
 import { CopilotTextarea } from '@copilotkit/react-textarea';
-import { Slider } from '@gitroom/react/form/slider';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Slider } from '@xpoz/react/form/slider';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 export const Autopost: FC = () => {
   const fetch = useFetch();
   const t = useT();

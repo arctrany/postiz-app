@@ -2,11 +2,11 @@ import { FC, useCallback, useState } from 'react';
 import dayjs from 'dayjs';
 import { Calendar, TimeInput } from '@mantine/dates';
 import { useClickOutside } from '@mantine/hooks';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@xpoz/react/form/button';
 import { isUSCitizen } from './isuscitizen.utils';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { newDayjs } from '@gitroom/frontend/components/layout/set.timezone';
-import { CalendarIcon } from '@gitroom/frontend/components/ui/icons';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { newDayjs } from '@xpoz/frontend/components/layout/set.timezone';
+import { CalendarIcon } from '@xpoz/frontend/components/ui/icons';
 export const DatePicker: FC<{
   date: dayjs.Dayjs;
   onChange: (day: dayjs.Dayjs) => void;

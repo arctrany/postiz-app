@@ -1,15 +1,15 @@
 import { Body, Controller, Get, HttpException, Param, Post, Req } from '@nestjs/common';
-import { SubscriptionService } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/subscription.service';
-import { StripeService } from '@gitroom/nestjs-libraries/services/stripe.service';
-import { GetOrgFromRequest } from '@gitroom/nestjs-libraries/user/org.from.request';
+import { SubscriptionService } from '@xpoz/nestjs-libraries/database/prisma/subscriptions/subscription.service';
+import { StripeService } from '@xpoz/nestjs-libraries/services/stripe.service';
+import { GetOrgFromRequest } from '@xpoz/nestjs-libraries/user/org.from.request';
 import { Organization, User } from '@prisma/client';
-import { BillingSubscribeDto } from '@gitroom/nestjs-libraries/dtos/billing/billing.subscribe.dto';
+import { BillingSubscribeDto } from '@xpoz/nestjs-libraries/dtos/billing/billing.subscribe.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { GetUserFromRequest } from '@gitroom/nestjs-libraries/user/user.from.request';
-import { NotificationService } from '@gitroom/nestjs-libraries/database/prisma/notifications/notification.service';
+import { GetUserFromRequest } from '@xpoz/nestjs-libraries/user/user.from.request';
+import { NotificationService } from '@xpoz/nestjs-libraries/database/prisma/notifications/notification.service';
 import { Request } from 'express';
-import { Nowpayments } from '@gitroom/nestjs-libraries/crypto/nowpayments';
-import { AuthService } from '@gitroom/helpers/auth/auth.service';
+import { Nowpayments } from '@xpoz/nestjs-libraries/crypto/nowpayments';
+import { AuthService } from '@xpoz/helpers/auth/auth.service';
 
 @ApiTags('Billing')
 @Controller('/billing')

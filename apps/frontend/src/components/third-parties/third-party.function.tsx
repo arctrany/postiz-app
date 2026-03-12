@@ -1,5 +1,5 @@
-import { useThirdParty } from '@gitroom/frontend/components/third-parties/third-party.media';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useThirdParty } from '@xpoz/frontend/components/third-parties/third-party.media';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 

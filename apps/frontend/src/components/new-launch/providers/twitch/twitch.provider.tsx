@@ -4,10 +4,10 @@ import { FC } from 'react';
 import {
   PostComment,
   withProvider,
-} from '@gitroom/frontend/components/new-launch/providers/high.order.provider';
-import { TwitchDto } from '@gitroom/nestjs-libraries/dtos/posts/providers-settings/twitch.dto';
-import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
-import { Select } from '@gitroom/react/form/select';
+} from '@xpoz/frontend/components/new-launch/providers/high.order.provider';
+import { TwitchDto } from '@xpoz/nestjs-libraries/dtos/posts/providers-settings/twitch.dto';
+import { useSettings } from '@xpoz/frontend/components/launches/helpers/use.values';
+import { Select } from '@xpoz/react/form/select';
 import { useWatch } from 'react-hook-form';
 
 const messageTypes = [

@@ -1,4 +1,4 @@
-import { ContinueIntegration } from '@gitroom/frontend/components/launches/continue.integration';
+import { ContinueIntegration } from '@xpoz/frontend/components/launches/continue.integration';
 import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';

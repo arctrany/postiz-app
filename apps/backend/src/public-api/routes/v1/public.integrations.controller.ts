@@ -12,34 +12,34 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GetOrgFromRequest } from '@gitroom/nestjs-libraries/user/org.from.request';
+import { GetOrgFromRequest } from '@xpoz/nestjs-libraries/user/org.from.request';
 import { Organization } from '@prisma/client';
-import { IntegrationService } from '@gitroom/nestjs-libraries/database/prisma/integrations/integration.service';
-import { CheckPolicies } from '@gitroom/backend/services/auth/permissions/permissions.ability';
-import { PostsService } from '@gitroom/nestjs-libraries/database/prisma/posts/posts.service';
+import { IntegrationService } from '@xpoz/nestjs-libraries/database/prisma/integrations/integration.service';
+import { CheckPolicies } from '@xpoz/backend/services/auth/permissions/permissions.ability';
+import { PostsService } from '@xpoz/nestjs-libraries/database/prisma/posts/posts.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadFactory } from '@gitroom/nestjs-libraries/upload/upload.factory';
-import { MediaService } from '@gitroom/nestjs-libraries/database/prisma/media/media.service';
-import { GetPostsDto } from '@gitroom/nestjs-libraries/dtos/posts/get.posts.dto';
+import { UploadFactory } from '@xpoz/nestjs-libraries/upload/upload.factory';
+import { MediaService } from '@xpoz/nestjs-libraries/database/prisma/media/media.service';
+import { GetPostsDto } from '@xpoz/nestjs-libraries/dtos/posts/get.posts.dto';
 import {
   AuthorizationActions,
   Sections,
-} from '@gitroom/backend/services/auth/permissions/permission.exception.class';
-import { VideoDto } from '@gitroom/nestjs-libraries/dtos/videos/video.dto';
-import { VideoFunctionDto } from '@gitroom/nestjs-libraries/dtos/videos/video.function.dto';
-import { UploadDto } from '@gitroom/nestjs-libraries/dtos/media/upload.dto';
-import { NotificationService } from '@gitroom/nestjs-libraries/database/prisma/notifications/notification.service';
-import { GetNotificationsDto } from '@gitroom/nestjs-libraries/dtos/notifications/get.notifications.dto';
+} from '@xpoz/backend/services/auth/permissions/permission.exception.class';
+import { VideoDto } from '@xpoz/nestjs-libraries/dtos/videos/video.dto';
+import { VideoFunctionDto } from '@xpoz/nestjs-libraries/dtos/videos/video.function.dto';
+import { UploadDto } from '@xpoz/nestjs-libraries/dtos/media/upload.dto';
+import { NotificationService } from '@xpoz/nestjs-libraries/database/prisma/notifications/notification.service';
+import { GetNotificationsDto } from '@xpoz/nestjs-libraries/dtos/notifications/get.notifications.dto';
 import axios from 'axios';
 import { Readable } from 'stream';
 import { lookup, extension } from 'mime-types';
 import * as Sentry from '@sentry/nestjs';
-import { socialIntegrationList, IntegrationManager } from '@gitroom/nestjs-libraries/integrations/integration.manager';
-import { getValidationSchemas } from '@gitroom/nestjs-libraries/chat/validation.schemas.helper';
-import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
-import { RefreshToken } from '@gitroom/nestjs-libraries/integrations/social.abstract';
-import { timer } from '@gitroom/helpers/utils/timer';
-import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
+import { socialIntegrationList, IntegrationManager } from '@xpoz/nestjs-libraries/integrations/integration.manager';
+import { getValidationSchemas } from '@xpoz/nestjs-libraries/chat/validation.schemas.helper';
+import { RefreshIntegrationService } from '@xpoz/nestjs-libraries/integrations/refresh.integration.service';
+import { RefreshToken } from '@xpoz/nestjs-libraries/integrations/social.abstract';
+import { timer } from '@xpoz/helpers/utils/timer';
+import { ioRedis } from '@xpoz/nestjs-libraries/redis/redis.service';
 
 @ApiTags('Public API')
 @Controller('/public/v1')

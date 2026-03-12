@@ -45,13 +45,13 @@ pnpm run start -- posts:list
 **Required:** Set your XPoz API key
 
 ```bash
-export POSTIZ_API_KEY=your_api_key_here
+export XPOZ_API_KEY=your_api_key_here
 ```
 
 **Optional:** Custom API endpoint
 
 ```bash
-export POSTIZ_API_URL=https://your-custom-api.com
+export XPOZ_API_URL=https://your-custom-api.com
 ```
 
 ---
@@ -494,8 +494,8 @@ The CLI interacts with these XPoz API endpoints:
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `POSTIZ_API_KEY` | ✅ Yes | - | Your XPoz API key |
-| `POSTIZ_API_URL` | No | `https://api.xpoz.com` | Custom API endpoint |
+| `XPOZ_API_KEY` | ✅ Yes | - | Your XPoz API key |
+| `XPOZ_API_URL` | No | `https://api.xpoz.com` | Custom API endpoint |
 
 ---
 
@@ -510,7 +510,7 @@ The CLI provides clear error messages with exit codes:
 
 | Error | Solution |
 |-------|----------|
-| `POSTIZ_API_KEY is not set` | Set environment variable: `export POSTIZ_API_KEY=key` |
+| `XPOZ_API_KEY is not set` | Set environment variable: `export XPOZ_API_KEY=key` |
 | `Integration not found` | Run `integrations:list` to get valid IDs |
 | `startDate/endDate required` | Use ISO 8601 format: `"2024-12-31T12:00:00Z"` |
 | `Invalid settings` | Check `integrations:settings` for required fields |
@@ -567,7 +567,7 @@ Output in `dist/`:
 
 ```bash
 # Environment setup
-export POSTIZ_API_KEY=your_key
+export XPOZ_API_KEY=your_key
 
 # Discovery
 xpoz integrations:list                           # List integrations

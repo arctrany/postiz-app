@@ -1,11 +1,11 @@
-import { videoWrapper } from '@gitroom/frontend/components/videos/video.wrapper';
+import { videoWrapper } from '@xpoz/frontend/components/videos/video.wrapper';
 import { FC, useCallback, useRef, useState, useEffect } from 'react';
-import { useVideoFunction } from '@gitroom/frontend/components/videos/video.render.component';
+import { useVideoFunction } from '@xpoz/frontend/components/videos/video.render.component';
 import useSWR from 'swr';
 import { useFormContext } from 'react-hook-form';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@xpoz/react/form/button';
 import clsx from 'clsx';
-import { useVideo } from '@gitroom/frontend/components/videos/video.context.wrapper';
+import { useVideo } from '@xpoz/frontend/components/videos/video.context.wrapper';
 
 export interface Voices {
   voices: Voice[];

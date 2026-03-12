@@ -2,14 +2,14 @@
 
 import { uniqBy } from 'lodash';
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react';
-import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { Integrations } from '@xpoz/frontend/components/launches/calendar.context';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 import clsx from 'clsx';
 import { useClickOutside } from '@mantine/hooks';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
+import { useToaster } from '@xpoz/react/toaster/toaster';
+import { useLaunchStore } from '@xpoz/frontend/components/new-launch/store';
 import { useShallow } from 'zustand/react/shallow';
-import { UserIcon, DropdownArrowIcon } from '@gitroom/frontend/components/ui/icons';
+import { UserIcon, DropdownArrowIcon } from '@xpoz/frontend/components/ui/icons';
 
 export const SelectCustomer: FC<{
   onChange: (value: string) => void;

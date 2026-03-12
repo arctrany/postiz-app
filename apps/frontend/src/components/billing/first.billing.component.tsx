@@ -2,34 +2,34 @@
 
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { OrganizationSelector } from '@gitroom/frontend/components/layout/organization.selector';
-import { LanguageComponent } from '@gitroom/frontend/components/layout/language.component';
-import { AttachToFeedbackIcon } from '@gitroom/frontend/components/new-layout/sentry.feedback.component';
-import NotificationComponent from '@gitroom/frontend/components/notifications/notification.component';
+import { OrganizationSelector } from '@xpoz/frontend/components/layout/organization.selector';
+import { LanguageComponent } from '@xpoz/frontend/components/layout/language.component';
+import { AttachToFeedbackIcon } from '@xpoz/frontend/components/new-layout/sentry.feedback.component';
+import NotificationComponent from '@xpoz/frontend/components/notifications/notification.component';
 import dynamic from 'next/dynamic';
-import { LogoTextComponent } from '@gitroom/frontend/components/ui/logo-text.component';
-import { pricing } from '@gitroom/nestjs-libraries/database/prisma/subscriptions/pricing';
+import { LogoTextComponent } from '@xpoz/frontend/components/ui/logo-text.component';
+import { pricing } from '@xpoz/nestjs-libraries/database/prisma/subscriptions/pricing';
 import { capitalize } from 'lodash';
 import clsx from 'clsx';
-import { LoadingComponent } from '@gitroom/frontend/components/layout/loading';
-import { CheckIconComponent } from '@gitroom/frontend/components/ui/check.icon.component';
+import { LoadingComponent } from '@xpoz/frontend/components/layout/loading';
+import { CheckIconComponent } from '@xpoz/frontend/components/ui/check.icon.component';
 import {
   FAQComponent,
   FAQSection,
-} from '@gitroom/frontend/components/billing/faq.component';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { useDubClickId } from '@gitroom/frontend/components/layout/dubAnalytics';
+} from '@xpoz/frontend/components/billing/faq.component';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useUser } from '@xpoz/frontend/components/layout/user.context';
+import { useDubClickId } from '@xpoz/frontend/components/layout/dubAnalytics';
 import Image from 'next/image';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 import useCookie from 'react-use-cookie';
-import { LogoutComponent } from '@gitroom/frontend/components/layout/logout.component';
+import { LogoutComponent } from '@xpoz/frontend/components/layout/logout.component';
 
 const ModeComponent = dynamic(
-  () => import('@gitroom/frontend/components/layout/mode.component'),
+  () => import('@xpoz/frontend/components/layout/mode.component'),
   {
     ssr: false,
   }
@@ -37,7 +37,7 @@ const ModeComponent = dynamic(
 
 const EmbeddedBilling = dynamic(
   () =>
-    import('@gitroom/frontend/components/billing/embedded.billing').then(
+    import('@xpoz/frontend/components/billing/embedded.billing').then(
       (mod) => mod.EmbeddedBilling
     ),
   {

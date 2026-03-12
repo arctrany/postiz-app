@@ -1,13 +1,13 @@
 'use client';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import Link from 'next/link';
-import { Button } from '@gitroom/react/form/button';
-import { Input } from '@gitroom/react/form/input';
+import { Button } from '@xpoz/react/form/button';
+import { Input } from '@xpoz/react/form/input';
 import { useMemo, useState } from 'react';
 import { classValidatorResolver } from '@hookform/resolvers/class-validator';
-import { ForgotReturnPasswordDto } from '@gitroom/nestjs-libraries/dtos/auth/forgot-return.password.dto';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { ForgotReturnPasswordDto } from '@xpoz/nestjs-libraries/dtos/auth/forgot-return.password.dto';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 type Inputs = {
   password: string;
   repeatPassword: string;

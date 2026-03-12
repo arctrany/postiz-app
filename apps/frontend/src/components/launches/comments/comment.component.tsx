@@ -1,14 +1,14 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { TopTitle } from '@gitroom/frontend/components/launches/helpers/top.title.component';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
-import { Textarea } from '@gitroom/react/form/textarea';
-import { Button } from '@gitroom/react/form/button';
+import { TopTitle } from '@xpoz/frontend/components/launches/helpers/top.title.component';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
+import { Textarea } from '@xpoz/react/form/textarea';
+import { Button } from '@xpoz/react/form/button';
 import clsx from 'clsx';
-import { useUser } from '@gitroom/frontend/components/layout/user.context';
-import { Input } from '@gitroom/react/form/input';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { deleteDialog } from '@gitroom/react/helpers/delete.dialog';
+import { useUser } from '@xpoz/frontend/components/layout/user.context';
+import { Input } from '@xpoz/react/form/input';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { deleteDialog } from '@xpoz/react/helpers/delete.dialog';
 export const CommentBox: FC<{
   value?: string;
   type: 'textarea' | 'input';

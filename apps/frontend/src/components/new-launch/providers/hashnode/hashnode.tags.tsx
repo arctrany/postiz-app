@@ -1,8 +1,8 @@
 'use client';
 
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useCustomProviderFunction } from '@gitroom/frontend/components/launches/helpers/use.custom.provider.function';
-import { useSettings } from '@gitroom/frontend/components/launches/helpers/use.values';
+import { useCustomProviderFunction } from '@xpoz/frontend/components/launches/helpers/use.custom.provider.function';
+import { useSettings } from '@xpoz/frontend/components/launches/helpers/use.values';
 import { ReactTags } from 'react-tag-autocomplete';
 
 export const HashnodeTags: FC<{

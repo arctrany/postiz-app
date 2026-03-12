@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
 
 export const useFireEvents = () => {
   const { billingEnabled } = useVariables();

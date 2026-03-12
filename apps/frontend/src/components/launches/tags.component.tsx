@@ -2,22 +2,22 @@
 
 import { FC, useCallback, useMemo, useState } from 'react';
 import { ReactTags } from 'react-tag-autocomplete';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
 import useSWR from 'swr';
-import { Input } from '@gitroom/react/form/input';
-import { ColorPicker } from '@gitroom/react/form/color.picker';
-import { Button } from '@gitroom/react/form/button';
+import { Input } from '@xpoz/react/form/input';
+import { ColorPicker } from '@xpoz/react/form/color.picker';
+import { Button } from '@xpoz/react/form/button';
 import { uniqBy } from 'lodash';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
 import { useClickOutside } from '@mantine/hooks';
 import clsx from 'clsx';
-import { useModals } from '@gitroom/frontend/components/layout/new-modal';
+import { useModals } from '@xpoz/frontend/components/layout/new-modal';
 import {
   TagIcon,
   DropdownArrowIcon,
   PlusIcon,
   CheckmarkIcon,
-} from '@gitroom/frontend/components/ui/icons';
+} from '@xpoz/frontend/components/ui/icons';
 
 export const TagsComponent: FC<{
   name: string;

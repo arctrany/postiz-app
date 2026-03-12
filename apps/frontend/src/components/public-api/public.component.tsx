@@ -3,14 +3,14 @@
 import { useState, useCallback } from 'react';
 import { useSWRConfig } from 'swr';
 import { useUser } from '../layout/user.context';
-import { Button } from '@gitroom/react/form/button';
+import { Button } from '@xpoz/react/form/button';
 import copy from 'copy-to-clipboard';
-import { useToaster } from '@gitroom/react/toaster/toaster';
-import { useVariables } from '@gitroom/react/helpers/variable.context';
-import { useT } from '@gitroom/react/translation/get.transation.service.client';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { useDecisionModal } from '@gitroom/frontend/components/layout/new-modal';
-import { DeveloperComponent } from '@gitroom/frontend/components/developer/developer.component';
+import { useToaster } from '@xpoz/react/toaster/toaster';
+import { useVariables } from '@xpoz/react/helpers/variable.context';
+import { useT } from '@xpoz/react/translation/get.transation.service.client';
+import { useFetch } from '@xpoz/helpers/utils/custom.fetch';
+import { useDecisionModal } from '@xpoz/frontend/components/layout/new-modal';
+import { DeveloperComponent } from '@xpoz/frontend/components/developer/developer.component';
 import clsx from 'clsx';
 
 const PublicApiContent = () => {

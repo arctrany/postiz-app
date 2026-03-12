@@ -1,10 +1,10 @@
 export const dynamic = 'force-dynamic';
 import { Metadata } from 'next';
-import { Activate } from '@gitroom/frontend/components/auth/activate';
-import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
+import { Activate } from '@xpoz/frontend/components/auth/activate';
+import { isGeneralServerSide } from '@xpoz/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
   title: `${
-    isGeneralServerSide() ? 'XPoz' : 'Gitroom'
+    'XPoz'
   } - Activate your account`,
   description: '',
 };
