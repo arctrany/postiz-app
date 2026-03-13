@@ -692,5 +692,17 @@
   "watch_tutorial_title": "学习如何使用XPoz",
   "watch_tutorial_description": "观看这个简短的视频，学习如何最大程度地利用XPoz",
   "back": "返回",
-  "get_started": "开始使用"
+  "get_started": "开始使用",
+  "auth_brand_headline": "一个平台，\n触达全球受众",
+  "auth_brand_subheadline": "国内外 55+ 社交平台同步发布\nAI 助力内容创作，智能驱动增长",
+  "auth_feature_publish_title": "全平台矩阵发布",
+  "auth_feature_publish_desc": "Twitter、微信、小红书等国内外 55+ 平台一键触达同步",
+  "auth_feature_ai_title": "智能内容衍生",
+  "auth_feature_ai_desc": "从创作到分发，结构化重塑每一次思想脉络的传播",
+  "auth_feature_schedule_title": "时序精准调度",
+  "auth_feature_schedule_desc": "工业级可视化日历驱动，多通道任务队列零延迟投递",
+  "auth_feature_analytics_title": "全维数据追踪",
+  "auth_feature_analytics_desc": "穿透跨平台数据孤岛，高精度洞察每一次曝光与转化",
+  "auth_supported_platforms": "已支持平台",
+  "auth_more_platforms": "+47 更多"
 }

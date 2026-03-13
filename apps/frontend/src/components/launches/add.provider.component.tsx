@@ -705,6 +705,12 @@ export const AddProviderComponent: FC<{
                           'rounded-full'
                       )}
                       src={`/icons/platforms/${item.identifier}.png`}
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (target.src.endsWith('.png')) {
+                          target.src = `/icons/platforms/${item.identifier}.svg`;
+                        }
+                      }}
                     />
                   )}
                 </div>
