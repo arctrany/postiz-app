@@ -695,5 +695,7 @@
   "watch_tutorial_description": "Watch this short video to learn how to get the most out of XPoz",
   "back": "Back",
   "get_started": "Get Started",
-  "kick_select_channel": "Select Channel"
+  "kick_select_channel": "Select Channel",
+  "auth_login_subtitle": "Welcome back to XPoz, connect all your audiences",
+  "auth_trust_signal": "Trusted by 20,000+ creators worldwide"
 }

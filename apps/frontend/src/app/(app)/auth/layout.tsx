@@ -32,7 +32,7 @@ export default async function AuthLayout({
         </div>
 
         {/* Glassmorphism card */}
-        <div className="w-full rounded-[24px] border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl shadow-[0_0_80px_rgba(99,102,241,0.06)] p-[32px] md:p-[40px]">
+        <div className="relative w-full rounded-[24px] border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl shadow-[0_0_80px_rgba(99,102,241,0.06)] p-[32px] md:p-[40px]">
           {/* Top edge glow */}
           <div className="absolute top-0 left-[20%] right-[20%] h-[1px] bg-gradient-to-r from-transparent via-[#6366F1]/40 to-transparent rounded-full"></div>
           
