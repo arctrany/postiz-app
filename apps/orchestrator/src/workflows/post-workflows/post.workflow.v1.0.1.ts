@@ -144,13 +144,10 @@ export async function postWorkflowV101({
             postsList[i],
           ]);
 
-          // XSync 国内平台：postSocial 返回 PENDING_EXTENSION 而非实际 postId
+          // XSync 国内平台：postSocial 返回 { status: 'PENDING_EXTENSION' } 而非 PostResponse[]
           // 需要等待前端 Chrome Extension 完成实际发布后回写状态
-          if (
-            Array.isArray(rawResult) &&
-            rawResult.length === 1 &&
-            (rawResult[0] as any)?.status === 'PENDING_EXTENSION'
-          ) {
+          const pendingCheck = Array.isArray(rawResult) ? rawResult[0] : rawResult;
+          if ((pendingCheck as any)?.status === 'PENDING_EXTENSION') {
             await changeState(postsList[0].id, 'PENDING_EXTENSION' as any);
             await inAppNotification(
               post.organizationId,
