@@ -22,7 +22,10 @@ i18next
     fallbackNS: defaultNS,
     defaultNS,
     detection: {
-      order: ['cookie', 'header'],
+      // cookie = explicit user choice (language selector)
+      // navigator = OS/system locale (navigator.language)
+      // header = Accept-Language from browser (server-side)
+      order: ['cookie', 'navigator', 'header'],
     },
     preload: runsOnServerSide ? languages : [],
   });
