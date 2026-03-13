@@ -704,5 +704,6 @@
   "auth_feature_analytics_title": "全维数据追踪",
   "auth_feature_analytics_desc": "穿透跨平台数据孤岛，高精度洞察每一次曝光与转化",
   "auth_supported_platforms": "已支持平台",
-  "auth_more_platforms": "+47 更多"
+  "auth_more_platforms": "+47 更多",
+  "auth_login_subtitle": "欢迎回到 XPoz，连接全渠道受众"
 }

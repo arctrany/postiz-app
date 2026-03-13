@@ -69,7 +69,7 @@ export function Login() {
               {t('sign_in', 'Sign In')}
             </h1>
             <p className="text-gray-400 text-[15px]">
-              欢迎回到 XPoz，连接全渠道受众
+              {t('auth_login_subtitle', 'Welcome back to XPoz, connect all your audiences')}
             </p>
           </div>
           <div className="text-[13px] text-gray-500 mt-[32px] mb-[16px] font-[500] uppercase tracking-wider">
