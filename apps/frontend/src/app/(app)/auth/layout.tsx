@@ -1,5 +1,4 @@
 import { getT } from '@xpoz/react/translation/get.translation.service.backend';
-import { AuthBrandPanel } from './auth.brand.panel';
 
 export const dynamic = 'force-dynamic';
 import { ReactNode } from 'react';
@@ -14,30 +13,38 @@ export default async function AuthLayout({
   const t = await getT();
 
   return (
-    <div className="relative flex flex-1 p-[16px] md:p-[24px] lg:p-[40px] gap-[16px] min-h-screen w-screen text-white overflow-hidden items-center justify-center bg-[#09090b]">
-      {/* 极光背景装饰 */}
-      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full opacity-30 mix-blend-screen mix-blend-color-dodge filter blur-[100px] pointer-events-none" style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }}></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full opacity-20 filter blur-[120px] pointer-events-none" style={{ background: 'radial-gradient(circle, #8B5CF6 0%, transparent 70%)' }}></div>
-      <div className="absolute top-[20%] right-[20%] w-[30%] h-[30%] rounded-full opacity-10 filter blur-[80px] pointer-events-none" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }}></div>
+    <div className="relative flex flex-1 min-h-screen w-screen text-white overflow-hidden items-center justify-center bg-[#09090b]">
+      {/* Aurora background */}
+      <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full opacity-20 filter blur-[120px] pointer-events-none" style={{ background: 'radial-gradient(circle, #6366F1 0%, transparent 70%)' }}></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full opacity-15 filter blur-[100px] pointer-events-none" style={{ background: 'radial-gradient(circle, #8B5CF6 0%, transparent 70%)' }}></div>
+      <div className="absolute top-[30%] right-[30%] w-[20%] h-[20%] rounded-full opacity-10 filter blur-[80px] pointer-events-none" style={{ background: 'radial-gradient(circle, #ec4899 0%, transparent 70%)' }}></div>
+
+      {/* Subtle grid pattern */}
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
 
       <ReturnUrlComponent />
 
-      {/* 超大圆角主内容面板 (毛玻璃特效) */}
-      <div className="relative z-10 flex flex-col md:flex-row w-full max-w-[1240px] min-h-[700px] rounded-[32px] overflow-hidden border border-white/5 shadow-2xl backdrop-blur-2xl bg-[#0a0a0a]/50">
-        
-        {/* 左侧：登录表单区域 */}
-        <div className="flex flex-col py-[50px] px-[32px] md:px-[40px] lg:px-[60px] flex-1 text-white relative">
-          {/* 表单内层微距光晕 */}
-          <div className="absolute top-0 left-[50%] translate-x-[-50%] w-[50%] h-[1px] bg-gradient-to-r from-transparent via-[#6366F1]/50 to-transparent"></div>
+      {/* Centered auth card */}
+      <div className="relative z-10 flex flex-col items-center w-full max-w-[460px] mx-auto px-[24px] py-[40px]">
+        {/* Logo */}
+        <div className="mb-[32px]">
+          <LogoTextComponent />
+        </div>
+
+        {/* Glassmorphism card */}
+        <div className="w-full rounded-[24px] border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl shadow-[0_0_80px_rgba(99,102,241,0.06)] p-[32px] md:p-[40px]">
+          {/* Top edge glow */}
+          <div className="absolute top-0 left-[20%] right-[20%] h-[1px] bg-gradient-to-r from-transparent via-[#6366F1]/40 to-transparent rounded-full"></div>
           
-          <div className="w-full max-w-[420px] mx-auto justify-center gap-[24px] h-full flex flex-col text-white">
-            <LogoTextComponent />
-            <div className="flex flex-col flex-1">{children}</div>
+          <div className="flex flex-col text-white">
+            {children}
           </div>
         </div>
 
-        {/* 右侧：XPoz 品牌展示面板（仅 md 及以上屏幕显示）*/}
-        <AuthBrandPanel />
+        {/* Bottom trust signal */}
+        <div className="mt-[24px] text-center text-gray-500 text-[12px]">
+          {t('auth_trust_signal', 'Trusted by 20,000+ creators worldwide')}
+        </div>
       </div>
     </div>
   );
