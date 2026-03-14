@@ -759,19 +759,14 @@ export class PostsService {
     if (!post) {
       throw new BadRequestException(`Post ${postId} not found`);
     }
-    if (post.state !== ('PENDING_EXTENSION' as State)) {
+    if (post.state !== 'PENDING_EXTENSION') {
       throw new BadRequestException(
         `Post ${postId} is not in PENDING_EXTENSION state (current: ${post.state})`
       );
     }
 
     if (error) {
-      await this._postRepository.changeState(
-        postId,
-        'ERROR' as State,
-        new Error(error),
-        []
-      );
+      await this._postRepository.changeState(postId, 'ERROR', error);
       return { success: false, error };
     }
 
@@ -784,10 +779,7 @@ export class PostsService {
    * 获取当前 org 下所有 PENDING_EXTENSION 状态的帖子，供前端轮询触发 Extension
    */
   async getPendingExtensionPosts(orgId: string) {
-    return this._postRepository.getPostsByState(
-      orgId,
-      'PENDING_EXTENSION' as State
-    );
+    return this._postRepository.getPostsByState(orgId, 'PENDING_EXTENSION');
   }
 
 

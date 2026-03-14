@@ -149,6 +149,34 @@ export class PostsController {
     return this._postsService.getPostsByGroup(org.id, group);
   }
 
+  /**
+   * 查询当前 org 下所有处于 PENDING_EXTENSION 状态的帖子
+   * 前端轮询此端点，触发 Extension 执行实际发布
+   * 必须在 /:id 路由之前定义，否则 NestJS 会把 'pending-extension' 当作 id 参数
+   */
+  @Get('/pending-extension')
+  async getPendingExtensionPosts(@GetOrgFromRequest() org: Organization) {
+    return this._postsService.getPendingExtensionPosts(org.id);
+  }
+
+  /**
+   * XSync Extension 发布完成后，前端调用此端点将帖子状态从 PENDING_EXTENSION 更新为 PUBLISHED
+   * 必须在 /:id 路由之前定义
+   */
+  @Post('/:id/mark-published')
+  async markPublished(
+    @GetOrgFromRequest() org: Organization,
+    @Param('id') id: string,
+    @Body() body: { releaseURL?: string; error?: string }
+  ) {
+    return this._postsService.markExtensionPublished(
+      org.id,
+      id,
+      body.releaseURL,
+      body.error
+    );
+  }
+
   @Get('/:id')
   getPost(@GetOrgFromRequest() org: Organization, @Param('id') id: string) {
     return this._postsService.getPost(org.id, id);
@@ -215,31 +243,4 @@ export class PostsController {
     return this._postsService.separatePosts(body.content, body.len);
   }
 
-  /**
-   * XSync Extension 发布完成后，前端调用此端点将帖子状态从 PENDING_EXTENSION 更新为 PUBLISHED
-   * body.releaseURL: 可选，Extension 发布后返回的文章 URL
-   * body.error: 若发布失败，传入错误信息，状态会改为 ERROR
-   */
-  @Post('/:id/mark-published')
-  async markPublished(
-    @GetOrgFromRequest() org: Organization,
-    @Param('id') id: string,
-    @Body() body: { releaseURL?: string; error?: string }
-  ) {
-    return this._postsService.markExtensionPublished(
-      org.id,
-      id,
-      body.releaseURL,
-      body.error
-    );
-  }
-
-  /**
-   * 查询当前 org 下所有处于 PENDING_EXTENSION 状态的帖子
-   * 前端轮询此端点，触发 Extension 执行实际发布
-   */
-  @Get('/pending-extension')
-  async getPendingExtensionPosts(@GetOrgFromRequest() org: Organization) {
-    return this._postsService.getPendingExtensionPosts(org.id);
-  }
 }

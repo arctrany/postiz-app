@@ -4,7 +4,12 @@
   "description": "XPoz browser extension for cookie-based platform authentication",
   "scripts": {
     "build": "rm -rf dist && vite build && cp manifest.json dist/manifest.json && cd dist && zip -r ../extension.zip .",
-    "dev": "rm -rf dist && HOT_RELOAD_EXTENSION_VITE_PORT=8081 NODE_ENV=development dotenv -e ../../.env -- vite build --config vite.config.chrome.ts --mode development --watch"
+    "dev": "rm -rf dist && HOT_RELOAD_EXTENSION_VITE_PORT=18082 NODE_ENV=development dotenv -e ../../.env -- vite build --config vite.config.chrome.ts --mode development --watch"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "js-md5": "^0.8.3",
+    "juice": "^11.1.1",
+    "remarkable": "^2.0.1"
+  }
 }
