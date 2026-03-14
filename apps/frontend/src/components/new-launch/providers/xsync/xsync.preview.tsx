@@ -13,20 +13,32 @@ import { stripHtmlValidation } from '@xpoz/helpers/utils/strip.html.validation';
 import { VideoOrImage } from '@xpoz/react/helpers/video.or.image';
 import { FC } from 'react';
 
-/** 平台品牌色映射 */
+/** 平台品牌色映射（25 个 XSync 平台全覆盖）*/
 const PLATFORM_COLORS: Record<string, string> = {
-  'xsync-weixin': '#07C160',
-  'xsync-weibo': '#E6162D',
-  'xsync-zhihu': '#0066FF',
-  'xsync-toutiao': '#FE2C55',
-  'xsync-xiaohongshu': '#FF2442',
-  'xsync-bilibili': '#00A1D6',
-  'xsync-juejin': '#1E80FF',
-  'xsync-csdn': '#FC5531',
-  'xsync-douban': '#007722',
-  'xsync-jianshu': '#EA6F5A',
-  'xsync-yuque': '#3B7DDD',
-  'xsync-51cto': '#FF6C00',
+  'xsync-weixin':       '#07C160', // 微信绿
+  'xsync-weibo':        '#E6162D', // 微博红
+  'xsync-zhihu':        '#0066FF', // 知乎蓝
+  'xsync-toutiao':      '#FE2C55', // 头条橙红
+  'xsync-xiaohongshu':  '#FF2442', // 小红书红
+  'xsync-bilibili':     '#00A1D6', // B站蓝
+  'xsync-baijiahao':    '#2468F2', // 百家号蓝
+  'xsync-juejin':       '#1E80FF', // 掘金蓝
+  'xsync-csdn':         '#FC5531', // CSDN 橙
+  'xsync-jianshu':      '#EA6F5A', // 简书橙
+  'xsync-douban':       '#007722', // 豆瓣绿
+  'xsync-xueqiu':       '#F5A623', // 雪球橙
+  'xsync-yuque':        '#3B7DDD', // 语雀蓝
+  'xsync-oschina':      '#ED1C24', // 开源中国红
+  'xsync-segmentfault': '#009A63', // SegmentFault 绿
+  'xsync-cnblogs':      '#5C833D', // 博客园绿
+  'xsync-woshipm':      '#FF6400', // 人人都是产品经理橙
+  'xsync-sohu':         '#FF6600', // 搜狐橙
+  'xsync-dayu':         '#FF6A00', // 大鱼号橙
+  'xsync-51cto':        '#FF6C00', // 51CTO 橙
+  'xsync-yidian':       '#E02020', // 一点号红
+  'xsync-eastmoney':    '#C8241A', // 东方财富红
+  'xsync-imooc':        '#3F86FF', // 慕课网蓝
+  'xsync-sohufocus':    '#FF8C00', // 搜狐焦点橙
 };
 
 function getPlatformColor(identifier: string): string {

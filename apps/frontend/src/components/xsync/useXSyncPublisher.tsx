@@ -8,6 +8,11 @@
  *   2. 发现 PENDING_EXTENSION 帖子后，通过 chrome.runtime.sendMessage 通知 XPoz Extension
  *   3. Extension 完成发布后，调用 POST /posts/:id/mark-published 回写状态
  *
+ * 轮询策略：
+ *   - 初始间隔：5 秒（发布后快速感知）
+ *   - 无 pending 帖子时逐步退避到 30 秒（自适应间隔）
+ *   - 每个帖子最多重试 5 次，超出后标记为 ERROR
+ *
  * 使用方式：在 (site)/layout.tsx 或顶层 Provider 中调用一次：
  *   useXSyncPublisher();
  */
@@ -17,8 +22,13 @@ import { useEffect, useRef } from 'react';
 const XPOZ_EXTENSION_ID =
   process.env.NEXT_PUBLIC_XPOZ_EXTENSION_ID || 'xpozextensionid';
 
-/** 轮询间隔（毫秒），默认 30 秒 */
-const POLL_INTERVAL_MS = 30_000;
+/** 轮询间隔边界（毫秒）*/
+const POLL_MIN_MS  =  5_000;  // 5 秒：有 pending 帖子时的最小间隔
+const POLL_MAX_MS  = 30_000;  // 30 秒：无 pending 帖子时退避到的最大间隔
+const POLL_BACK_MS =  5_000;  // 每次无任务后，间隔增加的步长
+
+/** 单个帖子的最大重试次数（超出后标记 ERROR） */
+const MAX_RETRIES = 5;
 
 interface PendingPost {
   id: string;
@@ -97,7 +107,7 @@ async function triggerExtension(post: PendingPost): Promise<void> {
       payload,
       (response: { success: boolean; releaseURL?: string; error?: string }) => {
         if (chrome.runtime.lastError) {
-          console.error(
+          console.warn(
             '[XSyncPublisher] Extension 通信失败:',
             chrome.runtime.lastError.message
           );
@@ -122,9 +132,11 @@ async function triggerExtension(post: PendingPost): Promise<void> {
 
 export function useXSyncPublisher() {
   const processingRef = useRef<Set<string>>(new Set());
+  const retryCountRef = useRef<Map<string, number>>(new Map());
+  const pollIntervalRef = useRef<number>(POLL_MIN_MS);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setInterval>;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const poll = async () => {
       const posts = await fetchPendingPosts();
@@ -132,18 +144,45 @@ export function useXSyncPublisher() {
         (p) => !processingRef.current.has(p.id)
       );
 
+      // 自适应轮询间隔：有任务时保持最小间隔，无任务时退避
+      if (unprocessed.length > 0) {
+        pollIntervalRef.current = POLL_MIN_MS;
+      } else {
+        pollIntervalRef.current = Math.min(
+          pollIntervalRef.current + POLL_BACK_MS,
+          POLL_MAX_MS
+        );
+      }
+
       for (const post of unprocessed) {
+        // 检查重试次数上限
+        const retries = retryCountRef.current.get(post.id) || 0;
+        if (retries >= MAX_RETRIES) {
+          if (!processingRef.current.has(`${post.id}:errored`)) {
+            processingRef.current.add(`${post.id}:errored`);
+            console.error(
+              `[XSyncPublisher] 帖子 ${post.id} 超过最大重试次数 (${MAX_RETRIES})，标记 ERROR`
+            );
+            markPublished(post.id, undefined, `超过最大重试次数 ${MAX_RETRIES} 次`);
+          }
+          continue;
+        }
+
         processingRef.current.add(post.id);
+        retryCountRef.current.set(post.id, retries + 1);
+
         triggerExtension(post).finally(() => {
           processingRef.current.delete(post.id);
         });
       }
+
+      // 用 setTimeout 替换 setInterval，动态调整间隔
+      timeoutId = setTimeout(poll, pollIntervalRef.current);
     };
 
-    // 立即执行一次，再按间隔轮询
+    // 立即执行一次，之后按动态间隔轮询
     poll();
-    timer = setInterval(poll, POLL_INTERVAL_MS);
 
-    return () => clearInterval(timer);
+    return () => clearTimeout(timeoutId);
   }, []);
 }
