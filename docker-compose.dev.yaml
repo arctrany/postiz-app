@@ -1,35 +1,39 @@
-# Do **not** use this yml for production. It is not up-to-date.
-# Use https://docs.xpoz.com/installation/docker-compose
-# This is only for the dev enviroment
+# Do **not** use this yml for production.
+# This is only for the dev environment.
+#
+# All volume data is stored on D:\docker\xpoz\
+#
+# Start only required services for local dev:
+#   docker compose -f docker-compose.dev.yaml up -d xpoz-postgres xpoz-redis
 
 services:
   xpoz-postgres:
-    # ref: https://hub.docker.com/_/postgres
-    image: postgres:17-alpine # 17.0
+    image: postgres:17-alpine
     container_name: xpoz-postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: xpoz-local-pwd
       POSTGRES_USER: xpoz-local
       POSTGRES_DB: xpoz-db-local
-      TEMPORAL_ADDRESS: "temporal:7233"
     volumes:
-      - postgres-volume:/var/lib/postgresql/data
+      - D:\docker\xpoz\postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
       - xpoz-network
+
   xpoz-redis:
-    # ref: https://hub.docker.com/_/redis
-    image: redis:7-alpine # 7.4.0
+    image: redis:7-alpine
     container_name: xpoz-redis
     restart: always
+    volumes:
+      - D:\docker\xpoz\redis:/data
     ports:
       - 6379:6379
     networks:
       - xpoz-network
+
   xpoz-pg-admin:
-    # ref: https://hub.docker.com/r/dpage/pgadmin4/tags
     image: dpage/pgadmin4:latest
     container_name: xpoz-pg-admin
     restart: always
@@ -40,8 +44,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     networks:
       - xpoz-network
+
   xpoz-redisinsight:
-    # ref: https://hub.docker.com/r/redis/redisinsight
     image: redis/redisinsight:latest
     container_name: xpoz-redisinsight
     links:
@@ -49,7 +53,7 @@ services:
     ports:
       - '5540:5540'
     volumes:
-      - redisinsight:/data
+      - D:\docker\xpoz\redisinsight:/data
     networks:
       - xpoz-network
     restart: always
@@ -70,7 +74,7 @@ services:
     expose:
       - 9200
     volumes:
-      - /var/lib/elasticsearch/data
+      - D:\docker\xpoz\elasticsearch:/var/lib/elasticsearch/data
 
   temporal-postgresql:
     container_name: temporal-postgresql
@@ -83,7 +87,7 @@ services:
     expose:
       - 5432
     volumes:
-      - /var/lib/postgresql/data
+      - D:\docker\xpoz\temporal-postgres:/var/lib/postgresql/data
 
   temporal:
     container_name: temporal
@@ -134,11 +138,6 @@ services:
       - temporal-network
     ports:
       - "8080:8080"
-
-volumes:
-  redisinsight:
-  postgres-volume:
-    external: false
 
 networks:
   xpoz-network:

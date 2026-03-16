@@ -24,7 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 
 // ── 配置 ──────────────────────────────────────────────────────────────
-const BACKEND   = process.env.E2E_BACKEND_URL || 'http://localhost:3000';
+const BACKEND   = process.env.E2E_BACKEND_URL || 'http://localhost:3333';
 const JWT_SECRET = process.env.JWT_SECRET      || 'your-jwt-secret';
 
 // 测试数据 ID（使用固定 ID 便于幂等重试）

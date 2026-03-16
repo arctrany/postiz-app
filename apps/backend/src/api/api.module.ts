@@ -42,7 +42,7 @@ import { GoogleProvider } from '@xpoz/backend/services/auth/providers/google.pro
 import { FarcasterProvider } from '@xpoz/backend/services/auth/providers/farcaster.provider';
 import { WalletProvider } from '@xpoz/backend/services/auth/providers/wallet.provider';
 import { OauthProvider } from '@xpoz/backend/services/auth/providers/oauth.provider';
-import { A2AController } from '@xpoz/backend/api/routes/a2a.controller';
+import { McpController, McpPublicController } from '@xpoz/backend/api/routes/mcp.controller';
 
 const authenticatedController = [
   UsersController,
@@ -62,6 +62,7 @@ const authenticatedController = [
   OAuthAppController,
   ApprovedAppsController,
   OAuthAuthorizedController,
+  McpController,
 ];
 @Module({
   imports: [UploadModule],
@@ -74,7 +75,7 @@ const authenticatedController = [
     EnterpriseController,
     NoAuthIntegrationsController,
     OAuthController,
-    A2AController,
+    McpPublicController,
     ...authenticatedController,
   ],
   providers: [

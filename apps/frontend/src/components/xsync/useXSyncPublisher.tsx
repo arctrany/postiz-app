@@ -92,20 +92,40 @@ async function triggerExtension(post: PendingPost): Promise<void> {
       return;
     }
 
+    // 解析 settings，提取平台特定选项
+    const settings: Record<string, unknown> = post.settings
+      ? JSON.parse(post.settings)
+      : {};
+    const images: string[] = post.image ? JSON.parse(post.image) : [];
+
+    /**
+     * 消息结构与 Extension types/messages.ts XSyncPublishRequest 严格对齐：
+     *   type: 'XSYNC_PUBLISH'
+     *   platformId: string           (from providerIdentifier, e.g. 'xsync-zhihu')
+     *   article: { title, markdown, cover, tags, category }
+     *   options?: { draftOnly }
+     */
     const payload = {
-      type: 'XSYNC_PUBLISH',
-      postId: post.id,
-      provider: post.integration.providerIdentifier,
-      content: post.content,
-      settings: post.settings ? JSON.parse(post.settings) : {},
-      images: post.image ? JSON.parse(post.image) : [],
-      token: post.integration.token, // JWT 格式，包含 userId/cookies 信息
+      type: 'XSYNC_PUBLISH' as const,
+      // Extension 使用 providerIdentifier 直接作为 platformId
+      platformId: post.integration.providerIdentifier,
+      article: {
+        title:    (settings.title as string) || post.content.slice(0, 50),
+        markdown: post.content,
+        cover:    images[0] || undefined,
+        tags:     (settings.tags as string[]) || undefined,
+        category: (settings.category as string) || undefined,
+        summary:  (settings.summary as string) || undefined,
+      },
+      options: {
+        draftOnly: Boolean(settings.draftOnly),
+      },
     };
 
     chrome.runtime.sendMessage(
       XPOZ_EXTENSION_ID,
       payload,
-      (response: { success: boolean; releaseURL?: string; error?: string }) => {
+      (response: { success: boolean; postUrl?: string; error?: string }) => {
         if (chrome.runtime.lastError) {
           console.warn(
             '[XSyncPublisher] Extension 通信失败:',
@@ -117,7 +137,7 @@ async function triggerExtension(post: PendingPost): Promise<void> {
         }
 
         if (response?.success) {
-          markPublished(post.id, response.releaseURL).then(resolve);
+          markPublished(post.id, response.postUrl).then(resolve);
         } else {
           markPublished(
             post.id,
