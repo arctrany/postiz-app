@@ -8,6 +8,8 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
+unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy all_proxy ALL_PROXY
+
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
 pass() { echo -e "${GREEN}✅ PASS${NC}: $1"; PASSED=$((PASSED+1)); }
 fail() { echo -e "${RED}❌ FAIL${NC}: $1 — $2"; FAILED=$((FAILED+1)); }
@@ -39,8 +41,8 @@ fi
 
 # ---- Step 1: Start servers if not running ----
 header "Step 1: Check/Start Services"
-BACKEND_RUNNING=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333 2>/dev/null || echo "000")
-if [ "$BACKEND_RUNNING" = "000" ]; then
+BACKEND_RUNNING=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333 2>/dev/null || true)
+if [ "$BACKEND_RUNNING" != "200" ]; then
   info "Starting backend + orchestrator + frontend (skipping extension)..."
   pnpm run --filter ./apps/backend --filter ./apps/orchestrator --filter ./apps/frontend --parallel dev &
   DEV_PID=$!
@@ -55,8 +57,8 @@ if [ "$BACKEND_RUNNING" = "000" ]; then
   done
   
   # Verify
-  BACKEND_RUNNING=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333 2>/dev/null || echo "000")
-  if [ "$BACKEND_RUNNING" = "000" ]; then
+  BACKEND_RUNNING=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3333 2>/dev/null || true)
+  if [ "$BACKEND_RUNNING" != "200" ]; then
     echo -e "${RED}ERROR: Backend failed to start${NC}"
     exit 1
   fi
@@ -132,7 +134,7 @@ const token = jwt.sign({id:'${USER_ID}',email:'admin@xpoz.local',activated:true,
   // TC-3.3b: Verify state updated
   try {
     const r = await fetch('http://localhost:3333/posts/e2e-test-xsync-001',{headers:h});
-    if(r.ok) { const d=await r.json(); if(d.state==='PUBLISHED') pass('TC-3.3b: State → PUBLISHED'); else fail('TC-3.3b','State='+d.state); }
+    if(r.ok) { const d=await r.json(); if(d.posts[0].state==='PUBLISHED') pass('TC-3.3b: State → PUBLISHED'); else fail('TC-3.3b','State='+(d.posts?.[0]?.state||d.state)); }
     else fail('TC-3.3b','HTTP '+r.status);
   } catch(e) { fail('TC-3.3b',e.message); }
 

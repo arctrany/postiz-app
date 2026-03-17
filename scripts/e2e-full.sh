@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
+unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy all_proxy ALL_PROXY
+export PATH="/opt/homebrew/opt/postgresql@14/bin:$PATH"
 # XPoz — Comprehensive E2E Test Suite via Agent Skills & CLI (Public API)
 # =============================================================================
 # Usage:
@@ -121,11 +123,11 @@ fi
 
 # Fallback: docker exec
 if [[ -z "$API_KEY" ]]; then
-  CONTAINER=$(docker ps --format '{{.Names}}' 2>/dev/null | grep -i 'xpoz.*postgres' | head -1)
+  CONTAINER=$(colima ssh -- docker ps --format '{{.Names}}' 2>/dev/null | grep -i 'xpoz.*postgres' | head -1)
   if [[ -n "$CONTAINER" ]]; then
     DB_USER=$(echo "$DB_URL" | sed -n 's|.*://\([^:]*\):.*|\1|p')
     DB_NAME=$(echo "$DB_URL" | sed -n 's|.*/\([^?]*\).*|\1|p')
-    API_KEY=$(docker exec "$CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -t -A -c 'SELECT "apiKey" FROM "Organization" ORDER BY "createdAt" DESC LIMIT 1;' 2>/dev/null | tr -d '[:space:]') || true
+    API_KEY=$(colima ssh -- docker exec "$CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -t -A -c 'SELECT "apiKey" FROM "Organization" ORDER BY "createdAt" DESC LIMIT 1;' 2>/dev/null | tr -d '[:space:]') || true
   fi
 fi
 
@@ -264,7 +266,7 @@ DRAFT_DATA="{
   \"tags\": [],
   \"posts\": [{
     \"integration\": {\"id\": \"$INT_ID\"},
-    \"value\": [{\"content\": \"[E2E TEST] Draft post — $(date +%s)\"}],
+    \"value\": [{\"content\": \"[E2E TEST] Draft post — $(date +%s)\", \"image\": []}],
     \"settings\": {\"who_can_reply_post\": \"everyone\"}
   }]
 }"
@@ -288,7 +290,7 @@ SCHED_DATA="{
   \"tags\": [],
   \"posts\": [{
     \"integration\": {\"id\": \"$INT_ID\"},
-    \"value\": [{\"content\": \"[E2E TEST] Scheduled post — $(date +%s)\"}],
+    \"value\": [{\"content\": \"[E2E TEST] Scheduled post — $(date +%s)\", \"image\": []}],
     \"settings\": {\"who_can_reply_post\": \"everyone\"}
   }]
 }"
@@ -375,9 +377,9 @@ THREAD_DATA="{
   \"posts\": [{
     \"integration\": {\"id\": \"$INT_ID\"},
     \"value\": [
-      {\"content\": \"[E2E TEST] Thread 1/3 — $(date +%s)\"},
-      {\"content\": \"[E2E TEST] Thread 2/3 — second part\"},
-      {\"content\": \"[E2E TEST] Thread 3/3 — conclusion\"}
+      {\"content\": \"[E2E TEST] Thread 1/3 — $(date +%s)\", \"image\": []},
+      {\"content\": \"[E2E TEST] Thread 2/3 — second part\", \"image\": []},
+      {\"content\": \"[E2E TEST] Thread 3/3 — conclusion\", \"image\": []}
     ],
     \"settings\": {\"who_can_reply_post\": \"everyone\"}
   }]
