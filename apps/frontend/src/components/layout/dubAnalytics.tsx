@@ -1,19 +1,11 @@
 'use client';
 
 import { useVariables } from '@xpoz/react/helpers/variable.context';
-import { Analytics as DubAnalyticsIn } from '@dub/analytics/react';
+// import { Analytics as DubAnalyticsIn } from '@dub/analytics/react';
 import { getCookie } from 'react-use-cookie';
 
 export const DubAnalytics = () => {
-  const { dub } = useVariables();
-  if (!dub) return null;
-  return (
-    <DubAnalyticsIn
-      domainsConfig={{
-        refer: 'xpoz.com',
-      }}
-    />
-  );
+  return null;
 };
 
 export const useDubClickId = () => {

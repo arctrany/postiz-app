@@ -25,7 +25,12 @@ const require = createRequire(import.meta.url);
 
 // ── 配置 ──────────────────────────────────────────────────────────────
 const BACKEND   = process.env.E2E_BACKEND_URL || 'http://localhost:3333';
-const JWT_SECRET = process.env.JWT_SECRET      || 'your-jwt-secret';
+const JWT_SECRET = process.env.JWT_SECRET      || '';
+
+if (!JWT_SECRET) {
+  console.error('Missing JWT_SECRET environment variable. Set it in your .env or export it.');
+  process.exit(1);
+}
 
 // 测试数据 ID（使用固定 ID 便于幂等重试）
 const TEST_ORG_ID         = 'e2e-org-xsync-001';
@@ -93,10 +98,12 @@ async function setup() {
     await prisma.user.upsert({
       where:  { id: TEST_USER_ID },
       create: {
-        id:        TEST_USER_ID,
-        email:     'e2e@xpoz.local',
-        activated: true,
-        password:  'e2e-password-hash',
+        id:           TEST_USER_ID,
+        email:        'e2e@xpoz.local',
+        activated:    true,
+        password:     'e2e-password-hash',
+        providerName: 'LOCAL',
+        timezone:     0,
       },
       update: {},
     });

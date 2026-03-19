@@ -3,11 +3,16 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 
-const API_KEY = 'breppPgzoWKbFDY6trYQBbFjH';
-const API_SECRET = 'wmOSVA4GlirP1elX0nwBH1nbpmBsPk3z1tsuUQ94ievFLcCscu';
-const ACCESS_TOKEN = '2031303571027931137-tEQogFFuMtlIW8Ivo98YFpiw7l0Deo';
-const ACCESS_SECRET = 'vYI7maVGhsjnj3siPECqsNYFvdpOawAOwN8LRR9JKJoUH';
-const PROXY = 'http://127.0.0.1:7897';
+const API_KEY = process.env.X_API_KEY || '';
+const API_SECRET = process.env.X_API_SECRET || '';
+const ACCESS_TOKEN = process.env.X_ACCESS_TOKEN || '';
+const ACCESS_SECRET = process.env.X_ACCESS_SECRET || '';
+const PROXY = process.env.HTTP_PROXY || 'http://127.0.0.1:7897';
+
+if (!API_KEY || !API_SECRET || !ACCESS_TOKEN || !ACCESS_SECRET) {
+  console.error("Missing X API credentials in environment variables.");
+  process.exit(1);
+}
 
 function oauthHeader(method, reqUrl) {
   const nonce = crypto.randomBytes(16).toString('hex');

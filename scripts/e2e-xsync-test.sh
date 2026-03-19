@@ -5,7 +5,7 @@
 # ==========================================================================
 set -euo pipefail
 
-PROJECT_DIR="/Users/haowu/IdealProjects/arctrany/postiz-app"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC='\033[0m'
@@ -22,8 +22,8 @@ echo "========================================"
 # ---- Step 0: Ensure DB has PENDING_EXTENSION enum ----
 header "Step 0: Database Migration"
 source .env 2>/dev/null || true
-export PGPASSWORD='postiz-local-pwd'
-DB_HOST=localhost DB_PORT=5432 DB_USER=postiz-local DB_NAME=postiz-db-local
+export PGPASSWORD="${PGPASSWORD:-xpoz-local-pwd}"
+DB_HOST=localhost DB_PORT=5432 DB_USER="${DB_USER:-xpoz-local}" DB_NAME="${DB_NAME:-xpoz-db-local}"
 
 HAS_ENUM=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc \
   "SELECT COUNT(*) FROM pg_enum WHERE enumlabel = 'PENDING_EXTENSION' AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'State');" 2>/dev/null || echo "0")
@@ -94,7 +94,7 @@ fi
 
 # ---- Step 3: Generate JWT ----
 header "Step 3: API Tests"
-JWT_SECRET="xpoz-dev-jwt-secret-2026-arctrany-e2e-testing"
+JWT_SECRET="${JWT_SECRET:-xpoz-local-dev-jwt-secret-do-not-use-in-production-32chars}"
 USER_ID=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc "SELECT id FROM \"User\" LIMIT 1;" 2>/dev/null | tr -d ' ')
 
 # Use Node.js to generate JWT and run all API tests

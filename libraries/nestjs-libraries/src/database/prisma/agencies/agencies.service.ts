@@ -85,7 +85,7 @@ export class AgenciesService {
   async createAgency(user: User, body: CreateAgencyDto) {
     const agency = await this._agenciesRepository.createAgency(user, body);
     await this._notificationService.sendEmail(
-      process.env.ADMIN_EMAIL || 'admin@xpoz.com',
+      process.env.ADMIN_EMAIL || 'admin@example.com',
       'New agency created',
       `
 <html lang="en">

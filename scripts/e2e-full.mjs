@@ -199,12 +199,12 @@ async function main() {
         });
         await prisma.user.upsert({
           where: { id: 'e2e-user-001' },
-          create: { id: 'e2e-user-001', email: 'e2e@xpoz.test', password: 'e2e-hash', activated: true },
+          create: { id: 'e2e-user-001', email: 'e2e@xpoz.test', password: 'e2e-hash', activated: true, providerName: 'LOCAL', timezone: 0 },
           update: {},
         });
         // Link user to org
         await prisma.userOrganization.upsert({
-          where: { uniqueUserOrg: { userId: 'e2e-user-001', organizationId: 'e2e-org-001' } },
+          where: { userId_organizationId: { userId: 'e2e-user-001', organizationId: 'e2e-org-001' } },
           create: { userId: 'e2e-user-001', organizationId: 'e2e-org-001', role: 'ADMIN' },
           update: {},
         });
