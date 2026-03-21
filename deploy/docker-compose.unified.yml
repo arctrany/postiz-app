@@ -1,0 +1,253 @@
+# XPoz + Huginn 统一部署
+#
+# 容器清单 (共 9 个):
+#   1. nginx           - 反向代理 + SSL (端口 80/443)
+#   2. xpoz            - XPoz 社媒管理应用 (端口 5000)
+#   3. xpoz-postgres   - XPoz + Huginn 共用数据库 (端口 5432)
+#   4. xpoz-redis      - XPoz 缓存 (端口 6379)
+#   5. temporal         - Temporal 工作流引擎 (端口 7233)
+#   6. temporal-postgres - Temporal 专用数据库 (端口 5433)
+#   7. temporal-es      - Temporal Elasticsearch (端口 9200)
+#   8. temporal-ui      - Temporal Web UI (端口 8080)
+#   9. huginn           - Huginn 情报采集平台 (端口 3000)
+#
+# 优化说明:
+#   - Huginn 使用 PostgreSQL 而非 MySQL，与 XPoz 共用 xpoz-postgres 实例
+#   - 移除 Spotlight (Sentry 调试) 和 Temporal Admin Tools，节省生产资源
+#   - 使用 Nginx 统一反向代理，按域名路由
+
+services:
+
+  # ═══════════════════════════════════════
+  #  1. Nginx 反向代理
+  # ═══════════════════════════════════════
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/logs:/var/log/nginx
+    networks:
+      - frontend
+    depends_on:
+      xpoz:
+        condition: service_started
+      huginn:
+        condition: service_started
+
+  # ═══════════════════════════════════════
+  #  2. XPoz 应用
+  # ═══════════════════════════════════════
+  xpoz:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: xpoz
+    restart: always
+    env_file: .env
+    environment:
+      MAIN_URL: ${XPOZ_URL:-http://localhost:4007}
+      FRONTEND_URL: ${XPOZ_URL:-http://localhost:4007}
+      NEXT_PUBLIC_BACKEND_URL: ${XPOZ_URL:-http://localhost:4007}/api
+      DATABASE_URL: postgresql://${POSTGRES_USER:-xpoz}:${POSTGRES_PASSWORD:-xpoz-secure-pwd}@xpoz-postgres:5432/${XPOZ_DB:-xpoz}
+      REDIS_URL: redis://xpoz-redis:6379
+      BACKEND_INTERNAL_URL: http://localhost:3333
+      TEMPORAL_ADDRESS: temporal:7233
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-random-string}
+      IS_GENERAL: 'true'
+      STORAGE_PROVIDER: 'local'
+      UPLOAD_DIRECTORY: '/uploads'
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: '/uploads'
+      NX_ADD_PLUGINS: 'false'
+      API_LIMIT: 30
+    volumes:
+      - xpoz-config:/config
+      - xpoz-uploads:/uploads
+    networks:
+      - frontend
+      - xpoz-backend
+      - temporal-net
+    depends_on:
+      xpoz-postgres:
+        condition: service_healthy
+      xpoz-redis:
+        condition: service_healthy
+
+  # ═══════════════════════════════════════
+  #  3. PostgreSQL (XPoz + Huginn 共用)
+  # ═══════════════════════════════════════
+  xpoz-postgres:
+    image: postgres:17-alpine
+    container_name: xpoz-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-xpoz}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-xpoz-secure-pwd}
+      POSTGRES_DB: ${XPOZ_DB:-xpoz}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-huginn-db.sh:ro
+    networks:
+      - xpoz-backend
+      - huginn-backend
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER:-xpoz}
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ═══════════════════════════════════════
+  #  4. Redis
+  # ═══════════════════════════════════════
+  xpoz-redis:
+    image: redis:7.2-alpine
+    container_name: xpoz-redis
+    restart: always
+    volumes:
+      - redis-data:/data
+    networks:
+      - xpoz-backend
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # ═══════════════════════════════════════
+  #  5. Temporal Server
+  # ═══════════════════════════════════════
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    container_name: temporal
+    restart: always
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PWD=${TEMPORAL_DB_PASSWORD:-temporal-secure-pwd}
+      - POSTGRES_SEEDS=temporal-postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
+      - ENABLE_ES=true
+      - ES_SEEDS=temporal-es
+      - ES_VERSION=v7
+      - TEMPORAL_NAMESPACE=default
+    volumes:
+      - ./dynamicconfig:/etc/temporal/config/dynamicconfig
+    networks:
+      - temporal-net
+    depends_on:
+      - temporal-postgres
+      - temporal-es
+
+  # ═══════════════════════════════════════
+  #  6. Temporal PostgreSQL
+  # ═══════════════════════════════════════
+  temporal-postgres:
+    image: postgres:16-alpine
+    container_name: temporal-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: ${TEMPORAL_DB_PASSWORD:-temporal-secure-pwd}
+    volumes:
+      - temporal-pg-data:/var/lib/postgresql/data
+    networks:
+      - temporal-net
+
+  # ═══════════════════════════════════════
+  #  7. Temporal Elasticsearch
+  # ═══════════════════════════════════════
+  temporal-es:
+    image: elasticsearch:7.17.27
+    container_name: temporal-es
+    restart: always
+    environment:
+      - cluster.routing.allocation.disk.threshold_enabled=true
+      - cluster.routing.allocation.disk.watermark.low=512mb
+      - cluster.routing.allocation.disk.watermark.high=256mb
+      - cluster.routing.allocation.disk.watermark.flood_stage=128mb
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - xpack.security.enabled=false
+    volumes:
+      - temporal-es-data:/usr/share/elasticsearch/data
+    networks:
+      - temporal-net
+
+  # ═══════════════════════════════════════
+  #  8. Temporal UI
+  # ═══════════════════════════════════════
+  temporal-ui:
+    image: temporalio/ui:2.34.0
+    container_name: temporal-ui
+    restart: always
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:8080
+    networks:
+      - frontend
+      - temporal-net
+    depends_on:
+      - temporal
+
+  # ═══════════════════════════════════════
+  #  9. Huginn 情报采集
+  # ═══════════════════════════════════════
+  huginn:
+    image: ghcr.io/huginn/huginn
+    container_name: huginn
+    restart: always
+    environment:
+      DOMAIN: ${HUGINN_DOMAIN:-huginn.localhost}
+      PORT: 3000
+      DATABASE_ADAPTER: postgresql
+      DATABASE_HOST: xpoz-postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${HUGINN_DB:-huginn}
+      DATABASE_USERNAME: ${POSTGRES_USER:-xpoz}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-xpoz-secure-pwd}
+      DATABASE_ENCODING: utf8
+      APP_SECRET_TOKEN: ${HUGINN_SECRET:-change-me-huginn-secret}
+      INVITATION_CODE: ${HUGINN_INVITATION_CODE:-xpoz-huginn}
+      IMPORT_DEFAULT_SCENARIO_FOR_ALL_USERS: 'true'
+      TIMEZONE: ${TIMEZONE:-Asia/Shanghai}
+      HUGINN_URL: ${HUGINN_URL:-http://huginn.localhost}
+      # Huginn 密码
+      HUGINN_PASSWORD: ${HUGINN_PASSWORD:-huginn-pwd}
+    networks:
+      - frontend
+      - huginn-backend
+    depends_on:
+      xpoz-postgres:
+        condition: service_healthy
+
+# ═══════════════════════════════════════
+#  Volumes
+# ═══════════════════════════════════════
+volumes:
+  postgres-data:
+  redis-data:
+  xpoz-config:
+  xpoz-uploads:
+  temporal-pg-data:
+  temporal-es-data:
+  nginx-logs:
+
+# ═══════════════════════════════════════
+#  Networks
+# ═══════════════════════════════════════
+networks:
+  frontend:
+    driver: bridge
+  xpoz-backend:
+    driver: bridge
+    internal: true
+  huginn-backend:
+    driver: bridge
+    internal: true
+  temporal-net:
+    driver: bridge
+    internal: true
