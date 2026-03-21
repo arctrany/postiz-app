@@ -1,6 +1,7 @@
 import { XPozAPI } from '../api';
 import { getConfig } from '../config';
 import { readFileSync } from 'fs';
+import { basename } from 'path';
 
 export async function uploadFile(args: any) {
   const config = getConfig();
@@ -13,7 +14,7 @@ export async function uploadFile(args: any) {
 
   try {
     const fileBuffer = readFileSync(args.file);
-    const filename = args.file.split('/').pop() || 'file';
+    const filename = basename(args.file);
 
     const result = await api.upload(fileBuffer, filename);
     console.log('✅ File uploaded successfully!');
@@ -21,6 +22,26 @@ export async function uploadFile(args: any) {
     return result;
   } catch (error: any) {
     console.error('❌ Failed to upload file:', error.message);
+    process.exit(1);
+  }
+}
+
+export async function uploadFromUrl(args: any) {
+  const config = getConfig();
+  const api = new XPozAPI(config);
+
+  if (!args.url) {
+    console.error('❌ URL is required');
+    process.exit(1);
+  }
+
+  try {
+    const result = await api.uploadFromUrl(args.url);
+    console.log('✅ File uploaded from URL successfully!');
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  } catch (error: any) {
+    console.error('❌ Failed to upload from URL:', error.message);
     process.exit(1);
   }
 }

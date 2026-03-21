@@ -1,6 +1,6 @@
 {
   "name": "xpoz",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "XPoz CLI - Command line interface for the XPoz social media scheduling API",
   "main": "dist/index.js",
   "bin": {

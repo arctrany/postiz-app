@@ -159,4 +159,59 @@ export class XPozAPI {
       body: JSON.stringify({ methodName, data }),
     });
   }
+
+  async getAnalytics(integrationId: string, date?: string) {
+    const query = date ? `?date=${encodeURIComponent(date)}` : '';
+    return this.request(`/public/v1/analytics/${integrationId}${query}`, {
+      method: 'GET',
+    });
+  }
+
+  async getPostAnalytics(postId: string, date?: number) {
+    const query = date !== undefined ? `?date=${date}` : '';
+    return this.request(`/public/v1/analytics/post/${postId}${query}`, {
+      method: 'GET',
+    });
+  }
+
+  async getNotifications(page: number = 0) {
+    return this.request(`/public/v1/notifications?page=${page}`, {
+      method: 'GET',
+    });
+  }
+
+  async getChannelAuthUrl(integration: string, refresh?: string) {
+    const query = refresh ? `?refresh=${encodeURIComponent(refresh)}` : '';
+    return this.request(`/public/v1/social/${integration}${query}`, {
+      method: 'GET',
+    });
+  }
+
+  async deleteChannel(id: string) {
+    return this.request(`/public/v1/integrations/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async uploadFromUrl(url: string) {
+    return this.request('/public/v1/upload-from-url', {
+      method: 'POST',
+      body: JSON.stringify({ url }),
+    });
+  }
+
+  async findSlot(integrationId?: string) {
+    const path = integrationId
+      ? `/public/v1/find-slot/${integrationId}`
+      : '/public/v1/find-slot/all';
+    return this.request(path, {
+      method: 'GET',
+    });
+  }
+
+  async checkConnection() {
+    return this.request('/public/v1/is-connected', {
+      method: 'GET',
+    });
+  }
 }

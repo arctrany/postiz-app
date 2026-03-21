@@ -153,3 +153,19 @@ export async function deletePost(args: any) {
     process.exit(1);
   }
 }
+
+export async function findSlot(args: any) {
+  const config = getConfig();
+  const api = new XPozAPI(config);
+
+  try {
+    const result = await api.findSlot(args.id);
+    console.log('📅 Next available scheduling slot:');
+    console.log(JSON.stringify(result, null, 2));
+    return result;
+  } catch (error: any) {
+    console.error('❌ Failed to find slot:', error.message);
+    process.exit(1);
+  }
+}
+

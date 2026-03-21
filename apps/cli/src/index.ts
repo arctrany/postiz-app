@@ -1,13 +1,19 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { createPost, listPosts, deletePost } from './commands/posts';
+import { createPost, listPosts, deletePost, findSlot } from './commands/posts';
 import { listIntegrations, getIntegrationSettings, triggerIntegrationTool } from './commands/integrations';
-import { uploadFile } from './commands/upload';
+import { uploadFile, uploadFromUrl } from './commands/upload';
+import { channelAnalytics, postAnalytics } from './commands/analytics';
+import { connectChannel, disconnectChannel } from './commands/channels';
+import { listNotifications } from './commands/notifications';
+import { showStatus } from './commands/status';
 import type { Argv } from 'yargs';
 
 yargs(hideBin(process.argv))
   .scriptName('xpoz')
   .usage('$0 <command> [options]')
+
+  // ─── Posts ────────────────────────────────────────────────
   .command(
     'posts:create',
     'Create a new post',
@@ -77,40 +83,12 @@ yargs(hideBin(process.argv))
           'Simple scheduled post'
         )
         .example(
-          '$0 posts:create -c "Draft post" -s "2024-12-31T12:00:00Z" -t draft -i "twitter-123"',
-          'Create draft post'
-        )
-        .example(
-          '$0 posts:create -c "Main post" -m "img1.jpg,img2.jpg" -s "2024-12-31T12:00:00Z" -i "twitter-123"',
-          'Post with multiple images'
-        )
-        .example(
-          '$0 posts:create -c "Main post" -m "img1.jpg" -c "First comment" -m "img2.jpg" -c "Second comment" -m "img3.jpg,img4.jpg" -s "2024-12-31T12:00:00Z" -i "twitter-123"',
-          'Post with comments, each having their own media'
-        )
-        .example(
-          '$0 posts:create -c "Main" -c "Comment with semicolon; see?" -c "Another!" -s "2024-12-31T12:00:00Z" -i "twitter-123"',
-          'Comments can contain semicolons'
-        )
-        .example(
-          '$0 posts:create -c "Thread 1/3" -c "Thread 2/3" -c "Thread 3/3" -d 2000 -s "2024-12-31T12:00:00Z" -i "twitter-123"',
-          'Twitter thread with 2s delay'
+          '$0 posts:create -c "Main post" -m "img1.jpg" -c "Comment" -m "img2.jpg" -s "2024-12-31T12:00:00Z" -i "twitter-123"',
+          'Post with comments and media'
         )
         .example(
           '$0 posts:create --json ./post.json',
           'Complex post from JSON file'
-        )
-        .example(
-          '$0 posts:create -c "Post to subreddit" -s "2024-12-31T12:00:00Z" --settings \'{"subreddit":[{"value":{"subreddit":"programming","title":"My Title","type":"text","url":"","is_flair_required":false}}]}\' -i "reddit-123"',
-          'Reddit post with specific subreddit settings'
-        )
-        .example(
-          '$0 posts:create -c "Video description" -s "2024-12-31T12:00:00Z" --settings \'{"title":"My Video","type":"public","tags":[{"value":"tech","label":"Tech"}]}\' -i "youtube-123"',
-          'YouTube post with title and tags'
-        )
-        .example(
-          '$0 posts:create -c "Tweet content" -s "2024-12-31T12:00:00Z" --settings \'{"who_can_reply_post":"everyone"}\' -i "twitter-123"',
-          'X (Twitter) post with reply settings'
         );
     },
     createPost as any
@@ -136,10 +114,6 @@ yargs(hideBin(process.argv))
         .example(
           '$0 posts:list --startDate "2024-01-01T00:00:00Z" --endDate "2024-12-31T23:59:59Z"',
           'List posts for a specific date range'
-        )
-        .example(
-          '$0 posts:list --customer "customer-id"',
-          'List posts for a specific customer'
         );
     },
     listPosts as any
@@ -158,6 +132,22 @@ yargs(hideBin(process.argv))
     deletePost as any
   )
   .command(
+    'posts:slot [id]',
+    'Find next available scheduling slot',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Integration ID (optional, for integration-specific slot)',
+          type: 'string',
+        })
+        .example('$0 posts:slot', 'Find next free scheduling slot')
+        .example('$0 posts:slot twitter-123', 'Find slot for specific integration');
+    },
+    findSlot as any
+  )
+
+  // ─── Integrations ────────────────────────────────────────
+  .command(
     'integrations:list',
     'List all connected integrations',
     {},
@@ -175,10 +165,6 @@ yargs(hideBin(process.argv))
         .example(
           '$0 integrations:settings reddit-123',
           'Get settings schema for Reddit integration'
-        )
-        .example(
-          '$0 integrations:settings youtube-456',
-          'Get settings schema for YouTube integration'
         );
     },
     getIntegrationSettings as any
@@ -206,19 +192,121 @@ yargs(hideBin(process.argv))
           'Get list of subreddits'
         )
         .example(
-          '$0 integrations:trigger reddit-123 searchSubreddits -d \'{"query":"programming"}\'',
-          'Search for subreddits'
-        )
-        .example(
           '$0 integrations:trigger youtube-123 getPlaylists',
           'Get YouTube playlists'
         );
     },
     triggerIntegrationTool as any
   )
+
+  // ─── Channels ─────────────────────────────────────────────
+  .command(
+    'channels:connect <provider>',
+    'Generate OAuth URL to connect a new channel',
+    (yargs: Argv) => {
+      return yargs
+        .positional('provider', {
+          describe: 'Provider name (e.g. x, linkedin, facebook, instagram, youtube, tiktok, reddit)',
+          type: 'string',
+        })
+        .option('refresh', {
+          describe: 'Integration ID to reconnect/refresh',
+          type: 'string',
+        })
+        .example('$0 channels:connect x', 'Connect a new X (Twitter) channel')
+        .example('$0 channels:connect linkedin', 'Connect a new LinkedIn channel')
+        .example(
+          '$0 channels:connect x --refresh integration-123',
+          'Reconnect an existing X channel'
+        );
+    },
+    connectChannel as any
+  )
+  .command(
+    'channels:disconnect <id>',
+    'Disconnect/remove a channel',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Channel/integration ID to disconnect',
+          type: 'string',
+        })
+        .example(
+          '$0 channels:disconnect integration-123',
+          'Disconnect a channel'
+        );
+    },
+    disconnectChannel as any
+  )
+
+  // ─── Analytics ────────────────────────────────────────────
+  .command(
+    'analytics:channel <id>',
+    'Get analytics for a specific channel',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Integration/channel ID',
+          type: 'string',
+        })
+        .option('date', {
+          describe: 'Date to fetch analytics from (ISO 8601 format)',
+          type: 'string',
+        })
+        .example(
+          '$0 analytics:channel twitter-123',
+          'Get analytics for X channel'
+        )
+        .example(
+          '$0 analytics:channel twitter-123 --date "2024-03-01T00:00:00Z"',
+          'Get analytics from a specific date'
+        );
+    },
+    channelAnalytics as any
+  )
+  .command(
+    'analytics:post <id>',
+    'Get analytics for a specific post',
+    (yargs: Argv) => {
+      return yargs
+        .positional('id', {
+          describe: 'Post ID',
+          type: 'string',
+        })
+        .option('date', {
+          describe: 'Date to fetch analytics from (ISO 8601 format)',
+          type: 'string',
+        })
+        .example(
+          '$0 analytics:post post-123',
+          'Get analytics for a specific post'
+        );
+    },
+    postAnalytics as any
+  )
+
+  // ─── Notifications ───────────────────────────────────────
+  .command(
+    'notifications:list',
+    'List notifications',
+    (yargs: Argv) => {
+      return yargs
+        .option('page', {
+          alias: 'p',
+          describe: 'Page number (default: 0)',
+          type: 'number',
+          default: 0,
+        })
+        .example('$0 notifications:list', 'List notifications')
+        .example('$0 notifications:list -p 2', 'List page 2 of notifications');
+    },
+    listNotifications as any
+  )
+
+  // ─── Upload ───────────────────────────────────────────────
   .command(
     'upload <file>',
-    'Upload a file',
+    'Upload a local file',
     (yargs: Argv) => {
       return yargs
         .positional('file', {
@@ -229,6 +317,31 @@ yargs(hideBin(process.argv))
     },
     uploadFile as any
   )
+  .command(
+    'upload:url <url>',
+    'Upload media from a remote URL',
+    (yargs: Argv) => {
+      return yargs
+        .positional('url', {
+          describe: 'Remote URL to download and upload',
+          type: 'string',
+        })
+        .example(
+          '$0 upload:url "https://example.com/image.jpg"',
+          'Upload image from URL'
+        );
+    },
+    uploadFromUrl as any
+  )
+
+  // ─── Status ───────────────────────────────────────────────
+  .command(
+    'status',
+    'Check API connection and show account summary',
+    {},
+    showStatus as any
+  )
+
   .demandCommand(1, 'You need at least one command')
   .help()
   .alias('h', 'help')

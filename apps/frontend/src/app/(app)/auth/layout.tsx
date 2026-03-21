@@ -41,10 +41,8 @@ export default async function AuthLayout({
           </div>
         </div>
 
-        {/* Bottom trust signal */}
-        <div className="mt-[24px] text-center text-gray-500 text-[12px]">
-          {t('auth_trust_signal', 'Trusted by 20,000+ creators worldwide')}
-        </div>
+
+
       </div>
     </div>
   );
