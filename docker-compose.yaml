@@ -37,8 +37,8 @@ services:
       # X (Twitter) - Legacy OAuth 1.0a (deprecated)
       X_API_KEY: ''
       X_API_SECRET: ''
-      LINKEDIN_CLIENT_ID: ''
-      LINKEDIN_CLIENT_SECRET: ''
+      LINKEDIN_CLIENT_ID: '86edjnqt53bovh'
+      LINKEDIN_CLIENT_SECRET: 'WPL_AP1.dNvwNl1dPtFNX'
       REDDIT_CLIENT_ID: ''
       REDDIT_CLIENT_SECRET: ''
       GITHUB_CLIENT_ID: ''

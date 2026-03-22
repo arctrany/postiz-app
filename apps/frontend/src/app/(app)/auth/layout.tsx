@@ -41,8 +41,6 @@ export default async function AuthLayout({
           </div>
         </div>
 
-
-
       </div>
     </div>
   );

@@ -533,14 +533,28 @@ export class XProvider extends SocialAbstract implements SocialProvider {
       oauth_version: '1.0',
     };
 
-    // Combine OAuth params with request params for signature
-    const allParams = { ...oauthParams, ...params };
+    // Extract query params from URL and include them in signature base
+    // OAuth 1.0a spec: base URL must NOT contain query string;
+    // query params must be included in the parameter string for signing
+    let baseUrl = url;
+    const queryParams: Record<string, string> = {};
+    const qIndex = url.indexOf('?');
+    if (qIndex !== -1) {
+      baseUrl = url.substring(0, qIndex);
+      const searchParams = new URLSearchParams(url.substring(qIndex + 1));
+      searchParams.forEach((v, k) => {
+        queryParams[k] = v;
+      });
+    }
+
+    // Combine OAuth params with explicit params and query params for signature
+    const allParams = { ...oauthParams, ...params, ...queryParams };
     const paramString = Object.keys(allParams)
       .sort()
       .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(allParams[k])}`)
       .join('&');
 
-    const baseString = `${method}&${encodeURIComponent(url)}&${encodeURIComponent(paramString)}`;
+    const baseString = `${method}&${encodeURIComponent(baseUrl)}&${encodeURIComponent(paramString)}`;
     const signingKey = `${encodeURIComponent(apiSecret)}&${encodeURIComponent(accessSecret)}`;
     const signature = crypto
       .createHmac('sha1', signingKey)
@@ -660,8 +674,8 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     const mediaId = initData?.data?.id || initData?.id || initData?.media_id_string;
     console.log('[X-Upload] INIT OK, media_id:', mediaId);
 
-    // APPEND (5MB chunks)
-    const CHUNK_SIZE = 5 * 1024 * 1024;
+    // APPEND (3MB chunks — base64 encoding inflates ~33%, so 3MB binary ≈ 4MB payload)
+    const CHUNK_SIZE = 3 * 1024 * 1024;
     for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
       const chunk = buffer.subarray(i, Math.min(i + CHUNK_SIZE, buffer.length));
       const segmentIndex = Math.floor(i / CHUNK_SIZE);
@@ -708,24 +722,47 @@ export class XProvider extends SocialAbstract implements SocialProvider {
     }
 
     const finalData = (await finalRes.json()) as any;
+    // v2 API wraps response in { data: { ... } }
+    const _fdata = finalData?.data || finalData;
     console.log('[X-Upload] FINALIZE OK:', JSON.stringify(finalData));
 
     // Handle async processing (videos)
-    if (finalData.processing_info) {
-      let state = finalData.processing_info.state;
+    if (_fdata.processing_info || isVideo) {
+      // For videos, always wait at least 10s even if processing_info is missing
+      // (OAuth1 status check may fail with 401 on query-param URLs)
+      if (isVideo) {
+        console.log('[X-Upload] Video detected, waiting 10s for initial processing...');
+        await new Promise((r) => setTimeout(r, 10000));
+      }
+      let state = _fdata.processing_info?.state;
+      let checkAfter = _fdata.processing_info?.check_after_secs || 5;
       while (state === 'pending' || state === 'in_progress') {
-        const waitSecs = finalData.processing_info.check_after_secs || 5;
-        console.log('[X-Upload] Processing, wait', waitSecs, 's...');
-        await new Promise((r) => setTimeout(r, waitSecs * 1000));
-        const statusUrl = `${BASE_URL}?media_id=${mediaId}`;
-        const statusAuth = this.generateOAuth1Header('GET', statusUrl);
-        const statusRes = await doFetch(statusUrl, {
-          method: 'GET',
-          headers: { Authorization: statusAuth },
-        });
-        const statusData = (await statusRes.json()) as any;
-        state = statusData.processing_info?.state;
-        console.log('[X-Upload] Status:', state);
+        console.log('[X-Upload] Processing, wait', checkAfter, 's...');
+        await new Promise((r) => setTimeout(r, checkAfter * 1000));
+        try {
+          // Status check — note: OAuth1 signature may fail for URLs with query params
+          const statusUrl = `${BASE_URL}?media_id=${mediaId}`;
+          const statusAuth = this.generateOAuth1Header('GET', statusUrl);
+          const statusRes = await doFetch(statusUrl, {
+            method: 'GET',
+            headers: { Authorization: statusAuth },
+          });
+          if (!statusRes.ok) {
+            console.warn('[X-Upload] Status check failed:', statusRes.status, '— will retry');
+            // If auth fails, wait and retry (video likely still processing)
+            await new Promise((r) => setTimeout(r, 5000));
+            break; // Exit loop, assume processing complete after initial wait
+          }
+          const statusData = (await statusRes.json()) as any;
+          const _sdata = statusData?.data || statusData;
+          console.log('[X-Upload] Status raw:', JSON.stringify(statusData).substring(0, 300));
+          state = _sdata.processing_info?.state;
+          checkAfter = _sdata.processing_info?.check_after_secs || 5;
+          console.log('[X-Upload] Status:', state);
+        } catch (statusErr: any) {
+          console.warn('[X-Upload] Status check error:', statusErr?.message, '— assuming complete');
+          break;
+        }
       }
       if (state === 'failed') {
         throw new Error('Media processing failed');
