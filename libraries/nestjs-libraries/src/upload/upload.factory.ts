@@ -1,6 +1,7 @@
 import { CloudflareStorage } from './cloudflare.storage';
 import { IUploadProvider } from './upload.interface';
 import { LocalStorage } from './local.storage';
+import { AliyunOSSStorage } from './aliyun-oss.storage';
 
 export class UploadFactory {
   static createStorage(): IUploadProvider {
@@ -17,6 +18,14 @@ export class UploadFactory {
           process.env.CLOUDFLARE_REGION!,
           process.env.CLOUDFLARE_BUCKETNAME!,
           process.env.CLOUDFLARE_BUCKET_URL!
+        );
+      case 'aliyun':
+        return new AliyunOSSStorage(
+          process.env.ALIBABA_OSS_ENDPOINT!,
+          process.env.ALIBABA_OSS_ACCESS_KEY_ID!,
+          process.env.ALIBABA_OSS_ACCESS_KEY_SECRET!,
+          process.env.ALIBABA_OSS_REGION!,
+          process.env.ALIBABA_OSS_BUCKET!,
         );
       default:
         throw new Error(`Invalid storage type ${storageProvider}`);
