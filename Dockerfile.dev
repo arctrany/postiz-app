@@ -1,6 +1,9 @@
 FROM node:22.20-bookworm-slim
 ARG NEXT_PUBLIC_VERSION
 ENV NEXT_PUBLIC_VERSION=$NEXT_PUBLIC_VERSION
+# Configure apt to retry on transient failures
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80retries && \
+    echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80retries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     make \
@@ -8,6 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     nginx \
 && rm -rf /var/lib/apt/lists/*
+
+
 
 RUN addgroup --system www \
  && adduser --system --ingroup www --home /www --shell /usr/sbin/nologin www \
