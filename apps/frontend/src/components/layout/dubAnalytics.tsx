@@ -4,11 +4,11 @@ import { useVariables } from '@xpoz/react/helpers/variable.context';
 // import { Analytics as DubAnalyticsIn } from '@dub/analytics/react';
 import { getCookie } from 'react-use-cookie';
 
-export const DubAnalytics = () => {
+export const DubAnalytics = (): null => {
   return null;
 };
 
-export const useDubClickId = () => {
+export const useDubClickId = (): string | undefined => {
   const { dub } = useVariables();
   if (!dub) return undefined;
 
