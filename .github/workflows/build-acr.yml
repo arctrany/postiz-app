@@ -1,9 +1,6 @@
 ---
 name: "Build and Push to GitHub Container Registry"
 
-# 触发条件：
-#   - push tag（生产发版用）
-#   - 手动触发（测试 / 紧急修复用）
 on:
   workflow_dispatch:
     inputs:
@@ -33,7 +30,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 确定最终的镜像 tag
       - name: Determine image tag
         id: tag
         run: |
@@ -74,14 +70,52 @@ jobs:
           provenance: false
           sbom: false
 
-      - name: Output image info
+      # 将包设为 public，ECS 无需认证即可拉取
+      - name: Make GHCR package public
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.packages.updatePackageForAuthenticatedUser({
+                package_type: 'container',
+                package_name: 'xpoz-custom',
+                visibility: 'public'
+              });
+              console.log('✅ Package set to public');
+            } catch (e) {
+              console.log('⚠️ Could not set visibility (may need org settings):', e.message);
+            }
+
+      # SSH 进 ECS 拉取新镜像并重启 xpoz 容器
+      - name: Deploy to ECS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 47.236.244.249
+          username: root
+          password: ${{ secrets.ECS_PASSWORD }}
+          script_stop: true
+          script: |
+            set -e
+            echo "=== Deploying xpoz ${{ steps.tag.outputs.version }} ==="
+            cd /data/compose
+
+            # 拉取最新镜像
+            export XPOZ_VERSION=${{ steps.tag.outputs.version }}
+            docker compose pull xpoz
+
+            # 重启 xpoz（不重启其他服务）
+            docker compose up -d --no-deps xpoz
+
+            # 等待启动
+            sleep 15
+
+            # 验证状态
+            docker compose ps xpoz
+            echo "✅ Deploy complete"
+
+      - name: Summary
         run: |
-          echo "✅ 镜像已推送至 GHCR:"
-          echo "   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}"
-          echo "   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          echo ""
-          echo "🚀 在 ECS 上执行以下命令完成部署："
-          echo "   cd /data/compose"
-          echo "   export XPOZ_VERSION=${{ steps.tag.outputs.version }}"
-          echo "   docker compose pull xpoz"
-          echo "   docker compose up -d xpoz"
+          echo "## ✅ Deploy Complete" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: \`ghcr.io/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- ECS: \`47.236.244.249\`" >> $GITHUB_STEP_SUMMARY
+          echo "- XPoz URL: https://xpoz.yourdomain.com" >> $GITHUB_STEP_SUMMARY
