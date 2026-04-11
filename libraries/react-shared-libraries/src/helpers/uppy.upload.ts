@@ -92,6 +92,7 @@ export const getUppyUploadPlugin = (
             }),
         },
       };
+    case 'aliyun':
     case 'local':
       return {
         plugin: XHRUpload,
