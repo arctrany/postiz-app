@@ -215,7 +215,7 @@ export function useUppyUploader(props: {
         return orderA - orderB;
       });
 
-      if (storageProvider === 'local') {
+      if (storageProvider === 'local' || storageProvider === 'aliyun') {
         setLocked(false);
         fileOrderIndex = 0;
         onUploadSuccess(sortedSuccessful.map((p) => p.response.body));

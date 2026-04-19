@@ -11,7 +11,7 @@ interface VariableContextInterface {
   mcpUrl?: string;
   frontEndUrl: string;
   plontoKey: string;
-  storageProvider: 'local' | 'cloudflare';
+  storageProvider: 'local' | 'cloudflare' | 'aliyun';
   backendUrl: string;
   environment: string;
   discordUrl: string;
