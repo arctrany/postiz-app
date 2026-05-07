@@ -17,6 +17,18 @@ const client = new NeynarAPIClient({
   apiKey: process.env.NEYNAR_SECRET_KEY || '00000000-000-0000-000-000000000000',
 });
 
+type PublishCastEmbeds = NonNullable<
+  Parameters<NeynarAPIClient['publishCast']>[0]['embeds']
+>;
+
+const toPublishCastEmbeds = (
+  media?: Array<{ path: string }>
+): PublishCastEmbeds =>
+  // Neynar's SDK typings lag the documented URL embed payload shape.
+  ((media || []).map(({ path }) => ({
+    url: path,
+  })) as unknown as PublishCastEmbeds);
+
 @Rules(
   'Farcaster/Warpcast can only accept pictures'
 )
@@ -90,10 +102,7 @@ export class FarcasterProvider
 
     for (const channel of channels) {
       const data = await client.publishCast({
-        embeds:
-          firstPost?.media?.map((media) => ({
-            url: media.path,
-          })) || [],
+        embeds: toPublishCastEmbeds(firstPost?.media),
         signerUuid: accessToken,
         text: firstPost.message,
         ...(channel?.value?.id ? { channelId: channel?.value?.id } : {}),
@@ -132,10 +141,7 @@ export class FarcasterProvider
 
     for (const parentHash of parentIds) {
       const data = await client.publishCast({
-        embeds:
-          commentPost?.media?.map((media) => ({
-            url: media.path,
-          })) || [],
+        embeds: toPublishCastEmbeds(commentPost?.media),
         signerUuid: accessToken,
         text: commentPost.message,
         parent: parentHash,
